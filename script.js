@@ -1,15 +1,9 @@
 let currentLang = 'en';
 
 const greetingsDB = {
-    morning: [
-        "A fresh morning to save energy", "Rise and shine, saver", "Wake up to savings", "Let's make today energy efficient"
-    ],
-    afternoon: [
-        "Hope your day is going green", "Mid-day energy check", "Keep saving this afternoon", "Turn off those extra lights"
-    ],
-    evening: [
-        "Wind down and power down", "Time to switch off extra lights", "Great evening to you", "A cozy and green evening"
-    ]
+    morning: ["A fresh morning to save energy", "Rise and shine, saver", "Wake up to savings", "Let's make today energy efficient"],
+    afternoon: ["Hope your day is going green", "Mid-day energy check", "Keep saving this afternoon", "Turn off those extra lights"],
+    evening: ["Wind down and power down", "Time to switch off extra lights", "Great evening to you", "A cozy and green evening"]
 };
 
 let barChartInstance;
@@ -51,7 +45,14 @@ function toggleTheme() {
 function changeLanguage(langCode) {
     currentLang = langCode || 'en';
     localStorage.setItem('ecoLang', currentLang);
-    console.log("Language changed to", currentLang, "(Static demo)");
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(translations && translations[currentLang] && translations[currentLang][key]) {
+            el.innerText = translations[currentLang][key];
+        }
+    });
+    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
+    if(activeUser) updateGreeting(activeUser.name);
 }
 
 function switchAuthTab(tab, btnElement) {
@@ -113,6 +114,9 @@ function handleLogin(e) {
     }
 }
 
+// ------------------------------------
+// FULL ADMIN CONTROL LOGIC
+// ------------------------------------
 async function handleAdminLogin(e) {
     e.preventDefault();
     const pwdEl = document.getElementById('adminPassword');
@@ -132,14 +136,17 @@ async function handleAdminLogin(e) {
             document.getElementById('mainAppSection').classList.add('hidden');
             document.getElementById('adminSection').classList.remove('hidden');
             
-            // Hide Sidebar and mobile nav
             const sb = document.querySelector('.sidebar');
             if(sb) sb.classList.add('hidden');
             const mn = document.getElementById('mobileNav');
             if(mn) mn.classList.add('hidden');
 
-            let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-            document.getElementById('adminUserCount').innerText = Object.keys(users).length;
+            loadAdminData(); // New full control function
+            
+            const statsRes = await fetch('/api/admin/stats');
+            const statsData = await statsRes.json();
+            populateAdminTable(statsData.analytics);
+
         } else {
             showError("Invalid Admin Password");
         }
@@ -147,10 +154,100 @@ async function handleAdminLogin(e) {
     finally { btnEl.innerText = "Access Admin Panel"; }
 }
 
+function loadAdminData() {
+    let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
+    let totalUsers = Object.keys(users).length;
+    document.getElementById('adminUserCount').innerText = totalUsers;
+    
+    const tbody = document.getElementById('adminUserListBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    
+    if(totalUsers === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No users registered yet.</td></tr>';
+        return;
+    }
+
+    // Populate user stats for Admin
+    Object.keys(users).forEach(id => {
+        const u = users[id];
+        let tLoad = 0;
+        let tCost = 0;
+        let numApps = u.appliances ? u.appliances.length : 0;
+        
+        if(u.appliances) {
+            u.appliances.forEach(a => {
+                tLoad += parseFloat(a.monthlyKwh || 0);
+                tCost += parseFloat(a.monthlyCost || 0);
+            });
+        }
+        
+        tbody.innerHTML += `<tr>
+            <td><strong>${u.id}</strong></td>
+            <td>${u.name}</td>
+            <td>${numApps} devices</td>
+            <td>${tLoad.toFixed(2)} kWh</td>
+            <td class="text-orange">₹${tCost.toFixed(2)}</td>
+            <td>
+                <button type="button" class="sm-btn" onclick="adminDeleteUser('${u.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+            </td>
+        </tr>`;
+    });
+}
+
+function adminDeleteUser(userId) {
+    if(confirm("Are you sure you want to delete this user? This cannot be undone.")) {
+        let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
+        delete users[userId];
+        localStorage.setItem('ecoUsers', JSON.stringify(users));
+        loadAdminData(); // Refresh table
+    }
+}
+
+function adminAddNewUser() {
+    const name = document.getElementById('adminNewName').value.trim();
+    const id = document.getElementById('adminNewId').value.trim();
+    const pin = document.getElementById('adminNewPin').value.trim();
+    
+    if(!name || !id || pin.length !== 4) return alert("Fill all fields properly (PIN must be 4 digits).");
+    
+    let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
+    if(users[id]) return alert("Consumer ID already exists!");
+    
+    users[id] = { name, id, pin, appliances: [] };
+    localStorage.setItem('ecoUsers', JSON.stringify(users));
+    
+    document.getElementById('adminNewName').value = '';
+    document.getElementById('adminNewId').value = '';
+    document.getElementById('adminNewPin').value = '';
+    
+    alert("User successfully added by Admin.");
+    loadAdminData(); // Refresh table
+}
+
 function saveAdminProfile() {
     alert("Admin Profile updated successfully!");
 }
 
+function populateAdminTable(logs) {
+    const tbody = document.getElementById('adminLogsBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    if(!logs || logs.length === 0) return tbody.innerHTML = '<tr><td colspan="5">No live network activity recorded yet.</td></tr>';
+    logs.forEach(log => {
+        tbody.innerHTML += `<tr>
+            <td><small>${log.time}</small></td>
+            <td><strong>${log.name}</strong><br><small>${log.userId}</small></td>
+            <td><span class="badge" style="background:#2980B9;color:white;padding:3px 8px;border-radius:4px;font-size:0.8rem">${log.action}</span></td>
+            <td><code>${log.ip}</code></td>
+            <td><small>${log.device}</small></td>
+        </tr>`;
+    });
+}
+
+// ------------------------------------
+// USER PROFILE & MAIN APP
+// ------------------------------------
 function loadProfileFields(user) {
     const nameEl = document.getElementById('profileName');
     const idEl = document.getElementById('profileId');
@@ -197,7 +294,6 @@ function showMainApp(user) {
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('mainAppSection').classList.remove('hidden');
     
-    // Show Navigations
     if(window.innerWidth <= 768) {
         document.querySelector('.features-nav').style.display = 'flex';
     } else {
@@ -226,9 +322,7 @@ function updateGreeting(name) {
 
 function showFeature(featureId, btnElement) {
     try {
-        // Handle Sidebar Links (Desktop)
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-        // Handle Mobile Nav Links
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
         
         if(btnElement) btnElement.classList.add('active');
@@ -260,7 +354,9 @@ function fillAndSend(text) {
     sendChatMessage();
 }
 
-// Feature 4: Proof of Impact & Compare
+// ------------------------------------
+// OFFLINE CALCULATORS
+// ------------------------------------
 function compareUsage() {
     const prevEl = document.getElementById('prevKwh');
     const latestEl = document.getElementById('latestKwh');
@@ -284,7 +380,6 @@ function compareUsage() {
     }
 }
 
-// Feature 2: Live Savings Simulator
 function calculateSimulator() {
     const unitsEl = document.getElementById('simUserUnits');
     const rateEl = document.getElementById('simUserRate');
@@ -459,20 +554,19 @@ function initCharts() {
             const ctxBar = chartEl.getContext('2d');
             if(barChartInstance) barChartInstance.destroy();
             
-            // Replicate the orange smooth graph from reference image
             barChartInstance = new Chart(ctxBar, {
-                type: chartType, // 'line' or 'bar'
+                type: chartType, 
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
                         label: 'Energy Usage (kWh)',
-                        data: [40, 55, 30, 60, 45, 70, 50, 40, 65, 35, 50, 45], // Dummy sample data like image
-                        borderColor: '#E67E22', // Orange like image
+                        data: [40, 55, 30, 60, 45, 70, 50, 40, 65, 35, 50, 45],
+                        borderColor: '#E67E22', 
                         backgroundColor: chartType === 'line' ? 'rgba(230, 126, 34, 0.15)' : '#E67E22',
                         borderWidth: 2,
                         borderRadius: chartType === 'bar' ? 4 : 0,
                         fill: chartType === 'line',
-                        tension: 0.4, // Smooth curve
+                        tension: 0.4,
                         pointBackgroundColor: '#fff',
                         pointBorderColor: '#E67E22',
                         pointRadius: 4
@@ -530,19 +624,17 @@ function updateManualChart() {
     const w4 = document.getElementById('graphW4') ? parseFloat(document.getElementById('graphW4').value) : 0;
 
     if(barChartInstance) {
-        // Pad the rest of the year with dummy curve data so it looks like the reference image
         barChartInstance.data.datasets[0].data = [w1, w2, w3, w4, 45, 70, 50, 40, 65, 35, 50, 45];
         barChartInstance.update();
     }
 }
 
-// --- Text to Speech (Browser Built-in) ---
+// --- Text to Speech ---
 function speakText(text) {
     if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Stop current
+        window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
         
-        // Try to find a good voice (Google Hindi or generic)
         const voices = window.speechSynthesis.getVoices();
         const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.name.includes('Hindi'));
         if(hindiVoice) msg.voice = hindiVoice;
@@ -562,19 +654,6 @@ function stopSpeak() {
 }
 
 // --- AI Chat Logic ---
-function askAIToOptimize() {
-    if(userAppliances.length === 0) return alert("Please add some appliances first!");
-    const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
-    
-    // Switch to AI tab directly
-    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
-    
-    const inputEl = document.getElementById('tabChatInput');
-    if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
-    window.tempAiContext = `User's current appliances: ${appData}`;
-    sendTabChatMessage();
-}
-
 async function sendChatMessage() {
     const inputField = document.getElementById('aiInput');
     if(!inputField) return;
@@ -588,28 +667,11 @@ async function sendChatMessage() {
     await processAIRequest(msg, loadingId, 'chatBox');
 }
 
-async function sendTabChatMessage() {
-    const inputField = document.getElementById('tabChatInput');
-    if(!inputField) return;
-    const msg = inputField.value.trim();
-    if(!msg) return;
-    
-    addMessageToChat('tabChatBox', 'user', msg);
-    inputField.value = '';
-    const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
-    
-    await processAIRequest(msg, loadingId, 'tabChatBox');
-}
-
 async function processAIRequest(msg, loadingId, boxId) {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
     
     const payload = { prompt: msg, language: currentLang, userId: userId };
-    if(window.tempAiContext) {
-        payload.customContext = window.tempAiContext;
-        window.tempAiContext = null; 
-    }
     
     try {
         const response = await fetch('/api/chat', {
@@ -623,9 +685,9 @@ async function processAIRequest(msg, loadingId, boxId) {
             const rawText = data.response;
             const htmlText = renderMarkdownToHTML(rawText);
             
-            // Add TTS buttons dynamically to the AI response
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
+/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -650,13 +712,13 @@ function addMessageToChat(boxId, sender, text) {
 }
 
 function handleChatEnter(e) { if(e.key === 'Enter') sendChatMessage(); }
-function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
+/g, '<br>');
 }
 
-// Feature 1 & 4: Live Energy Audit & Proof of Impact
+// --- Live Energy Audit ---
 function generateAudit() {
     const unitsEl = document.getElementById('auditUnits');
     const rateEl = document.getElementById('auditRate');
@@ -668,7 +730,7 @@ function generateAudit() {
     
     const bill = units * rate;
     const savings = bill * 0.18; 
-    const carbon = (units * 0.70).toFixed(1); // Exact metric requirement
+    const carbon = (units * 0.70).toFixed(1); 
 
     const resEl = document.getElementById('auditResult');
     if(resEl) resEl.classList.remove('hidden');

@@ -1,7 +1,7 @@
 {
   "name": "eco-sparks",
-  "version": "13.0.0",
-  "description": "Smart Energy Saver - Complete Mega Build",
+  "version": "14.0.0",
+  "description": "Smart Energy Saver - Admin Pro Build",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -11,7 +11,7 @@
 </head>
 <body data-theme="light">
     
-    <!-- Sidebar (Modern Dashboard Style) -->
+    <!-- Desktop Sidebar -->
     <nav class="sidebar hidden-mobile">
         <div class="logo">
             <i class="fa-solid fa-bolt text-orange"></i>
@@ -50,9 +50,6 @@
             </li>
             <li class="nav-item" onclick="showFeature('powercut', this)">
                 <i class="fa-solid fa-triangle-exclamation"></i> <span class="link-text" data-i18n="powerCutTab">Outages</span>
-            </li>
-            <li class="nav-item" onclick="showFeature('assistant', this)">
-                <i class="fa-solid fa-robot"></i> <span class="link-text" data-i18n="aiAdviser">AI Assistant</span>
             </li>
             <li class="nav-item" onclick="showFeature('profile', this)">
                 <i class="fa-solid fa-user"></i> <span class="link-text" data-i18n="profileTab">Profile</span>
@@ -120,48 +117,83 @@
             </div>
         </section>
 
-        <!-- Admin Dashboard -->
+        <!-- Admin Super Dashboard -->
         <section id="adminSection" class="hidden">
             <div class="admin-header glass-card mb-2">
                 <h2><i class="fa-solid fa-shield-halved"></i> Super Admin Control Panel</h2>
                 <span class="badge danger-bg">Prince Kumar (Root Access)</span>
             </div>
             
-            <div class="glass-card mb-2">
-                <h3><i class="fa-solid fa-user-gear"></i> Admin Profile & Settings</h3>
-                <div class="grid-2 mt-2">
-                    <div class="form-group">
-                        <label>Admin Name</label>
-                        <input type="text" id="adminProfileName" value="Prince Kumar">
-                    </div>
-                    <div class="form-group">
-                        <label>Admin Role / Responsibility</label>
-                        <input type="text" id="adminProfileRole" value="System Administration & Security Control">
-                    </div>
+            <div class="grid-4 mb-2">
+                <div class="glass-card stat-card p-2">
+                    <p class="card-label">Total Users</p>
+                    <h2 id="adminUserCount" class="text-orange">0</h2>
                 </div>
-                <button class="primary-btn sm-btn mt-1" type="button" onclick="saveAdminProfile()"><i class="fa-solid fa-floppy-disk"></i> Update Admin Profile</button>
+                <div class="glass-card stat-card p-2">
+                    <p class="card-label">Server Status</p>
+                    <h2 class="green-text"><i class="fa-solid fa-check-circle"></i> Online</h2>
+                </div>
+                <div class="glass-card stat-card p-2">
+                    <p class="card-label">System Health</p>
+                    <h2 class="text-orange">100%</h2>
+                </div>
+                <div class="glass-card stat-card p-2">
+                    <p class="card-label">AI Status</p>
+                    <h2 class="green-text">Active</h2>
+                </div>
             </div>
 
-            <div class="grid-2 mb-2">
-                <div class="glass-card stat-card p-2">
-                    <h3>Total Registered Users</h3>
-                    <p id="adminUserCount" class="text-orange" style="font-size:2rem; font-weight:600;">0</p>
+            <!-- Admin Full Control: User Management -->
+            <div class="glass-card mb-2">
+                <div class="flex-between mb-2">
+                    <h3><i class="fa-solid fa-users-gear text-orange"></i> Manage Registered Users</h3>
+                    <button class="primary-btn sm-btn" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
+                        <i class="fa-solid fa-user-plus"></i> Add New User
+                    </button>
                 </div>
-                <div class="glass-card stat-card p-2">
-                    <h3>Server Status</h3>
-                    <p class="green-text" style="font-size:2rem; font-weight:600;"><i class="fa-solid fa-circle-check"></i> Online</p>
+
+                <!-- Admin Add User Form -->
+                <div id="adminAddUserBox" class="hidden p-3 mb-2" style="background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--card-border);">
+                    <h4>Register a New Consumer Directly</h4>
+                    <div class="grid-4 mt-2">
+                        <input type="text" id="adminNewName" placeholder="Full Name">
+                        <input type="text" id="adminNewId" placeholder="Consumer Number">
+                        <input type="text" id="adminNewPin" placeholder="4-Digit PIN" maxlength="4">
+                        <button class="primary-btn m-0" onclick="adminAddNewUser()">Create User</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Consumer ID</th>
+                                <th>Full Name</th>
+                                <th>Total Appliances</th>
+                                <th>Est. Usage Load</th>
+                                <th>Est. Monthly Bill</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUserListBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
             
+            <!-- Server Logs -->
             <div class="glass-card">
-                <h3><i class="fa-solid fa-network-wired"></i> Live User Activity & IP Logs</h3>
-                <div class="table-container mt-2">
+                <h3><i class="fa-solid fa-network-wired text-orange"></i> Live User Activity & IP/Device Logs</h3>
+                <p class="small-text mb-2">Shows live network tracking for users online.</p>
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                     <table class="admin-table">
-                        <thead><tr><th>Time</th><th>User ID / Name</th><th>Action</th><th>IP Address</th><th>Device</th></tr></thead>
+                        <thead><tr><th>Time</th><th>User ID / Name</th><th>Action</th><th>IP Address</th><th>Device Info</th></tr></thead>
                         <tbody id="adminLogsBody"></tbody>
                     </table>
                 </div>
             </div>
+            <button class="danger-btn mt-3" onclick="logout()"><i class="fa-solid fa-power-off"></i> Exit Admin Dashboard</button>
         </section>
 
         <!-- Main User Application -->
@@ -176,7 +208,6 @@
                 <button class="nav-btn" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
                 <button class="nav-btn" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
                 <button class="nav-btn" onclick="showFeature('powercut', this)" data-i18n="powerCutTab">Outages</button>
-                <button class="nav-btn" onclick="showFeature('assistant', this)" data-i18n="aiAdviser">AI Chat</button>
                 <button class="nav-btn" onclick="showFeature('profile', this)" data-i18n="profileTab">Profile</button>
                 <button class="nav-btn" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
             </div>
@@ -224,7 +255,7 @@
                     </div>
                 </div>
 
-                <!-- Big Graph Area -->
+                <!-- Big Graph Area (2D Dynamic) -->
                 <div class="clean-card mb-3">
                     <div class="flex-between mb-2">
                         <h3 data-i18n="trendChart">Energy Usage Trend</h3>
@@ -239,7 +270,7 @@
                         <input type="number" id="graphW2" placeholder="W2 kWh" value="62">
                         <input type="number" id="graphW3" placeholder="W3 kWh" value="38">
                         <input type="number" id="graphW4" placeholder="W4 kWh" value="55">
-                        <button class="primary-btn m-0" type="button" onclick="updateManualChart()"><i class="fa-solid fa-arrows-rotate"></i> Update</button>
+                        <button class="primary-btn m-0" type="button" onclick="updateManualChart()"><i class="fa-solid fa-arrows-rotate"></i> Update Graph</button>
                     </div>
 
                     <div class="chart-container" style="height: 350px;"><canvas id="energyChart"></canvas></div>
@@ -322,6 +353,33 @@
                 </div>
             </div>
 
+            <!-- CALCULATORS (Generic Offline) -->
+            <div id="calculators" class="feature-content hidden">
+                <div class="grid-2">
+                    <div class="clean-card">
+                        <h2><i class="fa-solid fa-calculator text-orange"></i> Generic Estimator</h2>
+                        <div class="form-group mt-2"><label>Power rating (Watts)</label><input type="number" id="calcWatts" value="100"></div>
+                        <div class="form-group"><label>Hours per day</label><input type="number" id="calcHours" value="8"></div>
+                        <div class="form-group"><label>Rate (₹ per kWh)</label><input type="number" id="calcRate" value="8"></div>
+                        <button class="primary-btn" type="button" onclick="runCalculator()">Calculate Offline</button>
+                        <div class="calc-results mt-3">
+                            <div class="result-row"><span>Daily Energy:</span> <b id="resDailyKwh">0.80 kWh</b></div>
+                            <div class="result-row"><span>Monthly Energy:</span> <b id="resMonthlyKwh">24.00 kWh</b></div>
+                            <div class="result-row"><span>Monthly Cost:</span> <b class="danger-text" id="resMonthlyCost">₹192.00</b></div>
+                        </div>
+                    </div>
+
+                    <div class="clean-card">
+                        <h2><i class="fa-solid fa-bolt text-orange"></i> Ohm's Law Helper</h2>
+                        <div class="form-group mt-2"><label>Voltage (V)</label><input type="number" id="ohmVoltage" value="220"></div>
+                        <div class="form-group"><label>Current (A)</label><input type="number" id="ohmCurrent" placeholder="Leave empty to find"></div>
+                        <div class="form-group"><label>Resistance (Ω)</label><input type="number" id="ohmResistance" value="110"></div>
+                        <button class="secondary-btn" type="button" onclick="runOhmCalculator()">Solve Offline</button>
+                        <div class="calc-results mt-3 text-center"><h3 id="ohmResult" class="green-text">Current (I) = 2.00 A</h3></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- INSIGHTS & AUDIT (Proof of Impact) -->
             <div id="audit" class="feature-content hidden">
                 <div class="grid-2">
@@ -370,7 +428,7 @@
             <div id="simulator" class="feature-content hidden">
                 <div class="clean-card text-center" style="max-width: 700px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-sliders text-orange"></i> Live Savings Simulator</h2>
-                    <p class="mb-3">Adjust your Fan/AC daily usage to see live impact on units and cost.</p>
+                    <p class="mb-3">Adjust your appliance daily usage to see live impact on units and cost.</p>
                     
                     <div class="grid-2 text-left mb-3">
                         <div class="form-group">
@@ -456,33 +514,6 @@
                 </div>
             </div>
 
-            <!-- CALCULATORS (Generic) -->
-            <div id="calculators" class="feature-content hidden">
-                <div class="grid-2">
-                    <div class="clean-card">
-                        <h2><i class="fa-solid fa-calculator text-orange"></i> Generic Estimator</h2>
-                        <div class="form-group mt-2"><label>Power rating (Watts)</label><input type="number" id="calcWatts" value="100"></div>
-                        <div class="form-group"><label>Hours per day</label><input type="number" id="calcHours" value="8"></div>
-                        <div class="form-group"><label>Rate (₹ per kWh)</label><input type="number" id="calcRate" value="8"></div>
-                        <button class="primary-btn" type="button" onclick="runCalculator()">Calculate</button>
-                        <div class="calc-results mt-3">
-                            <div class="result-row"><span>Daily Energy:</span> <b id="resDailyKwh">0.80 kWh</b></div>
-                            <div class="result-row"><span>Monthly Energy:</span> <b id="resMonthlyKwh">24.00 kWh</b></div>
-                            <div class="result-row"><span>Monthly Cost:</span> <b class="danger-text" id="resMonthlyCost">₹192.00</b></div>
-                        </div>
-                    </div>
-
-                    <div class="clean-card">
-                        <h2><i class="fa-solid fa-bolt text-orange"></i> Ohm's Law Helper</h2>
-                        <div class="form-group mt-2"><label>Voltage (V)</label><input type="number" id="ohmVoltage" value="220"></div>
-                        <div class="form-group"><label>Current (A)</label><input type="number" id="ohmCurrent" placeholder="Leave empty to find"></div>
-                        <div class="form-group"><label>Resistance (Ω)</label><input type="number" id="ohmResistance" value="110"></div>
-                        <button class="secondary-btn" type="button" onclick="runOhmCalculator()">Solve</button>
-                        <div class="calc-results mt-3 text-center"><h3 id="ohmResult" class="green-text">Current (I) = 2.00 A</h3></div>
-                    </div>
-                </div>
-            </div>
-
             <!-- PROFILE SETTINGS -->
             <div id="profile" class="feature-content hidden">
                 <div class="clean-card" style="max-width: 600px; margin: 0 auto;">
@@ -503,31 +534,6 @@
                     </div>
                     <button class="primary-btn mt-2" type="button" onclick="saveUserProfile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
                     <div id="profileMsg" class="green-text text-center mt-2" style="font-weight: 500;"></div>
-                </div>
-            </div>
-
-            <!-- DEDICATED AI ASSISTANT TAB (WITH TTS) -->
-            <div id="assistant" class="feature-content hidden">
-                <div class="clean-card chat-panel-full" style="display: flex; flex-direction: column; height: 75vh;">
-                    <div class="flex-between mb-2">
-                        <h3><i class="fa-solid fa-robot green-text"></i> Eco Sparks AI Assistant</h3>
-                        <span class="badge light-green-bg">Memory & Voice Active</span>
-                    </div>
-                    
-                    <div id="tabChatBox" class="chat-box" style="flex:1; background: rgba(0,0,0,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--card-border); overflow-y: auto;">
-                        <div class="message ai-message">
-                            <p>Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!</p>
-                            <div class="tts-controls mt-1">
-                                <button class="tts-btn" type="button" onclick="speakText('Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
-                                <button class="tts-btn" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="chat-input-area mt-2" style="border: none; padding: 0;">
-                        <input type="text" id="tabChatInput" placeholder="Ask your energy doubt here..." onkeypress="handleTabChatEnter(event)">
-                        <button type="button" class="primary-btn m-0" style="width: 80px;" onclick="sendTabChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
                 </div>
             </div>
 
@@ -559,10 +565,36 @@
         </section>
     </div>
 
-    <!-- Floating AI Button (Only visible on Mobile usually, or kept as quick access) -->
-    <button id="floatingAIBtn" class="hidden-desktop" onclick="showFeature('assistant', document.querySelector('.nav-btn[onclick*=\'assistant\']'))" title="Ask Eco Spark AI">
+    <!-- Floating AI Button (Proper Popup trigger) -->
+    <button id="floatingAIBtn" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
         <i class="fa-solid fa-robot"></i>
     </button>
+
+    <!-- PROPER FLOATING AI POPUP -->
+    <div id="aiChatPopup" class="glass-card hidden">
+        <div class="chat-header">
+            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> Eco Spark AI <span class="badge" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
+            <button class="close-btn" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="chatBox" class="chat-box">
+            <div class="message ai-message">
+                <p data-i18n="aiGreeting">Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!</p>
+                <div class="tts-controls mt-1">
+                    <button class="tts-btn" type="button" onclick="speakText('Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
+                </div>
+            </div>
+            <div class="chat-suggestions" id="chatSuggestions">
+                <button type="button" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button type="button" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
+                <button type="button" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)">
+            <button type="button" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by Eco Sparks Team</small>
