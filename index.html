@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sparks - Smart Energy Saver</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-bolt text-yellow"></i> Eco Sparks
+        </div>
+        <div class="nav-controls">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="hinglish">Hinglish</option>
+            </select>
+            <button id="themeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <button id="logoutBtn" class="hidden" onclick="logout()" data-i18n="logout">Logout</button>
+        </div>
+    </nav>
+
+    <div id="appContainer">
+        
+        <!-- Auth Section -->
+        <section id="authSection" class="active-section glass-card">
+            <h2 data-i18n="welcomeAuth">Welcome to Eco Sparks</h2>
+            <p data-i18n="authSubtitle" class="subtitle">Log in or create an account to start saving energy.</p>
+            
+            <div class="auth-tabs">
+                <button class="active" onclick="switchAuthTab('login', this)" data-i18n="loginTab">User Login</button>
+                <button onclick="switchAuthTab('register', this)" data-i18n="registerTab">Create Account</button>
+                <button onclick="switchAuthTab('admin', this)" data-i18n="adminTab">Admin</button>
+            </div>
+
+            <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <input type="text" id="loginId" placeholder="Consumer Number" required>
+                <input type="password" id="loginPin" placeholder="4-Digit PIN" required pattern="[0-9]{4}">
+                <button type="submit" class="primary-btn" data-i18n="loginBtn">Secure Login</button>
+            </form>
+
+            <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <input type="text" id="regName" placeholder="Full Name" required>
+                <input type="text" id="regId" placeholder="Consumer Number" required>
+                <input type="password" id="regPin" placeholder="Set 4-Digit PIN" required pattern="[0-9]{4}">
+                <button type="submit" class="primary-btn" data-i18n="createAccBtn">Create Account</button>
+            </form>
+
+            <form id="adminForm" class="auth-form" onsubmit="handleAdminLogin(event)">
+                <input type="password" id="adminPassword" placeholder="Admin Password" required>
+                <button type="submit" class="danger-btn" id="adminLoginSubmitBtn" data-i18n="adminLoginBtn">Access Admin Panel</button>
+            </form>
+            <div id="authError" class="error-text"></div>
+        </section>
+
+        <!-- Admin Dashboard -->
+        <section id="adminSection" class="hidden glass-card">
+            <div class="admin-header">
+                <h2><i class="fa-solid fa-shield-halved"></i> Super Admin Control Panel</h2>
+                <span class="badge danger-bg">Prince Kumar (Root Access)</span>
+            </div>
+            <div class="stats-grid mt-3">
+                <div class="stat-card">
+                    <h3>Total Registered Users</h3>
+                    <p id="adminUserCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Server Status</h3>
+                    <p class="green-text"><i class="fa-solid fa-circle-check"></i> Online</p>
+                </div>
+            </div>
+            <h3 class="mt-3"><i class="fa-solid fa-network-wired"></i> Live User Activity & IP Logs</h3>
+            <div class="table-container mt-2">
+                <table class="admin-table">
+                    <thead><tr><th>Time</th><th>User ID / Name</th><th>Action</th><th>IP Address</th><th>Device</th></tr></thead>
+                    <tbody id="adminLogsBody"></tbody>
+                </table>
+            </div>
+            <button class="primary-btn mt-3" onclick="logout()">Exit Admin Dashboard</button>
+        </section>
+
+        <!-- User Dashboard -->
+        <section id="dashboardSection" class="hidden">
+            <div class="greeting-header glass-card fade-in">
+                <h1 id="userGreeting" style="font-weight: 600;">Good Morning, User! <span id="timeIcon">☀️</span></h1>
+                <p id="dailyMotivation" class="motivation-text mt-1">A fresh morning to save energy</p>
+            </div>
+
+            <div class="features-nav scroll-nav">
+                <button class="nav-btn active" onclick="showFeature('overview', this)" data-i18n="overview">Overview</button>
+                <button class="nav-btn" onclick="showFeature('appliances', this)" data-i18n="applianceTab">My Appliances</button>
+                <button class="nav-btn" onclick="showFeature('audit', this)" data-i18n="auditTool">Insights & Audit</button>
+                <button class="nav-btn" onclick="showFeature('calculators', this)" data-i18n="calcTool">Calculators</button>
+                <button class="nav-btn" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
+                <button class="nav-btn" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
+            </div>
+
+            <!-- Overview -->
+            <div id="overview" class="feature-content active-feature">
+                <div class="grid-2">
+                    <div class="glass-card stat-card pulse-hover">
+                        <i class="fa-solid fa-leaf icon-large green-text"></i>
+                        <h3 data-i18n="ecoScore">Eco Score</h3>
+                        <div class="score-circle" id="ecoScoreDisplay">85/100</div>
+                        <p class="small-text" data-i18n="ecoScoreSub">Excellent! You are an eco-warrior.</p>
+                    </div>
+                    
+                    <div class="glass-card stat-card pulse-hover" style="border-left: 4px solid var(--danger);">
+                        <i class="fa-solid fa-plug icon-large" style="color: var(--danger);"></i>
+                        <h3 data-i18n="vampirePower">Vampire Power Loss</h3>
+                        <h2 id="vampireDisplay" style="color: var(--danger);">₹ 0</h2>
+                        <p class="small-text" data-i18n="vampireSub">Estimated monthly cost of devices plugged in but turned off.</p>
+                    </div>
+                </div>
+                
+                <div class="guide-box mt-3 mb-2" style="background: rgba(39, 174, 96, 0.1); border-color: #27AE60;">
+                    <h3><i class="fa-solid fa-lightbulb text-yellow"></i> Daily Energy Tip</h3>
+                    <p class="mt-1" style="font-weight:500;">Start with the easy wins: Switch off lights and fans when a room is empty. It is simple, free, and adds up over time!</p>
+                </div>
+
+                <div class="grid-2 mt-3">
+                    <div class="glass-card">
+                        <h3 data-i18n="trendChart"><i class="fa-solid fa-chart-line"></i> Energy Trend (Monthly)</h3>
+                        <div class="chart-container"><canvas id="energyChart"></canvas></div>
+                    </div>
+                    <div class="glass-card">
+                        <h3><i class="fa-solid fa-chart-pie"></i> Usage Breakdown</h3>
+                        <div class="chart-container"><canvas id="pieChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appliances -->
+            <div id="appliances" class="feature-content hidden">
+                <div class="glass-card">
+                    <h2 data-i18n="appTitle">Appliance Load Calculator</h2>
+                    <p data-i18n="appDesc">Add your home appliances to build your energy profile.</p>
+                    
+                    <div class="appliance-form mt-2">
+                        <div class="grid-2">
+                            <input type="text" id="appName" placeholder="e.g. Ceiling Fan, AC, TV">
+                            <input type="number" id="appPower" placeholder="Power (Watts) e.g. 70">
+                            <input type="number" id="appHours" placeholder="Usage (Hours/Day)">
+                            <button class="primary-btn m-0" onclick="addAppliance()"><i class="fa-solid fa-plus"></i> <span data-i18n="addApp">Add</span></button>
+                        </div>
+                    </div>
+
+                    <div class="table-container mt-3">
+                        <table class="admin-table">
+                            <thead>
+                                <tr><th>Appliance</th><th>Power</th><th>Daily Usage</th><th>Monthly Cost</th><th>Action</th></tr>
+                            </thead>
+                            <tbody id="applianceList"></tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 text-right">
+                        <h4>Total Est. Monthly Load: <span class="green-text" id="totalAppLoad">0</span> kWh</h4>
+                    </div>
+
+                    <div class="guide-box mt-3">
+                        <h3><i class="fa-solid fa-robot text-yellow"></i> AI Analysis & Optimization</h3>
+                        <p class="small-text mt-1">Let Eco Spark AI analyze your specific appliances and provide a tailored plan.</p>
+                        <button class="primary-btn mt-2" onclick="askAIToOptimize()"><i class="fa-solid fa-bolt"></i> Generate Smart Insights</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights & Audit (With Bill Compare) -->
+            <div id="audit" class="feature-content hidden">
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <h2 data-i18n="auditTitle">Smart Energy Audit</h2>
+                        <p data-i18n="auditDesc">Generate a complete report.</p>
+                        <div class="form-group mt-2">
+                            <label data-i18n="monthlyUnits">Last Month Units (kWh)</label>
+                            <input type="number" id="auditUnits" placeholder="e.g. 250">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="tariffRate">Tariff Rate (₹ per unit)</label>
+                            <input type="number" id="auditRate" placeholder="e.g. 7.5">
+                        </div>
+                        <button class="primary-btn" onclick="generateAudit()" data-i18n="generateAudit">Generate Report</button>
+                        
+                        <div id="auditResult" class="hidden mt-3 p-3 result-box">
+                            <p id="auditBill">Estimated Bill: ₹0</p>
+                            <p id="auditSavings">Possible Savings: ₹0</p>
+                            <button class="secondary-btn mt-2" onclick="downloadReport()"><i class="fa-solid fa-file-csv"></i> Download CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2><i class="fa-solid fa-scale-balanced"></i> Bill Comparison Check</h2>
+                        <p class="small-text mb-2">Compare a previous bill with your latest bill.</p>
+                        <div class="form-group">
+                            <label>Previous Month (kWh)</label>
+                            <input type="number" id="prevKwh" placeholder="e.g. 240">
+                        </div>
+                        <div class="form-group">
+                            <label>Latest Month (kWh)</label>
+                            <input type="number" id="latestKwh" placeholder="e.g. 210">
+                        </div>
+                        <button class="secondary-btn" onclick="compareUsage()">Compare Usage</button>
+                        <div id="compareResult" class="mt-3 text-center" style="font-weight: 500;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculators -->
+            <div id="calculators" class="feature-content hidden">
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <h2><i class="fa-solid fa-calculator"></i> Energy & Cost Estimator</h2>
+                        <div class="form-group mt-2"><label>Power rating (Watts)</label><input type="number" id="calcWatts" value="100"></div>
+                        <div class="form-group"><label>Hours per day</label><input type="number" id="calcHours" value="8"></div>
+                        <div class="form-group"><label>Rate (₹ per kWh)</label><input type="number" id="calcRate" value="8"></div>
+                        <button class="primary-btn" onclick="runCalculator()">Calculate</button>
+                        <div class="calc-results mt-3">
+                            <div class="result-row"><span>Daily Energy:</span> <b id="resDailyKwh">0.80 kWh</b></div>
+                            <div class="result-row"><span>Monthly Energy:</span> <b id="resMonthlyKwh">24.00 kWh</b></div>
+                            <div class="result-row"><span>Monthly Cost:</span> <b class="danger-text" id="resMonthlyCost">₹192.00</b></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2><i class="fa-solid fa-bolt"></i> Ohm's Law Helper</h2>
+                        <div class="form-group mt-2"><label>Voltage (V)</label><input type="number" id="ohmVoltage" value="220"></div>
+                        <div class="form-group"><label>Current (A)</label><input type="number" id="ohmCurrent" placeholder="Leave empty to find"></div>
+                        <div class="form-group"><label>Resistance (Ω)</label><input type="number" id="ohmResistance" value="110"></div>
+                        <button class="secondary-btn" onclick="runOhmCalculator()">Solve</button>
+                        <div class="calc-results mt-3 text-center"><h3 id="ohmResult" class="green-text">Current (I) = 2.00 A</h3></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator -->
+            <div id="simulator" class="feature-content hidden">
+                <div class="glass-card text-center">
+                    <h2 data-i18n="simTitle">What-If Savings Simulator</h2>
+                    <p data-i18n="simDesc">See how changing your habits affects your bill.</p>
+                    <div class="slider-group mt-3" style="max-width: 500px; margin: 0 auto;">
+                        <label style="font-size: 1.2rem; font-weight: 600;"><span data-i18n="acHours">AC Usage reduction per day:</span> <span id="acHoursVal" class="green-text">2</span> hours</label>
+                        <input type="range" id="acSlider" min="0" max="10" value="2" oninput="updateSim()" style="width: 100%; margin-top: 15px;">
+                    </div>
+                    <div class="result-box mt-3">
+                        <h2 class="green-text mt-1" id="simSavings" style="font-size: 2.5rem;">₹ 420 / month saved!</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community -->
+            <div id="community" class="feature-content hidden">
+                <div class="glass-card">
+                    <h2 data-i18n="communityTitle">Community Energy Challenge</h2>
+                    <div class="stat-card mt-2 text-center" style="background: rgba(39, 174, 96, 0.1);">
+                        <h3>Total Units Saved by Community</h3>
+                        <h2 class="green-text">1,452 kWh 🌍</h2>
+                    </div>
+                    <h3 class="mt-3">Leaderboard (Top Savers)</h3>
+                    <div class="table-container mt-2">
+                        <table class="leaderboard-table">
+                            <thead><tr><th>Rank</th><th>Household</th><th>Energy Saved</th></tr></thead>
+                            <tbody>
+                                <tr class="gold-row"><td><i class="fa-solid fa-trophy"></i> 1</td><td>Consumer ****892</td><td>45 kWh</td></tr>
+                                <tr class="silver-row"><td><i class="fa-solid fa-medal"></i> 2</td><td>Consumer ****331</td><td>38 kWh</td></tr>
+                                <tr class="user-row"><td><i class="fa-solid fa-star"></i> 3</td><td>You</td><td>32 kWh</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Floating AI Button -->
+    <button id="floatingAIBtn" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
+        <i class="fa-solid fa-robot"></i>
+    </button>
+
+    <!-- AI Popup -->
+    <div id="aiChatPopup" class="glass-card hidden">
+        <div class="chat-header">
+            <h3><i class="fa-solid fa-robot"></i> Eco Spark AI <span style="font-size: 0.7rem; background: var(--primary); color:white; padding: 2px 5px; border-radius:4px; margin-left: 5px;">Online</span></h3>
+            <button onclick="toggleAIPopup()" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="chatBox" class="chat-box">
+            <div class="message ai-message">
+                <p data-i18n="aiGreeting">Hello! I am Eco Spark AI. How can I help you save energy today?</p>
+            </div>
+            
+            <!-- Quick Suggestions -->
+            <div class="chat-suggestions" id="chatSuggestions">
+                <button onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
+                <button onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
+            </div>
+
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)">
+            <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <small>Made with ❤️ by Eco Sparks Team</small>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
