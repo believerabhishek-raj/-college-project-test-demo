@@ -53,7 +53,6 @@ function changeLanguage(langCode) {
         currentLang = langCode || safeGetVal('languageSelect') || 'en';
         localStorage.setItem('ecoLang', currentLang);
         
-        // Skip dynamic trans demo for now to avoid errors, keeping english structure
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
         if(activeUser) updateGreeting(activeUser.name);
     } catch (e) { console.error(e); }
@@ -283,9 +282,13 @@ function saveUserProfile() {
             localStorage.setItem('ecoUsers', JSON.stringify(users));
         }
         
-        alert("Profile updated successfully!");
+        const msgEl = document.getElementById('profileMsg');
+        if(msgEl) {
+            msgEl.classList.remove('hidden');
+            msgEl.innerText = "Profile updated successfully!";
+        }
         updateGreeting(name);
-        loadProfileFields(activeUser);
+        setTimeout(() => { if(msgEl) msgEl.innerText = ''; }, 3000);
     } catch(e) { console.error(e); }
 }
 
@@ -340,7 +343,10 @@ function showFeature(featureId, btnElement) {
         
         if(btnElement) btnElement.classList.add('active');
         
-        document.querySelectorAll('.feature-content').forEach(fc => fc.classList.add('hidden'));
+        document.querySelectorAll('.feature-content').forEach(fc => {
+            fc.classList.add('hidden');
+            fc.classList.remove('active-feature');
+        });
         
         const targetSection = document.getElementById(featureId);
         if(targetSection) {
@@ -353,10 +359,29 @@ function showFeature(featureId, btnElement) {
     } catch(e) { console.error("Navigation error:", e); }
 }
 
+// ------------------------------------
+// PROPER AI POPUP MODAL BEHAVIOR
+// ------------------------------------
 function toggleAIPopup() {
     try {
         const popup = document.getElementById('aiChatPopup');
-        if(popup) popup.classList.toggle('hidden');
+        const overlay = document.getElementById('popupOverlay');
+        
+        if(popup && overlay) {
+            if(popup.classList.contains('hidden')) {
+                // Open Popup
+                popup.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+                
+                // Add pop animation classes explicitly
+                popup.classList.add('scale-in-center');
+            } else {
+                // Close Popup
+                popup.classList.add('hidden');
+                overlay.classList.add('hidden');
+                popup.classList.remove('scale-in-center');
+            }
+        }
     } catch(e) { console.error(e); }
 }
 

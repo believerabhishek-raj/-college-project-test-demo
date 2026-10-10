@@ -12,9 +12,9 @@
 <body data-theme="light">
     
     <!-- Desktop Sidebar -->
-    <nav class="sidebar hidden-mobile">
+    <nav class="sidebar hidden-mobile fade-in-left">
         <div class="logo">
-            <i class="fa-solid fa-bolt text-orange"></i>
+            <i class="fa-solid fa-bolt text-orange pulse-icon"></i>
             <span class="logo-text">Eco Sparks</span>
         </div>
         
@@ -51,6 +51,9 @@
             <li class="nav-item" onclick="showFeature('powercut', this)">
                 <i class="fa-solid fa-triangle-exclamation"></i> <span class="link-text" data-i18n="powerCutTab">Outages</span>
             </li>
+            <li class="nav-item" onclick="showFeature('assistant', this)">
+                <i class="fa-solid fa-robot"></i> <span class="link-text" data-i18n="aiAdviser">AI Assistant</span>
+            </li>
             <li class="nav-item" onclick="showFeature('profile', this)">
                 <i class="fa-solid fa-user"></i> <span class="link-text" data-i18n="profileTab">Profile</span>
             </li>
@@ -65,9 +68,9 @@
     </nav>
 
     <!-- Mobile Top Nav -->
-    <nav class="navbar hidden-desktop">
+    <nav class="navbar hidden-desktop fade-in-down">
         <div class="logo">
-            <i class="fa-solid fa-bolt text-orange"></i> Eco Sparks
+            <i class="fa-solid fa-bolt text-orange pulse-icon"></i> Eco Sparks
         </div>
         <div class="nav-controls">
             <select id="languageSelectMobile" onchange="changeLanguage(this.value)">
@@ -85,8 +88,8 @@
     <div class="main-content" id="appContainer">
         
         <!-- Auth Section -->
-        <section id="authSection" class="active-section">
-            <div class="glass-card auth-wrapper">
+        <section id="authSection" class="active-section scale-in">
+            <div class="glass-card auth-wrapper slide-up">
                 <h2 data-i18n="welcomeAuth">Welcome to Eco Sparks</h2>
                 <p data-i18n="authSubtitle" class="subtitle mb-3">Log in or create an account to start saving energy.</p>
                 
@@ -96,68 +99,68 @@
                     <button onclick="switchAuthTab('admin', this)" data-i18n="adminTab">Admin</button>
                 </div>
 
-                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                <form id="loginForm" class="auth-form active fade-in" onsubmit="handleLogin(event)">
                     <input type="text" id="loginId" placeholder="Consumer Number" required>
                     <input type="password" id="loginPin" placeholder="4-Digit PIN" required pattern="[0-9]{4}">
-                    <button type="submit" class="primary-btn" data-i18n="loginBtn">Secure Login</button>
+                    <button type="submit" class="primary-btn hover-pop" data-i18n="loginBtn">Secure Login</button>
                 </form>
 
-                <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                <form id="registerForm" class="auth-form fade-in" onsubmit="handleRegister(event)">
                     <input type="text" id="regName" placeholder="Full Name" required>
                     <input type="text" id="regId" placeholder="Consumer Number" required>
                     <input type="password" id="regPin" placeholder="Set 4-Digit PIN" required pattern="[0-9]{4}">
-                    <button type="submit" class="primary-btn" data-i18n="createAccBtn">Create Account</button>
+                    <button type="submit" class="primary-btn hover-pop" data-i18n="createAccBtn">Create Account</button>
                 </form>
 
-                <form id="adminForm" class="auth-form" onsubmit="handleAdminLogin(event)">
+                <form id="adminForm" class="auth-form fade-in" onsubmit="handleAdminLogin(event)">
                     <input type="password" id="adminPassword" placeholder="Admin Password" required>
-                    <button type="submit" class="danger-btn" id="adminLoginSubmitBtn" data-i18n="adminLoginBtn">Access Admin Panel</button>
+                    <button type="submit" class="danger-btn hover-pop" id="adminLoginSubmitBtn" data-i18n="adminLoginBtn">Access Admin Panel</button>
                 </form>
                 <div id="authError" class="error-text"></div>
             </div>
         </section>
 
         <!-- Admin Super Dashboard -->
-        <section id="adminSection" class="hidden">
+        <section id="adminSection" class="hidden fade-in-up">
             <div class="admin-header glass-card mb-2">
                 <h2><i class="fa-solid fa-shield-halved"></i> Super Admin Control Panel</h2>
                 <span class="badge danger-bg">Prince Kumar (Root Access)</span>
             </div>
             
             <div class="grid-4 mb-2">
-                <div class="glass-card stat-card p-2">
+                <div class="glass-card stat-card p-2 hover-lift">
                     <p class="card-label">Total Users</p>
                     <h2 id="adminUserCount" class="text-orange">0</h2>
                 </div>
-                <div class="glass-card stat-card p-2">
+                <div class="glass-card stat-card p-2 hover-lift">
                     <p class="card-label">Server Status</p>
                     <h2 class="green-text"><i class="fa-solid fa-check-circle"></i> Online</h2>
                 </div>
-                <div class="glass-card stat-card p-2">
+                <div class="glass-card stat-card p-2 hover-lift">
                     <p class="card-label">System Health</p>
                     <h2 class="text-orange">100%</h2>
                 </div>
-                <div class="glass-card stat-card p-2">
+                <div class="glass-card stat-card p-2 hover-lift">
                     <p class="card-label">AI Status</p>
                     <h2 class="green-text">Active</h2>
                 </div>
             </div>
 
-            <div class="glass-card mb-2">
+            <div class="glass-card mb-2 slide-up">
                 <div class="flex-between mb-2">
                     <h3><i class="fa-solid fa-users-gear text-orange"></i> Manage Registered Users</h3>
-                    <button type="button" class="primary-btn sm-btn" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
+                    <button type="button" class="primary-btn sm-btn hover-pop" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
                         <i class="fa-solid fa-user-plus"></i> Add New User
                     </button>
                 </div>
 
-                <div id="adminAddUserBox" class="hidden p-3 mb-2" style="background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--card-border);">
+                <div id="adminAddUserBox" class="hidden p-3 mb-2 scale-in" style="background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--card-border);">
                     <h4>Register a New Consumer Directly</h4>
                     <div class="grid-4 mt-2">
                         <input type="text" id="adminNewName" placeholder="Full Name">
                         <input type="text" id="adminNewId" placeholder="Consumer Number">
                         <input type="text" id="adminNewPin" placeholder="4-Digit PIN" maxlength="4">
-                        <button type="button" class="primary-btn m-0" onclick="adminAddNewUser()">Create User</button>
+                        <button type="button" class="primary-btn m-0 hover-pop" onclick="adminAddNewUser()">Create User</button>
                     </div>
                 </div>
 
@@ -179,7 +182,7 @@
                 </div>
             </div>
             
-            <div class="glass-card">
+            <div class="glass-card slide-up">
                 <h3><i class="fa-solid fa-network-wired text-orange"></i> Live User Activity & IP/Device Logs</h3>
                 <p class="small-text mb-2">Shows live network tracking for users online.</p>
                 <div class="table-container" style="max-height: 250px; overflow-y: auto;">
@@ -189,36 +192,37 @@
                     </table>
                 </div>
             </div>
-            <button type="button" class="danger-btn mt-3" onclick="logout()"><i class="fa-solid fa-power-off"></i> Exit Admin Dashboard</button>
+            <button type="button" class="danger-btn mt-3 hover-pop" onclick="logout()"><i class="fa-solid fa-power-off"></i> Exit Admin Dashboard</button>
         </section>
 
         <!-- Main User Application -->
-        <section id="mainAppSection" class="hidden">
+        <section id="mainAppSection" class="hidden fade-in-up">
             
             <!-- Mobile Horizontal Nav -->
-            <div class="features-nav scroll-nav hidden-desktop mb-2" id="mobileNav">
-                <button class="nav-btn active" onclick="showFeature('dashboard', this)" data-i18n="dashboardTab">Dashboard</button>
-                <button class="nav-btn" onclick="showFeature('appliances', this)" data-i18n="applianceTab">Appliances</button>
-                <button class="nav-btn" onclick="showFeature('calculators', this)" data-i18n="calcTool">Calculators</button>
-                <button class="nav-btn" onclick="showFeature('audit', this)" data-i18n="auditTool">Insights</button>
-                <button class="nav-btn" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
-                <button class="nav-btn" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
-                <button class="nav-btn" onclick="showFeature('powercut', this)" data-i18n="powerCutTab">Outages</button>
-                <button class="nav-btn" onclick="showFeature('profile', this)" data-i18n="profileTab">Profile</button>
-                <button class="nav-btn" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
+            <div class="features-nav scroll-nav hidden-desktop mb-2 slide-right" id="mobileNav">
+                <button class="nav-btn active hover-pop" onclick="showFeature('dashboard', this)" data-i18n="dashboardTab">Dashboard</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('appliances', this)" data-i18n="applianceTab">Appliances</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('calculators', this)" data-i18n="calcTool">Calculators</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('audit', this)" data-i18n="auditTool">Insights</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('powercut', this)" data-i18n="powerCutTab">Outages</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('assistant', this)" data-i18n="aiAdviser">AI Assistant</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('profile', this)" data-i18n="profileTab">Profile</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
             </div>
 
-            <div class="top-header mb-3 hidden-mobile">
+            <div class="top-header mb-3 hidden-mobile slide-down">
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Search insights, tips, appliances...">
                 </div>
                 <div class="user-greeting">
-                    <div class="avatar-circle" id="userAvatarInitials">AK</div>
+                    <div class="avatar-circle pulse-hover" id="userAvatarInitials">AK</div>
                 </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 slide-right">
                 <h2 id="userGreeting" style="font-weight: 600;">Good Morning! <span id="timeIcon">☀️</span></h2>
                 <p id="dailyMotivation" class="motivation-text">A fresh morning to save energy</p>
             </div>
@@ -228,35 +232,35 @@
                 
                 <!-- 4 Quick Stats -->
                 <div class="grid-4 mb-3">
-                    <div class="clean-card p-2">
+                    <div class="clean-card p-2 hover-lift">
                         <p class="card-label">Total Load (kWh)</p>
-                        <h2 id="dashLoadDisplay" class="text-orange">0</h2>
+                        <h2 id="dashLoadDisplay" class="text-orange count-up">0</h2>
                         <span class="badge light-green-bg mt-1"><i class="fa-solid fa-arrow-down"></i> Better than last month</span>
                     </div>
-                    <div class="clean-card p-2">
+                    <div class="clean-card p-2 hover-lift">
                         <p class="card-label">Eco Score</p>
-                        <h2 id="ecoScoreDisplay">85%</h2>
+                        <h2 id="ecoScoreDisplay" class="count-up">85%</h2>
                         <span class="badge light-green-bg mt-1"><i class="fa-solid fa-leaf"></i> Excellent warrior</span>
                     </div>
-                    <div class="clean-card p-2">
+                    <div class="clean-card p-2 hover-lift" style="border-left: 3px solid var(--danger);">
                         <p class="card-label">Est. Monthly Cost</p>
-                        <h2 id="dashBillDisplay" class="text-orange">₹0.00</h2>
+                        <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
                         <span class="badge light-red-bg mt-1">Based on current usage</span>
                     </div>
-                    <div class="clean-card p-2">
+                    <div class="clean-card p-2 hover-lift" style="border-left: 3px solid var(--secondary);">
                         <p class="card-label">Vampire Power Loss</p>
-                        <h2 id="vampireDisplay" class="danger-text">₹0.00</h2>
+                        <h2 id="vampireDisplay" class="text-secondary count-up">₹0.00</h2>
                         <span class="badge light-red-bg mt-1"><i class="fa-solid fa-plug"></i> Wasted energy</span>
                     </div>
                 </div>
 
                 <!-- Big Graph Area (2D Dynamic) -->
-                <div class="clean-card mb-3">
+                <div class="clean-card mb-3 slide-up">
                     <div class="flex-between mb-2">
                         <h3 data-i18n="trendChart">Energy Usage Trend</h3>
                         <div class="graph-toggles">
-                            <button class="toggle-btn active" type="button" onclick="switchGraphType('line', this)">Smooth</button>
-                            <button class="toggle-btn" type="button" onclick="switchGraphType('bar', this)">2D Bar</button>
+                            <button class="toggle-btn active hover-pop" type="button" onclick="switchGraphType('line', this)">Smooth</button>
+                            <button class="toggle-btn hover-pop" type="button" onclick="switchGraphType('bar', this)">2D Bar</button>
                         </div>
                     </div>
                     
@@ -265,7 +269,7 @@
                         <input type="number" id="graphW2" placeholder="W2 kWh" value="62">
                         <input type="number" id="graphW3" placeholder="W3 kWh" value="38">
                         <input type="number" id="graphW4" placeholder="W4 kWh" value="55">
-                        <button class="primary-btn m-0" type="button" onclick="updateManualChart()"><i class="fa-solid fa-arrows-rotate"></i> Update Graph</button>
+                        <button class="primary-btn m-0 hover-pop" type="button" onclick="updateManualChart()"><i class="fa-solid fa-arrows-rotate"></i> Update Graph</button>
                     </div>
 
                     <div class="chart-container" style="height: 350px;"><canvas id="energyChart"></canvas></div>
@@ -273,12 +277,12 @@
 
                 <!-- Lower Section: Best Action First & Tips -->
                 <div class="grid-2">
-                    <div class="clean-card">
+                    <div class="clean-card slide-right">
                         <div class="flex-between mb-2">
                             <h3><i class="fa-solid fa-list-check text-orange"></i> Best Action First</h3>
-                            <button class="icon-btn" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
+                            <button class="icon-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
                         </div>
-                        <div class="action-item">
+                        <div class="action-item hover-lift">
                             <div class="icon-box green-bg"><i class="fa-solid fa-fan"></i></div>
                             <div class="action-details">
                                 <h4>Clean AC & Fan Filters</h4>
@@ -286,7 +290,7 @@
                             </div>
                             <span class="badge light-green-bg hidden-mobile">No Cost</span>
                         </div>
-                        <div class="action-item mt-2">
+                        <div class="action-item mt-2 hover-lift">
                             <div class="icon-box orange-bg"><i class="fa-solid fa-plug"></i></div>
                             <div class="action-details">
                                 <h4>Unplug idle devices (TV, PC)</h4>
@@ -294,7 +298,7 @@
                             </div>
                             <span class="badge light-green-bg hidden-mobile">Instant ROI</span>
                         </div>
-                        <div class="action-item mt-2">
+                        <div class="action-item mt-2 hover-lift">
                             <div class="icon-box red-bg"><i class="fa-solid fa-lightbulb"></i></div>
                             <div class="action-details">
                                 <h4>Switch to 5-Star Appliances</h4>
@@ -304,7 +308,7 @@
                         </div>
                     </div>
 
-                    <div class="clean-card dashed-border">
+                    <div class="clean-card dashed-border slide-left pulse-subtle">
                         <h3><i class="fa-solid fa-lightbulb text-yellow"></i> Daily Energy Tip</h3>
                         <p class="mt-2" style="font-size: 1.1rem; line-height: 1.6;">Switch off lights and fans when a room is empty. It is simple, free, and adds up over time! Use natural sunlight during the day.</p>
                     </div>
@@ -313,7 +317,7 @@
 
             <!-- APPLIANCES -->
             <div id="appliances" class="feature-content hidden">
-                <div class="clean-card mb-3">
+                <div class="clean-card mb-3 slide-down">
                     <h2 data-i18n="appTitle">Appliance Load Calculator</h2>
                     <p data-i18n="appDesc">Add your home appliances to build your energy profile.</p>
                     
@@ -322,21 +326,21 @@
                             <input type="text" id="appName" placeholder="e.g. Ceiling Fan, AC, TV">
                             <input type="number" id="appPower" placeholder="Power (Watts) e.g. 70">
                             <input type="number" id="appHours" placeholder="Usage (Hours/Day)">
-                            <button class="primary-btn m-0" type="button" onclick="addAppliance()"><i class="fa-solid fa-plus"></i> Add Appliance</button>
+                            <button class="primary-btn m-0 hover-pop" type="button" onclick="addAppliance()"><i class="fa-solid fa-plus"></i> Add Appliance</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="grid-2 mb-3">
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift">
                         <h3><i class="fa-solid fa-chart-pie text-orange"></i> Load Breakdown</h3>
                         <div class="chart-container mt-2" style="height: 250px;"><canvas id="pieChart"></canvas></div>
                     </div>
                     
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift">
                         <div class="flex-between mb-2">
                             <h3><i class="fa-solid fa-list"></i> Appliance List</h3>
-                            <button class="sm-btn" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
+                            <button class="sm-btn hover-pop" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
                         </div>
                         <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                             <table class="admin-table">
@@ -351,12 +355,12 @@
             <!-- CALCULATORS (Generic Offline) -->
             <div id="calculators" class="feature-content hidden">
                 <div class="grid-2">
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift slide-right">
                         <h2><i class="fa-solid fa-calculator text-orange"></i> Generic Estimator</h2>
                         <div class="form-group mt-2"><label>Power rating (Watts)</label><input type="number" id="calcWatts" value="100"></div>
                         <div class="form-group"><label>Hours per day</label><input type="number" id="calcHours" value="8"></div>
                         <div class="form-group"><label>Rate (₹ per kWh)</label><input type="number" id="calcRate" value="8"></div>
-                        <button class="primary-btn" type="button" onclick="runCalculator()">Calculate Offline</button>
+                        <button class="primary-btn hover-pop" type="button" onclick="runCalculator()">Calculate Offline</button>
                         <div class="calc-results mt-3">
                             <div class="result-row"><span>Daily Energy:</span> <b id="resDailyKwh">0.80 kWh</b></div>
                             <div class="result-row"><span>Monthly Energy:</span> <b id="resMonthlyKwh">24.00 kWh</b></div>
@@ -364,12 +368,12 @@
                         </div>
                     </div>
 
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift slide-left">
                         <h2><i class="fa-solid fa-bolt text-orange"></i> Ohm's Law Helper</h2>
                         <div class="form-group mt-2"><label>Voltage (V)</label><input type="number" id="ohmVoltage" value="220"></div>
                         <div class="form-group"><label>Current (A)</label><input type="number" id="ohmCurrent" placeholder="Leave empty to find"></div>
                         <div class="form-group"><label>Resistance (Ω)</label><input type="number" id="ohmResistance" value="110"></div>
-                        <button class="secondary-btn" type="button" onclick="runOhmCalculator()">Solve Offline</button>
+                        <button class="secondary-btn hover-pop" type="button" onclick="runOhmCalculator()">Solve Offline</button>
                         <div class="calc-results mt-3 text-center"><h3 id="ohmResult" class="green-text">Current (I) = 2.00 A</h3></div>
                     </div>
                 </div>
@@ -378,7 +382,7 @@
             <!-- INSIGHTS & AUDIT (Proof of Impact) -->
             <div id="audit" class="feature-content hidden">
                 <div class="grid-2">
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift slide-right">
                         <h2><i class="fa-solid fa-file-invoice text-orange"></i> Live Energy Audit</h2>
                         <p class="small-text mb-2">Proof of Impact: Enter details to generate a comprehensive report.</p>
                         
@@ -390,19 +394,19 @@
                             <label>Tariff Rate (₹ per unit)</label>
                             <input type="number" id="auditRate" placeholder="e.g. 7.5">
                         </div>
-                        <button class="primary-btn" type="button" onclick="generateAudit()">Generate Audit Report</button>
+                        <button class="primary-btn hover-pop" type="button" onclick="generateAudit()">Generate Audit Report</button>
                         
-                        <div id="auditResult" class="hidden mt-3 p-3 result-box green-bg" style="border-radius: 8px;">
+                        <div id="auditResult" class="hidden mt-3 p-3 result-box green-bg scale-in" style="border-radius: 8px;">
                             <h3 class="mb-2">Audit Summary</h3>
                             <p id="auditBill" style="font-size: 1.2rem;">Estimated Bill: ₹0</p>
                             <p id="auditSavings" style="font-size: 1.2rem;" class="green-text mb-2">Possible Savings: ₹0</p>
                             
                             <p class="small-text">Estimated Carbon Reduction: <b id="auditCarbon">0 kg CO2</b> if optimized.</p>
-                            <button class="secondary-btn mt-2" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> Download Audit PDF/CSV</button>
+                            <button class="secondary-btn mt-2 hover-pop" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> Download Audit PDF/CSV</button>
                         </div>
                     </div>
 
-                    <div class="clean-card">
+                    <div class="clean-card hover-lift slide-left">
                         <h2><i class="fa-solid fa-scale-balanced text-orange"></i> Bill Comparison Check</h2>
                         <p class="small-text mb-2">Before/After Comparison of your usage.</p>
                         <div class="form-group">
@@ -413,17 +417,17 @@
                             <label>Latest Month (kWh)</label>
                             <input type="number" id="latestKwh" placeholder="e.g. 210">
                         </div>
-                        <button class="secondary-btn" type="button" onclick="compareUsage()">Compare Bills</button>
-                        <div id="compareResult" class="mt-3 text-center" style="font-size: 1.2rem; font-weight: 600;"></div>
+                        <button class="secondary-btn hover-pop" type="button" onclick="compareUsage()">Compare Bills</button>
+                        <div id="compareResult" class="mt-3 text-center fade-in" style="font-size: 1.2rem; font-weight: 600;"></div>
                     </div>
                 </div>
             </div>
 
             <!-- SIMULATOR -->
             <div id="simulator" class="feature-content hidden">
-                <div class="clean-card text-center" style="max-width: 700px; margin: 0 auto;">
+                <div class="clean-card text-center slide-up" style="max-width: 700px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-sliders text-orange"></i> Live Savings Simulator</h2>
-                    <p class="mb-3">Adjust your Fan/AC daily usage to see live impact on units and cost.</p>
+                    <p class="mb-3">Adjust your appliance daily usage to see live impact on units and cost.</p>
                     
                     <div class="grid-2 text-left mb-3">
                         <div class="form-group">
@@ -442,13 +446,13 @@
                     </div>
                     
                     <div class="grid-2 mt-3">
-                        <div class="p-2 green-bg" style="border-radius: 8px;">
+                        <div class="p-2 green-bg hover-lift" style="border-radius: 8px;">
                             <p class="small-text">Units Saved</p>
-                            <h2 class="green-text" id="simUnitsResult">45 kWh</h2>
+                            <h2 class="green-text count-up" id="simUnitsResult">45 kWh</h2>
                         </div>
-                        <div class="p-2 orange-bg" style="border-radius: 8px;">
+                        <div class="p-2 orange-bg hover-lift" style="border-radius: 8px;">
                             <p class="small-text">Money Saved</p>
-                            <h2 class="text-orange" id="simSavingsResult">₹ 360</h2>
+                            <h2 class="text-orange count-up" id="simSavingsResult">₹ 360</h2>
                         </div>
                     </div>
                 </div>
@@ -456,22 +460,22 @@
 
             <!-- COMMUNITY CHALLENGE -->
             <div id="community" class="feature-content hidden">
-                <div class="clean-card">
+                <div class="clean-card slide-up">
                     <h2 class="mb-1"><i class="fa-solid fa-trophy text-yellow"></i> Monthly Energy-Saving Challenge</h2>
                     <p class="mb-3">Compete with neighbors to save the most energy and earn badges!</p>
                     
                     <div class="grid-2 mb-3">
-                        <div class="p-3 text-center green-bg" style="border-radius: 12px; border: 1px solid #27AE60;">
+                        <div class="p-3 text-center green-bg hover-lift" style="border-radius: 12px; border: 1px solid #27AE60;">
                             <h3>Your Monthly Goal</h3>
                             <p class="small-text mt-1">Reduce consumption by 10% compared to last month.</p>
                             <div style="width: 100%; background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 15px; overflow: hidden;">
-                                <div style="width: 60%; background: #27AE60; height: 100%;"></div>
+                                <div style="width: 60%; background: #27AE60; height: 100%; transition: width 1s ease;"></div>
                             </div>
                             <p class="small-text mt-1">60% Completed</p>
                         </div>
-                        <div class="p-3 text-center" style="background: rgba(41, 128, 185, 0.1); border-radius: 12px; border: 1px solid #2980B9;">
+                        <div class="p-3 text-center hover-lift" style="background: rgba(41, 128, 185, 0.1); border-radius: 12px; border: 1px solid #2980B9;">
                             <h3>Total Units Saved by Community</h3>
-                            <h1 class="text-orange mt-2">1,452 kWh 🌍</h1>
+                            <h1 class="text-orange mt-2 count-up">1,452 kWh 🌍</h1>
                             <p class="small-text mt-1">Together we are making a difference.</p>
                         </div>
                     </div>
@@ -492,26 +496,51 @@
 
             <!-- SMART POWER CUT NOTIFICATION -->
             <div id="powercut" class="feature-content hidden">
-                <div class="clean-card text-center" style="max-width: 600px; margin: 0 auto;">
+                <div class="clean-card text-center slide-down" style="max-width: 600px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-triangle-exclamation danger-text"></i> Smart Power-Cut Monitor</h2>
                     <p class="mb-3">Live status of grid supply in your area.</p>
                     
-                    <div class="p-3 mb-3 red-bg" style="border-radius: 12px; border: 1px dashed var(--danger);">
+                    <div class="p-3 mb-3 red-bg pulse-subtle" style="border-radius: 12px; border: 1px dashed var(--danger);">
                         <i class="fa-solid fa-tower-observation danger-text" style="font-size: 3rem; margin-bottom: 15px;"></i>
                         <h3 class="danger-text">Power Supply Interruption Detected</h3>
                         <p class="mt-1"><strong>Possible Reason:</strong> Scheduled Feeder Maintenance</p>
                         <p class="mt-1"><strong>Expected Restoration:</strong> Within 45 minutes</p>
                     </div>
 
-                    <button class="primary-btn" type="button" onclick="alert('Recovery notification setup complete! We will notify you when power restores.')">
+                    <button class="primary-btn hover-pop" type="button" onclick="alert('Recovery notification setup complete! We will notify you when power restores.')">
                         <i class="fa-solid fa-bell"></i> Alert me when power restores
                     </button>
+                </div>
+            </div>
+            
+            <!-- DEDICATED AI ASSISTANT TAB (WITH TTS) -->
+            <div id="assistant" class="feature-content hidden">
+                <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
+                    <div class="flex-between mb-2">
+                        <h3><i class="fa-solid fa-robot green-text"></i> Eco Sparks AI Assistant</h3>
+                        <span class="badge light-green-bg pulse-subtle">Memory & Voice Active</span>
+                    </div>
+                    
+                    <div id="tabChatBox" class="chat-box" style="flex:1; background: rgba(0,0,0,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--card-border); overflow-y: auto;">
+                        <div class="message ai-message fade-in">
+                            <p>Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!</p>
+                            <div class="tts-controls mt-1">
+                                <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                                <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area mt-2" style="border: none; padding: 0;">
+                        <input type="text" id="tabChatInput" placeholder="Ask your energy doubt here..." onkeypress="handleTabChatEnter(event)">
+                        <button type="button" class="primary-btn m-0 hover-pop" style="width: 80px;" onclick="sendTabChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
                 </div>
             </div>
 
             <!-- PROFILE SETTINGS -->
             <div id="profile" class="feature-content hidden">
-                <div class="clean-card" style="max-width: 600px; margin: 0 auto;">
+                <div class="clean-card slide-up" style="max-width: 600px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-user-pen text-orange"></i> My Profile Settings</h2>
                     <p class="small-text mb-3">Manage your household details.</p>
                     
@@ -527,28 +556,28 @@
                         <label>4-Digit Secure PIN</label>
                         <input type="password" id="profilePin" maxlength="4" placeholder="4-digit PIN">
                     </div>
-                    <button class="primary-btn mt-2" type="button" onclick="saveUserProfile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
-                    <div id="profileMsg" class="green-text text-center mt-2" style="font-weight: 500;"></div>
+                    <button class="primary-btn mt-2 hover-pop" type="button" onclick="saveUserProfile()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                    <div id="profileMsg" class="green-text text-center mt-2 fade-in" style="font-weight: 500;"></div>
                 </div>
             </div>
 
             <!-- ABOUT US -->
             <div id="about" class="feature-content hidden">
-                <div class="clean-card text-center">
+                <div class="clean-card text-center slide-up">
                     <h2 data-i18n="teamTitle">Meet The Team</h2>
                     <p data-i18n="teamDesc">The creators behind Eco Sparks</p>
                     <div class="grid-4 mt-3" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                        <div class="glass-card p-3">
+                        <div class="glass-card p-3 hover-lift">
                             <div class="avatar-circle mx-auto mb-2" style="width:60px;height:60px;margin: 0 auto 10px auto;">AK</div>
                             <h3>Abhishek Kumar Raj</h3>
                             <p class="small-text">Backend Developer</p>
                         </div>
-                        <div class="glass-card p-3">
+                        <div class="glass-card p-3 hover-lift">
                             <div class="avatar-circle mx-auto mb-2" style="width:60px;height:60px;margin: 0 auto 10px auto;">KK</div>
                             <h3>Krish Kumar</h3>
                             <p class="small-text">UI/UX Designer</p>
                         </div>
-                        <div class="glass-card p-3">
+                        <div class="glass-card p-3 hover-lift">
                             <div class="avatar-circle mx-auto mb-2" style="width:60px;height:60px;margin: 0 auto 10px auto;">PK</div>
                             <h3>Prince Kumar</h3>
                             <p class="small-text">Admin Control</p>
@@ -560,42 +589,44 @@
         </section>
     </div>
 
-    <!-- Floating AI Button -->
-    <button id="floatingAIBtn" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
+    <!-- Floating AI Button (Visible on Desktop and Mobile) -->
+    <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- AI Popup -->
-    <div id="aiChatPopup" class="glass-card hidden">
-        <div class="chat-header" style="background: var(--primary); color: white; border-radius: 12px 12px 0 0; margin: -20px -20px 10px -20px; padding: 15px 20px;">
-            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> Eco Spark AI <span class="badge" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
-            <button class="close-btn" type="button" onclick="toggleAIPopup()" style="color: white; border: none; background: transparent; font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+    <!-- PROPER FLOATING AI POPUP MODAL (Centered like a true popup on all devices) -->
+    <div id="aiChatPopup" class="glass-card hidden scale-in-center popup-modal">
+        <div class="chat-header">
+            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> Eco Spark AI <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
+            <button class="close-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="chatBox" class="chat-box">
-            <div class="message ai-message">
+            <div class="message ai-message fade-in-left">
                 <p data-i18n="aiGreeting">Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn" type="button" onclick="speakText('Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
-                    <button class="tts-btn" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
-            <div class="chat-suggestions" id="chatSuggestions">
-                <button type="button" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
-                <button type="button" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
-                <button type="button" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
+            <div class="chat-suggestions fade-in-up" id="chatSuggestions">
+                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
         </div>
         <div class="chat-input-area">
             <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)">
-            <button type="button" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            <button type="button" class="hover-pop" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
+
+    <!-- Background overlay for popup -->
+    <div id="popupOverlay" class="hidden popup-overlay" onclick="toggleAIPopup()"></div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by Eco Sparks Team</small>
     </footer>
 
-    <script src="translations.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
