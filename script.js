@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
             loadAppliances();
             loadProfileFields(activeUser);
         }
-        calculateSimulator(); 
+        calculateSimulator();
     } catch(err) {
-        console.error("Initialization Error:", err);
+        console.error("Init Error:", err);
     }
 });
 
@@ -207,9 +207,10 @@ function saveUserProfile() {
         localStorage.setItem('ecoUsers', JSON.stringify(users));
     }
     
-    document.getElementById('profileMsg').innerText = "Profile updated successfully!";
+    const msgEl = document.getElementById('profileMsg');
+    if(msgEl) msgEl.innerText = "Profile updated successfully!";
     updateGreeting(name);
-    setTimeout(() => { document.getElementById('profileMsg').innerText = ''; }, 3000);
+    setTimeout(() => { if(msgEl) msgEl.innerText = ''; }, 3000);
 }
 
 function populateAdminTable(logs) {
@@ -322,7 +323,6 @@ function compareUsage() {
     }
 }
 
-// --- SIMULATOR CALCULATOR ---
 function calculateSimulator() {
     const unitsEl = document.getElementById('simUserUnits');
     const sliderEl = document.getElementById('simSlider');
@@ -343,7 +343,6 @@ function updateSim() {
     calculateSimulator();
 }
 
-// --- APPLIANCES ---
 function loadAppliances() {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     if(activeUser && activeUser.appliances) {
@@ -483,7 +482,6 @@ function runOhmCalculator() {
     else { resEl.innerText = "Leave exactly ONE field empty!"; }
 }
 
-// --- 2D Flat GRAPHS LOGIC ---
 function initCharts() {
     try {
         const isDark = document.body.getAttribute('data-theme') === 'dark';
@@ -561,7 +559,6 @@ function updateManualChart() {
     }
 }
 
-// --- AI Chat Logic ---
 function askAIToOptimize() {
     if(userAppliances.length === 0) return alert("Please add some appliances first!");
     const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
@@ -640,11 +637,9 @@ function handleChatEnter(e) { if(e.key === 'Enter') sendChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
-/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 }
 
-// --- Audit logic ---
 function generateAudit() {
     const unitsEl = document.getElementById('auditUnits');
     const rateEl = document.getElementById('auditRate');
