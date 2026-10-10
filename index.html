@@ -143,23 +143,21 @@
                 </div>
             </div>
 
-            <!-- Admin Full Control: User Management -->
             <div class="glass-card mb-2">
                 <div class="flex-between mb-2">
                     <h3><i class="fa-solid fa-users-gear text-orange"></i> Manage Registered Users</h3>
-                    <button class="primary-btn sm-btn" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
+                    <button type="button" class="primary-btn sm-btn" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
                         <i class="fa-solid fa-user-plus"></i> Add New User
                     </button>
                 </div>
 
-                <!-- Admin Add User Form -->
                 <div id="adminAddUserBox" class="hidden p-3 mb-2" style="background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--card-border);">
                     <h4>Register a New Consumer Directly</h4>
                     <div class="grid-4 mt-2">
                         <input type="text" id="adminNewName" placeholder="Full Name">
                         <input type="text" id="adminNewId" placeholder="Consumer Number">
                         <input type="text" id="adminNewPin" placeholder="4-Digit PIN" maxlength="4">
-                        <button class="primary-btn m-0" onclick="adminAddNewUser()">Create User</button>
+                        <button type="button" class="primary-btn m-0" onclick="adminAddNewUser()">Create User</button>
                     </div>
                 </div>
 
@@ -176,13 +174,11 @@
                             </tr>
                         </thead>
                         <tbody id="adminUserListBody">
-                            <!-- Populated by JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- Server Logs -->
             <div class="glass-card">
                 <h3><i class="fa-solid fa-network-wired text-orange"></i> Live User Activity & IP/Device Logs</h3>
                 <p class="small-text mb-2">Shows live network tracking for users online.</p>
@@ -193,7 +189,7 @@
                     </table>
                 </div>
             </div>
-            <button class="danger-btn mt-3" onclick="logout()"><i class="fa-solid fa-power-off"></i> Exit Admin Dashboard</button>
+            <button type="button" class="danger-btn mt-3" onclick="logout()"><i class="fa-solid fa-power-off"></i> Exit Admin Dashboard</button>
         </section>
 
         <!-- Main User Application -->
@@ -212,7 +208,6 @@
                 <button class="nav-btn" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
             </div>
 
-            <!-- Top Header Area (Desktop) -->
             <div class="top-header mb-3 hidden-mobile">
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -260,8 +255,8 @@
                     <div class="flex-between mb-2">
                         <h3 data-i18n="trendChart">Energy Usage Trend</h3>
                         <div class="graph-toggles">
-                            <button class="toggle-btn active" onclick="switchGraphType('line', this)">Smooth</button>
-                            <button class="toggle-btn" onclick="switchGraphType('bar', this)">2D Bar</button>
+                            <button class="toggle-btn active" type="button" onclick="switchGraphType('line', this)">Smooth</button>
+                            <button class="toggle-btn" type="button" onclick="switchGraphType('bar', this)">2D Bar</button>
                         </div>
                     </div>
                     
@@ -281,7 +276,7 @@
                     <div class="clean-card">
                         <div class="flex-between mb-2">
                             <h3><i class="fa-solid fa-list-check text-orange"></i> Best Action First</h3>
-                            <button class="icon-btn" onclick="toggleAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
+                            <button class="icon-btn" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
                         </div>
                         <div class="action-item">
                             <div class="icon-box green-bg"><i class="fa-solid fa-fan"></i></div>
@@ -341,7 +336,7 @@
                     <div class="clean-card">
                         <div class="flex-between mb-2">
                             <h3><i class="fa-solid fa-list"></i> Appliance List</h3>
-                            <button class="sm-btn" style="background: var(--primary);" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
+                            <button class="sm-btn" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
                         </div>
                         <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                             <table class="admin-table">
@@ -428,7 +423,7 @@
             <div id="simulator" class="feature-content hidden">
                 <div class="clean-card text-center" style="max-width: 700px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-sliders text-orange"></i> Live Savings Simulator</h2>
-                    <p class="mb-3">Adjust your appliance daily usage to see live impact on units and cost.</p>
+                    <p class="mb-3">Adjust your Fan/AC daily usage to see live impact on units and cost.</p>
                     
                     <div class="grid-2 text-left mb-3">
                         <div class="form-group">
@@ -565,16 +560,16 @@
         </section>
     </div>
 
-    <!-- Floating AI Button (Proper Popup trigger) -->
+    <!-- Floating AI Button -->
     <button id="floatingAIBtn" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- PROPER FLOATING AI POPUP -->
+    <!-- AI Popup -->
     <div id="aiChatPopup" class="glass-card hidden">
-        <div class="chat-header">
+        <div class="chat-header" style="background: var(--primary); color: white; border-radius: 12px 12px 0 0; margin: -20px -20px 10px -20px; padding: 15px 20px;">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> Eco Spark AI <span class="badge" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
-            <button class="close-btn" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="close-btn" type="button" onclick="toggleAIPopup()" style="color: white; border: none; background: transparent; font-size: 1.5rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="chatBox" class="chat-box">
             <div class="message ai-message">
