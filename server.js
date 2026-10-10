@@ -9,11 +9,24 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 100% BULLETPROOF FIX: Check exactly where index.html is located
-let publicPath = __dirname; // Default: Root folder
-if (fs.existsSync(path.join(__dirname, 'public', 'index.html'))) {
-    publicPath = path.join(__dirname, 'public'); // Use public folder only if index.html is actually inside it
+// 🚀 ULTIMATE AUTO-SCANNER: Khud dhoondhega index.html kahan hai
+let publicPath = __dirname; 
+const searchPaths = [
+    path.join(__dirname, 'public'),  // Agar public folder me hai
+    __dirname,                       // Agar direct bahar hai
+    path.join(__dirname, 'src'),     // Agar src folder me hai
+    path.join(__dirname, 'src', 'public'), // Agar src/public me hai
+    path.join(__dirname, '..')       // Agar server.js khud kisi folder me hai
+];
+
+for (const folder of searchPaths) {
+    if (fs.existsSync(path.join(folder, 'index.html'))) {
+        publicPath = folder;
+        break;
+    }
 }
+
+console.log(`[Auto-Detect] Serving website exactly from: ${publicPath}`);
 
 app.use(express.static(publicPath));
 
@@ -77,7 +90,7 @@ app.post('/api/chat', async (req, res) => {
             retries--;
             if (retries < 0) {
                 return res.status(503).json({ 
-                    error: "Eco Sparks AI is currently experiencing high traffic (503). Please try again in a few moments."
+                    error: "Eco Sparks AI is currently experiencing high traffic. Please try again."
                 });
             }
             await new Promise(res => setTimeout(res, 1500));
@@ -88,5 +101,4 @@ app.post('/api/chat', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Eco Sparks server running perfectly on port ${PORT}`);
-    console.log(`Serving index.html from: ${publicPath}`);
 });
