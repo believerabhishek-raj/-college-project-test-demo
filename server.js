@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
 const fetch = require('node-fetch');
 
 const app = express();
@@ -14,7 +13,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// AI Memory Database (Auto-cleans every 30 mins)
+// AI Memory Database
 const aiMemory = new Map();
 setInterval(() => {
     const twoHoursAgo = Date.now() - (2 * 60 * 60 * 1000);

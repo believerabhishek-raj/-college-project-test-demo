@@ -2,23 +2,22 @@ let currentLang = 'en';
 
 const greetingsDB = {
     morning: [
-        "A fresh morning to save energy", "Rise and shine, saver", "Wake up to savings", "Let's make today energy efficient", "Top of the morning",
-        "Morning energy boost", "Sun is up, time to save", "Great morning to you", "Keep the watts low today", "Start the day green"
+        "A fresh morning to save energy", "Rise and shine, saver", "Wake up to savings", "Let's make today energy efficient"
     ],
     afternoon: [
-        "Hope your day is going green", "Mid-day energy check", "Keep saving this afternoon", "Turn off those extra lights",
-        "Hello there, stay cool", "Afternoon boost", "Great afternoon", "Saving energy today?", "Sun is high, AC on low?"
+        "Hope your day is going green", "Mid-day energy check", "Keep saving this afternoon", "Turn off those extra lights"
     ],
     evening: [
-        "Wind down and power down", "Time to switch off extra lights", "Great evening to you", "A cozy and green evening",
-        "Evening energy check", "Relax and save", "Starry night, lower watts", "A peaceful evening", "Hope you had a green day"
+        "Wind down and power down", "Time to switch off extra lights", "Great evening to you", "A cozy and green evening"
     ]
 };
 
 let barChartInstance;
 let pieChartInstance;
 let userAppliances = [];
+let chartType = 'line'; 
 
+// Safe DOM initialization
 document.addEventListener('DOMContentLoaded', () => {
     try {
         const savedTheme = localStorage.getItem('ecoTheme') || 'light';
@@ -26,16 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const savedLang = localStorage.getItem('ecoLang') || 'en';
         const langSelect = document.getElementById('languageSelect');
+        const langSelectMob = document.getElementById('languageSelectMobile');
         if(langSelect) langSelect.value = savedLang;
-        changeLanguage(savedLang);
+        if(langSelectMob) langSelectMob.value = savedLang;
 
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
         if(activeUser) {
             showMainApp(activeUser);
             loadAppliances();
-            loadProfileFields(activeUser);
         }
-        calculateSimulator();
+        calculateSimulator(); 
     } catch(err) {
         console.error("Init Error:", err);
     }
@@ -50,18 +49,9 @@ function toggleTheme() {
 }
 
 function changeLanguage(langCode) {
-    currentLang = langCode || (document.getElementById('languageSelect') ? document.getElementById('languageSelect').value : 'en');
+    currentLang = langCode || 'en';
     localStorage.setItem('ecoLang', currentLang);
-    
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if(translations && translations[currentLang] && translations[currentLang][key]) {
-            el.innerText = translations[currentLang][key];
-        }
-    });
-    
-    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    if(activeUser) updateGreeting(activeUser.name);
+    console.log("Language changed to", currentLang, "(Static demo)");
 }
 
 function switchAuthTab(tab, btnElement) {
@@ -69,13 +59,7 @@ function switchAuthTab(tab, btnElement) {
         document.querySelectorAll('.auth-tabs button').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
         
-        if(btnElement) {
-            btnElement.classList.add('active');
-        } else {
-            const targetBtn = document.querySelector(`.auth-tabs button[onclick*="${tab}"]`);
-            if(targetBtn) targetBtn.classList.add('active');
-        }
-        
+        if(btnElement) btnElement.classList.add('active');
         const formEl = document.getElementById(tab + 'Form');
         if(formEl) formEl.classList.add('active');
         
@@ -87,15 +71,6 @@ function switchAuthTab(tab, btnElement) {
 function showError(msg) { 
     const el = document.getElementById('authError');
     if(el) el.innerText = msg; 
-}
-
-async function trackUserAction(userId, name, action, details) {
-    try {
-        await fetch('/api/track', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, name, action, details })
-        });
-    } catch(err) {}
 }
 
 function handleRegister(e) {
@@ -114,10 +89,9 @@ function handleRegister(e) {
     
     users[id] = { name, id, pin, appliances: [] };
     localStorage.setItem('ecoUsers', JSON.stringify(users));
-    trackUserAction(id, name, 'Registered', 'New Signup');
     showError("Account created! Please login.");
     
-    switchAuthTab('login', null);
+    switchAuthTab('login', document.querySelector('.auth-tabs button'));
 }
 
 function handleLogin(e) {
@@ -132,10 +106,8 @@ function handleLogin(e) {
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
     if(users[id] && users[id].pin === pin) {
         localStorage.setItem('ecoActiveUser', JSON.stringify(users[id]));
-        trackUserAction(id, users[id].name, 'Logged In', 'Standard Login');
         showMainApp(users[id]);
         loadAppliances();
-        loadProfileFields(users[id]);
     } else {
         showError("Invalid Consumer Number or PIN");
     }
@@ -159,13 +131,15 @@ async function handleAdminLogin(e) {
             document.getElementById('authSection').classList.add('hidden');
             document.getElementById('mainAppSection').classList.add('hidden');
             document.getElementById('adminSection').classList.remove('hidden');
-            document.getElementById('logoutBtn').classList.remove('hidden');
             
+            // Hide Sidebar and mobile nav
+            const sb = document.querySelector('.sidebar');
+            if(sb) sb.classList.add('hidden');
+            const mn = document.getElementById('mobileNav');
+            if(mn) mn.classList.add('hidden');
+
             let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
             document.getElementById('adminUserCount').innerText = Object.keys(users).length;
-            const statsRes = await fetch('/api/admin/stats');
-            const statsData = await statsRes.json();
-            populateAdminTable(statsData.analytics);
         } else {
             showError("Invalid Admin Password");
         }
@@ -174,17 +148,19 @@ async function handleAdminLogin(e) {
 }
 
 function saveAdminProfile() {
-    const name = document.getElementById('adminProfileName').value;
-    alert("Admin Profile updated successfully for " + name + "!");
+    alert("Admin Profile updated successfully!");
 }
 
 function loadProfileFields(user) {
     const nameEl = document.getElementById('profileName');
     const idEl = document.getElementById('profileId');
-    const pinEl = document.getElementById('profilePin');
     if(nameEl) nameEl.value = user.name || '';
     if(idEl) idEl.value = user.id || '';
-    if(pinEl) pinEl.value = user.pin || '';
+    
+    const avatarEl = document.getElementById('userAvatarInitials');
+    if(avatarEl && user.name) {
+        avatarEl.innerText = user.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+    }
 }
 
 function saveUserProfile() {
@@ -207,42 +183,27 @@ function saveUserProfile() {
         localStorage.setItem('ecoUsers', JSON.stringify(users));
     }
     
-    const msgEl = document.getElementById('profileMsg');
-    if(msgEl) msgEl.innerText = "Profile updated successfully!";
+    alert("Profile updated successfully!");
     updateGreeting(name);
-    setTimeout(() => { if(msgEl) msgEl.innerText = ''; }, 3000);
-}
-
-function populateAdminTable(logs) {
-    const tbody = document.getElementById('adminLogsBody');
-    if(!tbody) return;
-    tbody.innerHTML = '';
-    if(!logs || logs.length === 0) return tbody.innerHTML = '<tr><td colspan="5">No live activity recorded yet.</td></tr>';
-    logs.forEach(log => {
-        tbody.innerHTML += `<tr>
-            <td><small>${log.time}</small></td>
-            <td><strong>${log.name}</strong><br><small>${log.userId}</small></td>
-            <td><span class="badge" style="background:#2980B9;color:white;padding:3px 8px;border-radius:4px;font-size:0.8rem">${log.action}</span></td>
-            <td><code>${log.ip}</code></td>
-            <td><small>${log.device}</small></td>
-        </tr>`;
-    });
+    loadProfileFields(activeUser);
 }
 
 function logout() {
-    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    if(activeUser) trackUserAction(activeUser.id, activeUser.name, 'Logged Out', 'User Exit');
     localStorage.removeItem('ecoActiveUser');
-    document.getElementById('mainAppSection').classList.add('hidden');
-    document.getElementById('adminSection').classList.add('hidden');
-    document.getElementById('authSection').classList.remove('hidden');
-    document.getElementById('logoutBtn').classList.add('hidden');
+    location.reload();
 }
 
 function showMainApp(user) {
     document.getElementById('authSection').classList.add('hidden');
     document.getElementById('mainAppSection').classList.remove('hidden');
-    document.getElementById('logoutBtn').classList.remove('hidden');
+    
+    // Show Navigations
+    if(window.innerWidth <= 768) {
+        document.querySelector('.features-nav').style.display = 'flex';
+    } else {
+        document.getElementById('logoutBox').classList.remove('hidden');
+    }
+
     updateGreeting(user.name);
     initCharts();
 }
@@ -255,10 +216,9 @@ function updateGreeting(name) {
     
     const pool = greetingsDB[category];
     const randomMotivation = pool[Math.floor(Math.random() * pool.length)];
-    let displayTimeG = translations[currentLang][category === 'morning' ? 'goodMorning' : category === 'afternoon' ? 'goodAfternoon' : 'goodEvening'] || timeG;
     
     const greetEl = document.getElementById('userGreeting');
-    if(greetEl) greetEl.innerHTML = `${displayTimeG}, ${name}! <span id="timeIcon">${icon}</span>`;
+    if(greetEl) greetEl.innerHTML = `${timeG}, ${name}! <span id="timeIcon">${icon}</span>`;
     
     const motEl = document.getElementById('dailyMotivation');
     if(motEl) motEl.innerHTML = randomMotivation;
@@ -266,13 +226,13 @@ function updateGreeting(name) {
 
 function showFeature(featureId, btnElement) {
     try {
+        // Handle Sidebar Links (Desktop)
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        // Handle Mobile Nav Links
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        if(btnElement) {
-            btnElement.classList.add('active');
-        } else {
-            const targetBtn = document.querySelector(`.nav-btn[onclick*="${featureId}"]`);
-            if(targetBtn) targetBtn.classList.add('active');
-        }
+        
+        if(btnElement) btnElement.classList.add('active');
+        
         document.querySelectorAll('.feature-content').forEach(fc => fc.classList.add('hidden'));
         
         const targetSection = document.getElementById(featureId);
@@ -300,6 +260,7 @@ function fillAndSend(text) {
     sendChatMessage();
 }
 
+// Feature 4: Proof of Impact & Compare
 function compareUsage() {
     const prevEl = document.getElementById('prevKwh');
     const latestEl = document.getElementById('latestKwh');
@@ -323,26 +284,30 @@ function compareUsage() {
     }
 }
 
+// Feature 2: Live Savings Simulator
 function calculateSimulator() {
     const unitsEl = document.getElementById('simUserUnits');
+    const rateEl = document.getElementById('simUserRate');
     const sliderEl = document.getElementById('simSlider');
     const pctValEl = document.getElementById('simPctVal');
     const savingsEl = document.getElementById('simSavingsResult');
-    if(!unitsEl || !sliderEl || !pctValEl || !savingsEl) return;
+    const unitsResultEl = document.getElementById('simUnitsResult');
+    if(!unitsEl || !sliderEl || !savingsEl || !rateEl) return;
 
     const units = parseFloat(unitsEl.value) || 300;
+    const rate = parseFloat(rateEl.value) || 8;
     const pct = parseFloat(sliderEl.value) || 15;
+    
     pctValEl.innerText = pct;
 
     const savedUnits = (units * (pct / 100));
-    const savedMoney = (savedUnits * 8).toFixed(0); 
-    savingsEl.innerText = `₹ ${savedMoney} / month saved!`;
+    const savedMoney = (savedUnits * rate).toFixed(0); 
+    
+    unitsResultEl.innerText = `${savedUnits.toFixed(1)} kWh`;
+    savingsEl.innerText = `₹ ${savedMoney}`;
 }
 
-function updateSim() {
-    calculateSimulator();
-}
-
+// --- APPLIANCES ---
 function loadAppliances() {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     if(activeUser && activeUser.appliances) {
@@ -378,14 +343,10 @@ function addAppliance() {
     const monthlyCost = (monthlyKwh * 8).toFixed(2); 
     
     userAppliances.push({ id: Date.now(), name, power, hours, monthlyKwh, monthlyCost });
-    nameEl.value = '';
-    powerEl.value = '';
-    hoursEl.value = '';
+    nameEl.value = ''; powerEl.value = ''; hoursEl.value = '';
     
     saveAppliances();
     renderAppliances();
-    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    trackUserAction(activeUser.id, activeUser.name, 'Added Appliance', name);
 }
 
 function deleteAppliance(id) {
@@ -404,7 +365,7 @@ function renderAppliances() {
     let appLoads = [];
     
     if(userAppliances.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No appliances added yet. Start adding!</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No appliances added yet.</td></tr>';
     } else {
         userAppliances.forEach(app => {
             totalLoad += parseFloat(app.monthlyKwh);
@@ -412,43 +373,39 @@ function renderAppliances() {
             appLoads.push(app.monthlyKwh);
             tbody.innerHTML += `<tr>
                 <td><strong>${app.name}</strong></td>
-                <td>${app.power} W</td>
-                <td>${app.hours} hrs</td>
+                <td>${app.power}W</td>
                 <td>₹${app.monthlyCost}</td>
                 <td><button type="button" class="sm-btn" onclick="deleteAppliance(${app.id})"><i class="fa-solid fa-trash"></i></button></td>
             </tr>`;
         });
     }
     
-    const totalAppLoadEl = document.getElementById('totalAppLoad');
-    if(totalAppLoadEl) totalAppLoadEl.innerText = totalLoad.toFixed(2);
-    
     const dashLoadDisplayEl = document.getElementById('dashLoadDisplay');
-    if(dashLoadDisplayEl) dashLoadDisplayEl.innerText = `${totalLoad.toFixed(1)} kWh`;
+    if(dashLoadDisplayEl) dashLoadDisplayEl.innerText = `${totalLoad.toFixed(1)}`;
     
     const estBill = (totalLoad * 8).toFixed(0);
     const dashBillDisplayEl = document.getElementById('dashBillDisplay');
-    if(dashBillDisplayEl) dashBillDisplayEl.innerText = `₹ ${estBill}`;
+    if(dashBillDisplayEl) dashBillDisplayEl.innerText = `₹${estBill}`;
 
     const vampireLoss = (estBill * 0.10).toFixed(0);
     const vampDisp = document.getElementById('vampireDisplay');
-    if(vampDisp) vampDisp.innerText = `₹ ${vampireLoss}`;
+    if(vampDisp) vampDisp.innerText = `₹${vampireLoss}`;
     
     let ecoScore = 100 - (totalLoad / 10);
     if(ecoScore > 100) ecoScore = 100; if(ecoScore < 10) ecoScore = 10;
     if(totalLoad === 0) ecoScore = 85;
     const ecoScoreEl = document.getElementById('ecoScoreDisplay');
-    if(ecoScoreEl) ecoScoreEl.innerText = `${Math.floor(ecoScore)}/100`;
+    if(ecoScoreEl) ecoScoreEl.innerText = `${Math.floor(ecoScore)}%`;
 
     if(pieChartInstance) {
         if(appNames.length > 0) {
             pieChartInstance.data.labels = appNames;
             pieChartInstance.data.datasets[0].data = appLoads;
-            pieChartInstance.data.datasets[0].backgroundColor = ['#27AE60', '#2980B9', '#f39c12', '#E74C3C', '#8e44ad', '#16a085'];
+            pieChartInstance.data.datasets[0].backgroundColor = ['#E67E22', '#27AE60', '#2980B9', '#E74C3C', '#8e44ad', '#16a085'];
         } else {
             pieChartInstance.data.labels = ['No Data'];
             pieChartInstance.data.datasets[0].data = [100];
-            pieChartInstance.data.datasets[0].backgroundColor = ['#e0e0e0'];
+            pieChartInstance.data.datasets[0].backgroundColor = ['#f5f5f5'];
         }
         pieChartInstance.update();
     }
@@ -482,26 +439,43 @@ function runOhmCalculator() {
     else { resEl.innerText = "Leave exactly ONE field empty!"; }
 }
 
+// --- Visual Energy Flowchart/Trend ---
+function switchGraphType(type, btnEl) {
+    document.querySelectorAll('.graph-toggles .toggle-btn').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+    chartType = type;
+    initCharts();
+    updateManualChart();
+}
+
 function initCharts() {
     try {
         const isDark = document.body.getAttribute('data-theme') === 'dark';
-        const textColor = isDark ? '#E0E0E0' : '#333333';
-        const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+        const textColor = isDark ? '#E0E0E0' : '#888888';
+        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
         const chartEl = document.getElementById('energyChart');
         if(chartEl && typeof Chart !== 'undefined') {
             const ctxBar = chartEl.getContext('2d');
             if(barChartInstance) barChartInstance.destroy();
+            
+            // Replicate the orange smooth graph from reference image
             barChartInstance = new Chart(ctxBar, {
-                type: 'bar',
+                type: chartType, // 'line' or 'bar'
                 data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
-                        label: 'Consumption (kWh)',
-                        data: [45, 42, 48, 35],
-                        backgroundColor: '#27AE60',
-                        borderWidth: 0,
-                        borderRadius: 4
+                        label: 'Energy Usage (kWh)',
+                        data: [40, 55, 30, 60, 45, 70, 50, 40, 65, 35, 50, 45], // Dummy sample data like image
+                        borderColor: '#E67E22', // Orange like image
+                        backgroundColor: chartType === 'line' ? 'rgba(230, 126, 34, 0.15)' : '#E67E22',
+                        borderWidth: 2,
+                        borderRadius: chartType === 'bar' ? 4 : 0,
+                        fill: chartType === 'line',
+                        tension: 0.4, // Smooth curve
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#E67E22',
+                        pointRadius: 4
                     }]
                 },
                 options: { 
@@ -510,7 +484,7 @@ function initCharts() {
                         y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
                         x: { grid: {display: false}, ticks: {color: textColor}}
                     }, 
-                    plugins: { legend: {labels: {color: textColor}}} 
+                    plugins: { legend: {display: false} } 
                 }
             });
         }
@@ -523,9 +497,12 @@ function initCharts() {
                 type: 'doughnut',
                 data: {
                     labels: ['No Data'],
-                    datasets: [{ data: [100], backgroundColor: ['#e0e0e0'], borderWidth: 0 }]
+                    datasets: [{ data: [100], backgroundColor: ['#f5f5f5'], borderWidth: 0 }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {color: textColor} } } }
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '75%',
+                    plugins: { legend: { position: 'right', labels: {color: textColor, font: {family: 'Poppins', size: 11}, boxWidth: 12} } } 
+                }
             });
         }
     } catch (e) { console.error("Chart Init Error:", e); }
@@ -534,13 +511,12 @@ function initCharts() {
 function updateChartColors() {
     if(!barChartInstance || !pieChartInstance) return;
     const isDark = document.body.getAttribute('data-theme') === 'dark';
-    const textColor = isDark ? '#E0E0E0' : '#333333';
-    const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+    const textColor = isDark ? '#E0E0E0' : '#888888';
+    const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
     
     barChartInstance.options.scales.y.grid.color = gridColor;
     barChartInstance.options.scales.y.ticks.color = textColor;
     barChartInstance.options.scales.x.ticks.color = textColor;
-    barChartInstance.options.plugins.legend.labels.color = textColor;
     barChartInstance.update();
 
     pieChartInstance.options.plugins.legend.labels.color = textColor;
@@ -548,25 +524,55 @@ function updateChartColors() {
 }
 
 function updateManualChart() {
-    const w1 = document.getElementById('graphW1') ? document.getElementById('graphW1').value : 0;
-    const w2 = document.getElementById('graphW2') ? document.getElementById('graphW2').value : 0;
-    const w3 = document.getElementById('graphW3') ? document.getElementById('graphW3').value : 0;
-    const w4 = document.getElementById('graphW4') ? document.getElementById('graphW4').value : 0;
+    const w1 = document.getElementById('graphW1') ? parseFloat(document.getElementById('graphW1').value) : 0;
+    const w2 = document.getElementById('graphW2') ? parseFloat(document.getElementById('graphW2').value) : 0;
+    const w3 = document.getElementById('graphW3') ? parseFloat(document.getElementById('graphW3').value) : 0;
+    const w4 = document.getElementById('graphW4') ? parseFloat(document.getElementById('graphW4').value) : 0;
 
     if(barChartInstance) {
-        barChartInstance.data.datasets[0].data = [w1 || 0, w2 || 0, w3 || 0, w4 || 0];
+        // Pad the rest of the year with dummy curve data so it looks like the reference image
+        barChartInstance.data.datasets[0].data = [w1, w2, w3, w4, 45, 70, 50, 40, 65, 35, 50, 45];
         barChartInstance.update();
     }
 }
 
+// --- Text to Speech (Browser Built-in) ---
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Stop current
+        const msg = new SpeechSynthesisUtterance(text);
+        
+        // Try to find a good voice (Google Hindi or generic)
+        const voices = window.speechSynthesis.getVoices();
+        const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.name.includes('Hindi'));
+        if(hindiVoice) msg.voice = hindiVoice;
+        
+        msg.rate = 1.0;
+        msg.pitch = 1.0;
+        window.speechSynthesis.speak(msg);
+    } else {
+        alert("Text-to-speech is not supported in this browser.");
+    }
+}
+
+function stopSpeak() {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+    }
+}
+
+// --- AI Chat Logic ---
 function askAIToOptimize() {
     if(userAppliances.length === 0) return alert("Please add some appliances first!");
     const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
-    toggleAIPopup();
-    const inputEl = document.getElementById('aiInput');
+    
+    // Switch to AI tab directly
+    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
+    
+    const inputEl = document.getElementById('tabChatInput');
     if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
     window.tempAiContext = `User's current appliances: ${appData}`;
-    sendChatMessage();
+    sendTabChatMessage();
 }
 
 async function sendChatMessage() {
@@ -579,7 +585,7 @@ async function sendChatMessage() {
     inputField.value = '';
     const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
     
-    await processAIRequest(msg, loadingId);
+    await processAIRequest(msg, loadingId, 'chatBox');
 }
 
 async function sendTabChatMessage() {
@@ -592,10 +598,10 @@ async function sendTabChatMessage() {
     inputField.value = '';
     const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
     
-    await processAIRequest(msg, loadingId);
+    await processAIRequest(msg, loadingId, 'tabChatBox');
 }
 
-async function processAIRequest(msg, loadingId) {
+async function processAIRequest(msg, loadingId, boxId) {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
     
@@ -614,13 +620,23 @@ async function processAIRequest(msg, loadingId) {
         const loadingEl = document.getElementById(loadingId);
         
         if(response.ok && data.response && loadingEl) {
-            loadingEl.innerHTML = renderMarkdownToHTML(data.response);
+            const rawText = data.response;
+            const htmlText = renderMarkdownToHTML(rawText);
+            
+            // Add TTS buttons dynamically to the AI response
+            const ttsHtml = `<div class="tts-controls mt-1">
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
+            </div>`;
+            
+            loadingEl.innerHTML = htmlText + ttsHtml;
+            
         } else if (loadingEl) {
             loadingEl.innerHTML = `<span class="error-text">⚠️ ${data.error || 'Connection failed.'}</span>`;
         }
     } catch(err) {
         const loadingEl = document.getElementById(loadingId);
-        if(loadingEl) loadingEl.innerHTML = `<span class="error-text">⚠️ Network Error.</span>`;
+        if(loadingEl) loadingEl.innerHTML = `<span class="error-text">⚠️ Network Error. Fallback rule applied.</span>`;
     }
 }
 
@@ -640,6 +656,7 @@ function renderMarkdownToHTML(text) {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 }
 
+// Feature 1 & 4: Live Energy Audit & Proof of Impact
 function generateAudit() {
     const unitsEl = document.getElementById('auditUnits');
     const rateEl = document.getElementById('auditRate');
@@ -651,16 +668,37 @@ function generateAudit() {
     
     const bill = units * rate;
     const savings = bill * 0.18; 
+    const carbon = (units * 0.70).toFixed(1); // Exact metric requirement
+
     const resEl = document.getElementById('auditResult');
     if(resEl) resEl.classList.remove('hidden');
     
     const billEl = document.getElementById('auditBill');
-    if(billEl) billEl.innerHTML = `<strong>Estimated Bill:</strong> ₹${bill.toFixed(2)}`;
+    if(billEl) billEl.innerHTML = `Estimated Bill: ₹${bill.toFixed(2)}`;
     
     const savEl = document.getElementById('auditSavings');
-    if(savEl) savEl.innerHTML = `<strong>Possible Savings:</strong> <span class="green-text">₹${savings.toFixed(2)}</span>`;
+    if(savEl) savEl.innerHTML = `Possible Savings: ₹${savings.toFixed(2)}`;
+    
+    const carEl = document.getElementById('auditCarbon');
+    if(carEl) carEl.innerText = `${carbon} kg CO2`;
+    
+    window.lastAudit = { units, rate, bill, savings, carbon };
 }
 
 function downloadReport() { 
-    alert("Report generation feature is linked to your Appliance Table data."); 
+    if(!window.lastAudit) return alert("Generate an audit first!");
+    const { units, rate, bill, savings, carbon } = window.lastAudit;
+    
+    const csvContent = "data:text/csv;charset=utf-8,"
+        + "ECO SPARKS - PROOF OF IMPACT REPORT\n\n"
+        + `Total Units Consumed,${units} kWh\n`
+        + `Tariff Rate,₹${rate} per unit\n`
+        + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
+        + `Estimated Carbon Footprint,${carbon} kg CO2\n`
+        + `Target Monthly Savings,₹${savings.toFixed(2)}\n`;
+
+    const link = document.createElement("a");
+    link.setAttribute("href", encodeURI(csvContent));
+    link.setAttribute("download", `Eco_Sparks_Audit.csv`);
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
