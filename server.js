@@ -2,23 +2,27 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs'); // Ye naya module add kiya hai files dhoondhne ke liye
 const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// STRICT REQUIREMENT: Serve static files from 'public' directory properly
-app.use(express.static(path.join(__dirname, 'public')));
+// YAHI MAIN FIX HAI: Ye khud detect karega ki index.html kahan rakhi hai
+const publicPath = fs.existsSync(path.join(__dirname, 'public')) 
+    ? path.join(__dirname, 'public') 
+    : __dirname;
+
+app.use(express.static(publicPath));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-// Admin Login Endpoint (Validates against Render Environment Variable)
+// Admin Login
 app.post('/api/admin/login', (req, res) => {
     const { password } = req.body;
-    // Fetches ADMIN_PASSWORD from Render .env, falls back to 'admin123' if not set
     const actualPassword = process.env.ADMIN_PASSWORD || 'admin123';
     
     if (password === actualPassword) {
@@ -32,7 +36,6 @@ app.post('/api/admin/login', (req, res) => {
 app.post('/api/chat', async (req, res) => {
     const { prompt, language } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
-    // Uses gemini-1.5-flash by default but can be overridden in Render Env to lite/8b
     const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 
     if (!apiKey) {
@@ -61,15 +64,10 @@ app.post('/api/chat', async (req, res) => {
                 body: JSON.stringify(requestBody)
             });
 
-            if (response.status === 503) {
-                throw new Error("503 Service Unavailable");
-            }
-
-            const data = await response.json();
+            if (response.status === 503) throw new Error("503 Service Unavailable");
             
-            if (data.error) {
-                 throw new Error(data.error.message);
-            }
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
 
             const aiText = data.candidates[0].content.parts[0].text;
             return res.json({ response: aiText });
@@ -78,8 +76,7 @@ app.post('/api/chat', async (req, res) => {
             retries--;
             if (retries < 0) {
                 return res.status(503).json({ 
-                    error: "Eco Sparks AI is currently experiencing high traffic (503). Please try again in a few moments.",
-                    details: error.message
+                    error: "Eco Sparks AI is currently experiencing high traffic (503). Please try again in a few moments."
                 });
             }
             await new Promise(res => setTimeout(res, 1500));
@@ -90,4 +87,5 @@ app.post('/api/chat', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Eco Sparks server running perfectly on port ${PORT}`);
+    console.log(`Serving files from: ${publicPath}`);
 });
