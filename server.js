@@ -2,17 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs'); // Ye naya module add kiya hai files dhoondhne ke liye
+const fs = require('fs');
 const fetch = require('node-fetch');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// YAHI MAIN FIX HAI: Ye khud detect karega ki index.html kahan rakhi hai
-const publicPath = fs.existsSync(path.join(__dirname, 'public')) 
-    ? path.join(__dirname, 'public') 
-    : __dirname;
+// 100% BULLETPROOF FIX: Check exactly where index.html is located
+let publicPath = __dirname; // Default: Root folder
+if (fs.existsSync(path.join(__dirname, 'public', 'index.html'))) {
+    publicPath = path.join(__dirname, 'public'); // Use public folder only if index.html is actually inside it
+}
 
 app.use(express.static(publicPath));
 
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-// Admin Login
+// Admin Login Endpoint
 app.post('/api/admin/login', (req, res) => {
     const { password } = req.body;
     const actualPassword = process.env.ADMIN_PASSWORD || 'admin123';
@@ -87,5 +88,5 @@ app.post('/api/chat', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Eco Sparks server running perfectly on port ${PORT}`);
-    console.log(`Serving files from: ${publicPath}`);
+    console.log(`Serving index.html from: ${publicPath}`);
 });
