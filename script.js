@@ -1,3 +1,76 @@
+// FULL TRANSLATIONS INTEGRATED
+const translations = {
+    en: {
+        welcomeAuth: "Welcome to Eco Sparks",
+        authSubtitle: "Log in or create an account to start saving energy.",
+        loginTab: "User Login", registerTab: "Create Account", adminTab: "Admin",
+        loginBtn: "Secure Login", createAccBtn: "Create Account", adminLoginBtn: "Access Admin Panel",
+        dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
+        auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
+        powerCutTab: "Outages", aiAdviser: "AI Assistant", profileTab: "Profile", aboutUs: "About",
+        teamTitle: "Meet The Team", teamDesc: "The creators behind Eco Sparks",
+        ecoScore: "Eco Score", ecoScoreSub: "Excellent! You are an eco-warrior.",
+        vampirePower: "Vampire Power Loss", vampireSub: "Monthly cost of devices plugged in but turned off.",
+        dashLoad: "Total Appliance Load", dashBill: "Est. Monthly Bill",
+        trendChart: "Energy Usage Trend", trendSub: "Enter your weekly reading to plot your actual consumption graph.",
+        updateGraph: "Update Graph", appTitle: "Appliance Load Calculator",
+        appDesc: "Add your home appliances to build your energy profile.", addApp: "Add Appliance",
+        calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
+        auditTitle: "Live Energy Audit", auditDesc: "Proof of Impact: Enter details to generate a comprehensive report.",
+        monthlyUnits: "Last Month Units (kWh)", tariffRate: "Tariff Rate (₹ per unit)",
+        generateAudit: "Generate Audit Report", downloadReport: "Download Audit PDF/CSV",
+        simTitle: "Live Savings Simulator", simDesc: "Adjust your appliance daily usage to see live impact on units and cost.",
+        communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Compete with neighbors to save the most energy and earn badges!",
+        logout: "Logout", aiGreeting: "Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!"
+    },
+    hi: {
+        welcomeAuth: "Eco Sparks में आपका स्वागत है",
+        authSubtitle: "बिजली बचाने के लिए लॉगिन करें या अकाउंट बनाएं।",
+        loginTab: "लॉगिन", registerTab: "अकाउंट बनाएं", adminTab: "एडमिन",
+        loginBtn: "सुरक्षित लॉगिन", createAccBtn: "अकाउंट बनाएं", adminLoginBtn: "एडमिन पैनल खोलें",
+        dashboardTab: "डैशबोर्ड", applianceTab: "उपकरण", calcTool: "कैलकुलेटर",
+        auditTool: "इनसाइट्स", simulator: "सिम्युलेटर", communityTab: "कम्युनिटी",
+        powerCutTab: "पावर कट", aiAdviser: "AI असिस्टेंट", profileTab: "प्रोफ़ाइल", aboutUs: "हमारे बारे में",
+        teamTitle: "हमारी टीम", teamDesc: "Eco Sparks के निर्माता",
+        ecoScore: "इको स्कोर", ecoScoreSub: "बहुत बढ़िया! आप पर्यावरण के रक्षक हैं।",
+        vampirePower: "वैम्पायर पावर लॉस", vampireSub: "बंद उपकरणों के प्लग लगे रहने से होने वाला अनुमानित खर्च।",
+        dashLoad: "कुल उपकरण लोड", dashBill: "अनुमानित मासिक बिल",
+        trendChart: "ऊर्जा उपयोग प्रवृत्ति", trendSub: "अपना साप्ताहिक डेटा दर्ज करें और ग्राफ अपडेट करें।",
+        updateGraph: "ग्राफ अपडेट करें", appTitle: "उपकरण लोड कैलकुलेटर",
+        appDesc: "जानें कि आपके घर की बिजली कहाँ खर्च हो रही है।", addApp: "उपकरण जोड़ें",
+        calcEstimator: "सामान्य अनुमानक", calcOhm: "ओम का नियम हेल्पर",
+        auditTitle: "लाइव एनर्जी ऑडिट", auditDesc: "प्रभाव का प्रमाण: विस्तृत रिपोर्ट के लिए विवरण दर्ज करें।",
+        monthlyUnits: "पिछले महीने की यूनिट्स (kWh)", tariffRate: "टैरिफ रेट (₹ प्रति यूनिट)",
+        generateAudit: "ऑडिट रिपोर्ट जनरेट करें", downloadReport: "ऑडिट PDF/CSV डाउनलोड करें",
+        simTitle: "लाइव सेविंग्स सिम्युलेटर", simDesc: "इकाईयों और लागत पर लाइव प्रभाव देखने के लिए उपयोग को समायोजित करें।",
+        communityTitle: "मासिक ऊर्जा-बचत चुनौती", communityDesc: "ऊर्जा बचाने और बैज अर्जित करने के लिए पड़ोसियों के साथ प्रतिस्पर्धा करें!",
+        logout: "लॉग आउट", aiGreeting: "नमस्ते! मैं Eco Spark AI हूँ। मैं आपकी कैसे मदद कर सकता हूँ?"
+    },
+    hinglish: {
+        welcomeAuth: "Eco Sparks me Swagat Hai",
+        authSubtitle: "Login karein ya naya account banayein energy save karne ke liye.",
+        loginTab: "User Login", registerTab: "Naya Account", adminTab: "Admin",
+        loginBtn: "Secure Login", createAccBtn: "Account Banayein", adminLoginBtn: "Admin Panel Kholein",
+        dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
+        auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
+        powerCutTab: "Outages", aiAdviser: "AI Assistant", profileTab: "Profile", aboutUs: "About Us",
+        teamTitle: "Hamari Team", teamDesc: "Eco Sparks ke creators",
+        ecoScore: "Eco Score", ecoScoreSub: "Great! Aap eco-warrior hain.",
+        vampirePower: "Vampire Power Loss", vampireSub: "Standby devices se hone wala monthly waste.",
+        dashLoad: "Total Load", dashBill: "Est. Monthly Bill",
+        trendChart: "Energy Usage Trend", trendSub: "Apna weekly data enter karein aur graph update karein.",
+        updateGraph: "Update Graph", appTitle: "Appliance Load Calculator",
+        appDesc: "Add karein apne appliances aur dekhein energy kahan use ho rahi hai.", addApp: "Add Appliance",
+        calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
+        auditTitle: "Live Energy Audit", auditDesc: "Proof of Impact: Complete report ke liye details daalein.",
+        monthlyUnits: "Last Month Units (kWh)", tariffRate: "Tariff Rate (₹ per unit)",
+        generateAudit: "Audit Report Generate Karein", downloadReport: "Audit PDF/CSV Download Karein",
+        simTitle: "Live Savings Simulator", simDesc: "Appliance daily usage adjust karein aur live impact dekhein.",
+        communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Apne dosto ke sath energy save karne ka challenge aur badges jeetein!",
+        logout: "Logout", aiGreeting: "Hello! Main Eco Spark AI hoon. Aaj electricity save karne me main aapki kya madad karu?"
+    }
+};
+
 let currentLang = 'en';
 
 const greetingsDB = {
@@ -11,21 +84,35 @@ let pieChartInstance;
 let userAppliances = [];
 let chartType = 'line'; 
 
-// Ultra-Safe Utility Functions
 const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 const safeSetHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
 const safeGetVal = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
 const safeSetVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
 
-// Safe DOM initialization
+// SEED DUMMY USERS FOR ADMIN PANEL
+function seedDummyData() {
+    if(!localStorage.getItem('ecoUsers')) {
+        const dummies = {
+            "1001": { name: "Ramesh Sharma", id: "1001", pin: "1234", appliances: [{id:1, name:"AC 1.5 Ton", power:1500, hours:5, monthlyKwh:225, monthlyCost:1800, state:true}] },
+            "1002": { name: "Sunita Verma", id: "1002", pin: "1234", appliances: [{id:2, name:"Refrigerator", power:200, hours:24, monthlyKwh:144, monthlyCost:1152, state:true}] },
+            "1003": { name: "Amit Kumar", id: "1003", pin: "1234", appliances: [{id:3, name:"Ceiling Fan", power:75, hours:12, monthlyKwh:27, monthlyCost:216, state:false}] },
+            "1004": { name: "Priya Singh", id: "1004", pin: "1234", appliances: [] },
+            "1005": { name: "Vikash Gupta", id: "1005", pin: "1234", appliances: [{id:4, name:"Water Heater", power:2000, hours:1, monthlyKwh:60, monthlyCost:480, state:false}] }
+        };
+        localStorage.setItem('ecoUsers', JSON.stringify(dummies));
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     try {
+        seedDummyData();
         const savedTheme = localStorage.getItem('ecoTheme') || 'light';
         document.body.setAttribute('data-theme', savedTheme);
         
         const savedLang = localStorage.getItem('ecoLang') || 'en';
         safeSetVal('languageSelect', savedLang);
         safeSetVal('languageSelectMobile', savedLang);
+        changeLanguage(savedLang);
 
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
         if(activeUser) {
@@ -33,9 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadAppliances();
         }
         calculateSimulator(); 
-    } catch(err) {
-        console.error("Init Error:", err);
-    }
+    } catch(err) { console.error("Init Error:", err); }
 });
 
 function toggleTheme() {
@@ -52,6 +137,13 @@ function changeLanguage(langCode) {
     try {
         currentLang = langCode || safeGetVal('languageSelect') || 'en';
         localStorage.setItem('ecoLang', currentLang);
+        
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if(translations[currentLang] && translations[currentLang][key]) {
+                el.innerText = translations[currentLang][key];
+            }
+        });
         
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
         if(activeUser) updateGreeting(activeUser.name);
@@ -73,6 +165,15 @@ function switchAuthTab(tab, btnElement) {
 
 function showError(msg) { safeSetText('authError', msg); }
 
+async function trackUserAction(userId, name, action, details) {
+    try {
+        await fetch('/api/track', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, name, action, details })
+        });
+    } catch(err) {}
+}
+
 function handleRegister(e) {
     e.preventDefault();
     try {
@@ -87,6 +188,7 @@ function handleRegister(e) {
         
         users[id] = { name, id, pin, appliances: [] };
         localStorage.setItem('ecoUsers', JSON.stringify(users));
+        trackUserAction(id, name, 'Registered', 'New Signup');
         showError("Account created! Please login.");
         
         switchAuthTab('login', document.querySelector('.auth-tabs button'));
@@ -104,6 +206,7 @@ function handleLogin(e) {
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
         if(users[id] && users[id].pin === pin) {
             localStorage.setItem('ecoActiveUser', JSON.stringify(users[id]));
+            trackUserAction(id, users[id].name, 'Logged In', 'Standard Login');
             showMainApp(users[id]);
             loadAppliances();
         } else {
@@ -151,7 +254,7 @@ async function handleAdminLogin(e) {
         }
         btnEl.innerText = "Access Admin Panel";
     } catch (err) { 
-        showError("Server Connection Error"); 
+        showError("Server Error"); 
         const btnEl = document.getElementById('adminLoginSubmitBtn');
         if(btnEl) btnEl.innerText = "Access Admin Panel";
     }
@@ -360,6 +463,81 @@ function showFeature(featureId, btnElement) {
 }
 
 // ------------------------------------
+// SMART IOT DUMMY
+// ------------------------------------
+async function toggleIoTDevice(deviceName, checkboxEl) {
+    const state = checkboxEl.checked;
+    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
+    if(!activeUser) return;
+    
+    // Toast Alert
+    alert(`Smart Sync: Command sent to turn ${state ? 'ON' : 'OFF'} ${deviceName}.`);
+    
+    // Sync to memory
+    let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
+    if(users[activeUser.id] && users[activeUser.id].appliances) {
+        let appIndex = users[activeUser.id].appliances.findIndex(a => a.name === deviceName);
+        if(appIndex !== -1) {
+            users[activeUser.id].appliances[appIndex].state = state;
+            localStorage.setItem('ecoUsers', JSON.stringify(users));
+        }
+    }
+    
+    // Send to admin logs via server
+    try {
+        await fetch('/api/iot/toggle', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: activeUser.id, name: activeUser.name, deviceName, state })
+        });
+    } catch(e) {}
+}
+
+// ------------------------------------
+// DUMMY PAYMENT MODAL
+// ------------------------------------
+function openPaymentModal() {
+    const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
+    if(!activeUser || !activeUser.appliances) return alert("Calculate your load first!");
+    
+    let totalLoad = 0;
+    activeUser.appliances.forEach(a => totalLoad += parseFloat(a.monthlyCost || 0));
+    
+    if(totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed.");
+    
+    safeSetText('payModalAmount', `₹${totalLoad.toFixed(2)}`);
+    document.getElementById('paymentLoader').classList.add('hidden');
+    
+    const popup = document.getElementById('paymentModal');
+    const overlay = document.getElementById('popupOverlay');
+    if(popup && overlay) {
+        popup.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+        popup.classList.add('scale-in-center');
+        
+        // Ensure AI popup is closed
+        document.getElementById('aiChatPopup').classList.add('hidden');
+    }
+}
+
+function closePaymentModal() {
+    const popup = document.getElementById('paymentModal');
+    const overlay = document.getElementById('popupOverlay');
+    if(popup && overlay) {
+        popup.classList.add('hidden');
+        overlay.classList.add('hidden');
+    }
+}
+
+function processDummyPayment(methodName) {
+    document.getElementById('paymentLoader').classList.remove('hidden');
+    setTimeout(() => {
+        alert(`Payment Successful via ${methodName}! Your monthly bill is cleared.`);
+        closePaymentModal();
+    }, 2000);
+}
+
+
+// ------------------------------------
 // PROPER AI POPUP MODAL BEHAVIOR
 // ------------------------------------
 function toggleAIPopup() {
@@ -375,6 +553,8 @@ function toggleAIPopup() {
                 
                 // Add pop animation classes explicitly
                 popup.classList.add('scale-in-center');
+                // Ensure payment modal is closed
+                document.getElementById('paymentModal').classList.add('hidden');
             } else {
                 // Close Popup
                 popup.classList.add('hidden');
@@ -390,7 +570,7 @@ function fillAndSend(text) {
         safeSetVal('aiInput', text);
         const suggs = document.getElementById('chatSuggestions');
         if(suggs) suggs.style.display = 'none';
-        sendChatMessage();
+        sendPopupChatMessage();
     } catch(e) { console.error(e); }
 }
 
@@ -469,7 +649,7 @@ function addAppliance() {
         const monthlyKwh = ((power * hours * 30) / 1000).toFixed(2);
         const monthlyCost = (monthlyKwh * 8).toFixed(2); 
         
-        userAppliances.push({ id: Date.now(), name, power, hours, monthlyKwh, monthlyCost });
+        userAppliances.push({ id: Date.now(), name, power, hours, monthlyKwh, monthlyCost, state: true });
         safeSetVal('appName', ''); safeSetVal('appPower', ''); safeSetVal('appHours', '');
         
         saveAppliances();
@@ -502,10 +682,18 @@ function renderAppliances() {
                 totalLoad += parseFloat(app.monthlyKwh);
                 appNames.push(app.name);
                 appLoads.push(app.monthlyKwh);
+                
+                const checkedAttr = app.state ? 'checked' : '';
+                
                 tbody.innerHTML += `<tr>
                     <td><strong>${app.name}</strong></td>
                     <td>${app.power}W</td>
-                    <td>₹${app.monthlyCost}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" ${checkedAttr} onchange="toggleIoTDevice('${app.name}', this)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
                     <td><button type="button" class="sm-btn" onclick="deleteAppliance(${app.id})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
             });
@@ -701,7 +889,18 @@ function stopSpeak() {
 }
 
 // --- AI Chat Logic ---
-async function sendChatMessage() {
+function askAIToOptimize() {
+    if(userAppliances.length === 0) return alert("Please add some appliances first!");
+    const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
+    
+    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
+    const inputEl = document.getElementById('tabChatInput');
+    if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
+    window.tempAiContext = `User's current appliances: ${appData}`;
+    sendTabChatMessage();
+}
+
+async function sendPopupChatMessage() {
     try {
         const msg = safeGetVal('aiInput').trim();
         if(!msg) return;
@@ -710,16 +909,33 @@ async function sendChatMessage() {
         safeSetVal('aiInput', '');
         const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
         
-        await processAIRequest(msg, loadingId);
+        await processAIRequest(msg, loadingId, 'chatBox');
     } catch(e) { console.error(e); }
 }
 
-async function processAIRequest(msg, loadingId) {
+async function sendTabChatMessage() {
+    try {
+        const msg = safeGetVal('tabChatInput').trim();
+        if(!msg) return;
+        
+        addMessageToChat('tabChatBox', 'user', msg);
+        safeSetVal('tabChatInput', '');
+        const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
+        
+        await processAIRequest(msg, loadingId, 'tabChatBox');
+    } catch(e) { console.error(e); }
+}
+
+async function processAIRequest(msg, loadingId, boxId) {
     try {
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
         const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
         
         const payload = { prompt: msg, language: currentLang, userId: userId };
+        if(window.tempAiContext) {
+            payload.customContext = window.tempAiContext;
+            window.tempAiContext = null; 
+        }
         
         const response = await fetch('/api/chat', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -732,7 +948,8 @@ async function processAIRequest(msg, loadingId) {
             const htmlText = renderMarkdownToHTML(rawText);
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
+/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -756,10 +973,12 @@ function addMessageToChat(boxId, sender, text) {
     } catch(e) { console.error(e); return ''; }
 }
 
-function handleChatEnter(e) { if(e.key === 'Enter') sendChatMessage(); }
+function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
+function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
+/g, '<br>');
 }
 
 // --- Live Energy Audit ---
@@ -793,12 +1012,19 @@ function downloadReport() {
         const { units, rate, bill, savings, carbon } = window.lastAudit;
         
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "ECO SPARKS - PROOF OF IMPACT REPORT\n\n"
-            + `Total Units Consumed,${units} kWh\n`
-            + `Tariff Rate,₹${rate} per unit\n`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
-            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
-            + `Target Monthly Savings,₹${savings.toFixed(2)}\n`;
+            + "ECO SPARKS - PROOF OF IMPACT REPORT
+
+"
+            + `Total Units Consumed,${units} kWh
+`
+            + `Tariff Rate,₹${rate} per unit
+`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}
+`
+            + `Estimated Carbon Footprint,${carbon} kg CO2
+`
+            + `Target Monthly Savings,₹${savings.toFixed(2)}
+`;
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
