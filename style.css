@@ -24,7 +24,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
 body { background-color: var(--bg-color); color: var(--text-color); display: flex; min-height: 100vh; overflow-x: hidden;}
 
-/* Strict Hidden Utility */
+/* Strict Hidden Utility - OVERRIDES ALL DISPLAY PROPERTIES */
 .hidden { display: none !important; }
 
 /* ANIMATIONS */
@@ -82,10 +82,10 @@ body { background-color: var(--bg-color); color: var(--text-color); display: fle
 .danger-bg { background: var(--danger); color: white; }
 
 /* Smart Switch IoT Toggle */
-.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; margin-top:5px; }
 .switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;}
-.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .3s; border-radius: 50%;}
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px;}
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
 input:checked + .slider { background-color: var(--primary); }
 input:checked + .slider:before { transform: translateX(20px); }
 
@@ -183,18 +183,27 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 /* Floating AI Button */
 #floatingAIBtn { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: var(--orange); color: #fff; border: none; font-size: 1.8rem; box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4); cursor: pointer; z-index: 9998; display: flex; align-items: center; justify-content: center; }
 
-/* Popups & Modals */
+/* =========================================
+   CRITICAL FIX: ALL POPUP MODALS
+   Forces column layout so mobile UI doesn't crash into a row.
+========================================= */
 .popup-modal {
     position: fixed;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%); 
     width: 90%; max-width: 400px;
     height: 80vh; max-height: 600px;
-    z-index: 9999;
+    z-index: 9999; 
+    display: flex; 
+    flex-direction: column !important; /* FIXED ALIGNMENT CRASH */
     padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     background: var(--card-bg); border: 1px solid var(--card-border);
     border-radius: 16px; overflow: hidden;
 }
+
+#aiChatPopup .chat-header { width: 100%; flex-shrink: 0; }
+#aiChatPopup .chat-box { flex: 1; overflow-y: auto; width: 100%; }
+#aiChatPopup .chat-input-area { width: 100%; flex-shrink: 0; display: flex; flex-direction: row !important; }
 
 .popup-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -207,7 +216,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 
 /* Suggestions UI */
 .chat-suggestions { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-.chat-suggestions button { background: var(--card-bg); border: 1px solid var(--orange); color: var(--text-color); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: left; cursor: pointer; width: fit-content; }
+.chat-suggestions button { background: var(--card-bg); border: 1px solid var(--orange); color: var(--text-color); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: left; cursor: pointer; transition: 0.3s; width: fit-content; }
 .chat-suggestions button:hover { background: var(--orange); color: #fff; }
 
 .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; line-height: 1.5; font-size: 0.95rem; }
