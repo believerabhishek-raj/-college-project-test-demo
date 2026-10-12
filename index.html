@@ -121,7 +121,7 @@
             </div>
         </section>
 
-        <!-- Admin Super Dashboard -->
+        <!-- Admin Dashboard -->
         <section id="adminSection" class="hidden fade-in-up">
             <div class="admin-header glass-card mb-2">
                 <h2><i class="fa-solid fa-shield-halved"></i> Super Admin Control Panel</h2>
@@ -177,8 +177,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="adminUserListBody">
-                        </tbody>
+                        <tbody id="adminUserListBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -228,10 +227,8 @@
                 <p id="dailyMotivation" class="motivation-text">A fresh morning to save energy</p>
             </div>
 
-            <!-- MEGA DASHBOARD -->
+            <!-- DASHBOARD -->
             <div id="dashboard" class="feature-content active-feature">
-                
-                <!-- 4 Quick Stats -->
                 <div class="grid-4 mb-3">
                     <div class="clean-card p-2 hover-lift">
                         <p class="card-label" data-i18n="dashLoad">Total Load (kWh)</p>
@@ -247,7 +244,6 @@
                         <p class="card-label" data-i18n="dashBill">Est. Monthly Cost</p>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
-                            <!-- PAYMENT BUTTON -->
                             <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on current usage</span>
@@ -259,7 +255,7 @@
                     </div>
                 </div>
 
-                <!-- Big Graph Area (2D Dynamic) -->
+                <!-- 2D Graph -->
                 <div class="clean-card mb-3 slide-up">
                     <div class="flex-between mb-2">
                         <h3 data-i18n="trendChart">Energy Usage Trend</h3>
@@ -280,7 +276,7 @@
                     <div class="chart-container" style="height: 350px;"><canvas id="energyChart"></canvas></div>
                 </div>
 
-                <!-- Lower Section: Best Action First & Tips -->
+                <!-- Best Action First & Tips -->
                 <div class="grid-2">
                     <div class="clean-card slide-right">
                         <div class="flex-between mb-2">
@@ -312,7 +308,7 @@
                 </div>
             </div>
 
-            <!-- APPLIANCES & IOT -->
+            <!-- APPLIANCES -->
             <div id="appliances" class="feature-content hidden">
                 <div class="clean-card mb-3 slide-down">
                     <h2 data-i18n="appTitle">Appliance Load Calculator & Smart Control</h2>
@@ -349,7 +345,7 @@
                 </div>
             </div>
 
-            <!-- CALCULATORS (Generic Offline) -->
+            <!-- CALCULATORS -->
             <div id="calculators" class="feature-content hidden">
                 <div class="grid-2">
                     <div class="clean-card hover-lift slide-right">
@@ -376,7 +372,7 @@
                 </div>
             </div>
 
-            <!-- INSIGHTS & AUDIT (Proof of Impact) -->
+            <!-- INSIGHTS & AUDIT -->
             <div id="audit" class="feature-content hidden">
                 <div class="grid-2">
                     <div class="clean-card hover-lift slide-right">
@@ -397,9 +393,8 @@
                             <h3 class="mb-2">Audit Summary</h3>
                             <p id="auditBill" style="font-size: 1.2rem;">Estimated Bill: ₹0</p>
                             <p id="auditSavings" style="font-size: 1.2rem;" class="green-text mb-2">Possible Savings: ₹0</p>
-                            
                             <p class="small-text">Estimated Carbon Reduction: <b id="auditCarbon">0 kg CO2</b> if optimized.</p>
-                            <button class="secondary-btn mt-2 hover-pop" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> <span data-i18n="downloadReport">Download Audit PDF/CSV</span></button>
+                            <button class="secondary-btn mt-2 hover-pop" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> <span data-i18n="downloadReport">Download Audit CSV</span></button>
                         </div>
                     </div>
 
@@ -455,7 +450,7 @@
                 </div>
             </div>
 
-            <!-- COMMUNITY CHALLENGE -->
+            <!-- COMMUNITY -->
             <div id="community" class="feature-content hidden">
                 <div class="clean-card slide-up">
                     <h2 class="mb-1" data-i18n="communityTitle"><i class="fa-solid fa-trophy text-yellow"></i> Monthly Energy-Saving Challenge</h2>
@@ -466,7 +461,7 @@
                             <h3>Your Monthly Goal</h3>
                             <p class="small-text mt-1">Reduce consumption by 10% compared to last month.</p>
                             <div style="width: 100%; background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 15px; overflow: hidden;">
-                                <div style="width: 60%; background: #27AE60; height: 100%; transition: width 1s ease;"></div>
+                                <div style="width: 60%; background: #27AE60; height: 100%;"></div>
                             </div>
                             <p class="small-text mt-1">60% Completed</p>
                         </div>
@@ -491,7 +486,7 @@
                 </div>
             </div>
 
-            <!-- SMART POWER CUT NOTIFICATION -->
+            <!-- OUTAGES -->
             <div id="powercut" class="feature-content hidden">
                 <div class="clean-card text-center slide-down" style="max-width: 600px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-triangle-exclamation danger-text"></i> Smart Power-Cut Monitor</h2>
@@ -510,19 +505,19 @@
                 </div>
             </div>
             
-            <!-- DEDICATED AI ASSISTANT TAB (EcoSpearks Ai) -->
+            <!-- AI ASSISTANT TAB -->
             <div id="assistant" class="feature-content hidden">
                 <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
                     <div class="flex-between mb-2">
                         <h3><i class="fa-solid fa-robot green-text"></i> EcoSpearks Ai</h3>
-                        <span class="badge light-green-bg pulse-subtle">Memory & Voice Active</span>
+                        <span class="badge light-green-bg pulse-subtle">Voice & Memory Active</span>
                     </div>
                     
                     <div id="tabChatBox" class="chat-box" style="flex:1; background: rgba(0,0,0,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--card-border); overflow-y: auto;">
                         <div class="message ai-message fade-in">
                             <p>Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                             <div class="tts-controls mt-1">
-                                <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                                <button class="tts-btn hover-pop" type="button" onclick="speakStoredText('greeting')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                                 <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                             </div>
                         </div>
@@ -535,7 +530,7 @@
                 </div>
             </div>
 
-            <!-- PROFILE SETTINGS -->
+            <!-- PROFILE -->
             <div id="profile" class="feature-content hidden">
                 <div class="clean-card slide-up" style="max-width: 600px; margin: 0 auto;">
                     <h2 data-i18n="profileTab"><i class="fa-solid fa-user-pen text-orange"></i> My Profile Settings</h2>
@@ -586,10 +581,9 @@
         </section>
     </div>
 
-    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL (STRICTLY HIDDEN BY DEFAULT) -->
+    <!-- RAZORPAY THEMED PAYMENT MODAL (WITH REAL INVOICE & PDF) -->
     <div id="paymentModal" class="hidden scale-in-center popup-modal rzp-modal-theme" style="display: none;">
         
-        <!-- Left Sidebar Inside Modal -->
         <div class="rzp-sidebar">
             <div class="rzp-brand">
                 <i class="fa-solid fa-bolt text-orange"></i>
@@ -609,14 +603,13 @@
             </ul>
         </div>
 
-        <!-- Right Content Area -->
         <div class="rzp-content">
             <div class="rzp-header">
                 <span class="badge light-green-bg"><i class="fa-solid fa-lock"></i> 256-Bit Encrypted</span>
                 <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Tab 1: UPI Apps -->
+            <!-- Tab 1: UPI -->
             <div id="rzpTabUpi" class="rzp-tab-pane active fade-in">
                 <p class="small-text mb-2">Tap any app to pay with UPI:</p>
                 <div class="rzp-app-grid mb-3">
@@ -674,7 +667,7 @@
                 </div>
             </div>
 
-            <!-- Step: Dummy PIN / OTP Prompt -->
+            <!-- PIN / OTP Prompt -->
             <div id="rzpPinPrompt" class="hidden text-center p-3 scale-in">
                 <i class="fa-solid fa-key text-orange mb-2" style="font-size: 2rem;"></i>
                 <h4 id="pinPromptTitle">Authorize Transaction</h4>
@@ -684,18 +677,18 @@
                 <button class="secondary-btn mt-2 w-100 borderless" style="background:transparent; color:gray;" onclick="cancelPinPrompt()">Cancel</button>
             </div>
 
-            <!-- Step: Loader & Success Screen with Downloadable Invoice -->
+            <!-- Loader & Real Printable Invoice -->
             <div id="rzpStatusScreen" class="hidden text-center p-3" style="max-height: 480px; overflow-y: auto;">
                 <i id="rzpStatusIcon" class="fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2"></i>
                 <h3 id="rzpStatusHeading" style="font-weight:600; font-size: 1.2rem;">Connecting to Gateway...</h3>
                 <p class="small-text mt-1" id="rzpStatusSub">Please do not refresh or close.</p>
                 
-                <!-- Printable Real Invoice Template -->
+                <!-- Real PDF-Ready Invoice -->
                 <div id="rzpInvoiceTemplate" class="hidden mt-3 p-3 text-left" style="background:#ffffff; border:1px solid #e0e0e0; border-radius:10px; color:#333; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--orange); padding-bottom:8px; margin-bottom:10px;">
                         <div>
                             <h3 style="color:var(--orange); margin:0; font-size:1.1rem;"><i class="fa-solid fa-bolt"></i> ECO SPARKS</h3>
-                            <small style="color:gray;">Electricity Bill Receipt</small>
+                            <small style="color:gray;">Official Energy Bill Receipt</small>
                         </div>
                         <span class="badge light-green-bg" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> PAID</span>
                     </div>
@@ -719,7 +712,7 @@
                             <td style="padding:6px; text-align:right;" id="invBaseAmount">₹0.00</td>
                         </tr>
                         <tr>
-                            <td style="padding:6px;">Transaction & Gateway Charges</td>
+                            <td style="padding:6px;">Gateway Convenience Fee</td>
                             <td style="padding:6px; text-align:right;">₹0.00 (Waived)</td>
                         </tr>
                         <tr style="border-top:1px solid #ddd; font-weight:bold; background:#fafafa;">
@@ -743,12 +736,12 @@
         </div>
     </div>
 
-    <!-- Floating AI Button -->
+    <!-- Floating AI Circle Button -->
     <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask EcoSpearks Ai">
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- PROPER FLOATING AI POPUP MODAL (STRICTLY HIDDEN BY DEFAULT) -->
+    <!-- CRASH-PROOF FLOATING AI POPUP -->
     <div id="aiChatPopup" class="hidden scale-in-center popup-modal" style="display: none;">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
@@ -758,12 +751,12 @@
             <div class="message ai-message fade-in-left">
                 <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakStoredText('greeting')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
@@ -774,7 +767,7 @@
         </div>
     </div>
 
-    <!-- Background overlay for popups (STRICTLY HIDDEN BY DEFAULT) -->
+    <!-- Background overlay -->
     <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()" style="display: none;"></div>
 
     <footer class="site-footer">
