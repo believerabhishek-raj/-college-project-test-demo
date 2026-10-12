@@ -52,7 +52,7 @@
                 <i class="fa-solid fa-triangle-exclamation"></i> <span class="link-text" data-i18n="powerCutTab">Outages</span>
             </li>
             <li class="nav-item" onclick="showFeature('assistant', this)">
-                <i class="fa-solid fa-robot"></i> <span class="link-text" data-i18n="aiAdviser">AI Assistant</span>
+                <i class="fa-solid fa-robot"></i> <span class="link-text">EcoSpearks Ai</span>
             </li>
             <li class="nav-item" onclick="showFeature('profile', this)">
                 <i class="fa-solid fa-user"></i> <span class="link-text" data-i18n="profileTab">Profile</span>
@@ -207,7 +207,7 @@
                 <button class="nav-btn hover-pop" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('powercut', this)" data-i18n="powerCutTab">Outages</button>
-                <button class="nav-btn hover-pop" onclick="showFeature('assistant', this)" data-i18n="aiAdviser">AI Chat</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('assistant', this)">EcoSpearks Ai</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('profile', this)" data-i18n="profileTab">Profile</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
             </div>
@@ -247,7 +247,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
                             <!-- PAYMENT BUTTON -->
-                            <button class="primary-btn sm-btn hover-pop" style="padding:4px 8px; font-size:0.75rem;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Now</button>
+                            <button class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on current usage</span>
                     </div>
@@ -301,14 +301,6 @@
                                 <p>Estimated Savings: <b class="green-text">₹120/mo</b></p>
                             </div>
                             <span class="badge light-green-bg hidden-mobile">Instant ROI</span>
-                        </div>
-                        <div class="action-item mt-2 hover-lift">
-                            <div class="icon-box red-bg"><i class="fa-solid fa-lightbulb"></i></div>
-                            <div class="action-details">
-                                <h4>Switch to 5-Star Appliances</h4>
-                                <p>Estimated Savings: <b class="green-text">₹800/mo</b></p>
-                            </div>
-                            <span class="badge light-red-bg hidden-mobile">High Cost</span>
                         </div>
                     </div>
 
@@ -517,19 +509,19 @@
                 </div>
             </div>
             
-            <!-- DEDICATED AI ASSISTANT TAB -->
+            <!-- DEDICATED AI ASSISTANT TAB (EcoSpearks Ai) -->
             <div id="assistant" class="feature-content hidden">
                 <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
                     <div class="flex-between mb-2">
-                        <h3><i class="fa-solid fa-robot green-text"></i> Eco Sparks AI Assistant</h3>
+                        <h3><i class="fa-solid fa-robot green-text"></i> EcoSpearks Ai</h3>
                         <span class="badge light-green-bg pulse-subtle">Memory & Voice Active</span>
                     </div>
                     
                     <div id="tabChatBox" class="chat-box" style="flex:1; background: rgba(0,0,0,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--card-border); overflow-y: auto;">
                         <div class="message ai-message fade-in">
-                            <p>Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!</p>
+                            <p>Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                             <div class="tts-controls mt-1">
-                                <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am Eco Sparks AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                                <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                                 <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                             </div>
                         </div>
@@ -593,77 +585,138 @@
         </section>
     </div>
 
-    <!-- IMPROVED PAYMENT MODAL (WITH DUMMY INPUTS) -->
-    <div id="paymentModal" class="glass-card hidden scale-in-center popup-modal" style="height: auto; min-height:400px; z-index: 10000;">
-        <div class="chat-header" style="background: var(--primary);">
-            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-wallet"></i> Secure Bill Payment</h3>
-            <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL -->
+    <div id="paymentModal" class="glass-card hidden scale-in-center popup-modal rzp-modal-theme">
+        
+        <!-- Left Sidebar Inside Modal -->
+        <div class="rzp-sidebar">
+            <div class="rzp-brand">
+                <i class="fa-solid fa-bolt text-orange"></i>
+                <div>
+                    <h4>Eco Sparks Pay</h4>
+                    <small>Official Energy Gateway</small>
+                </div>
+            </div>
+            <div class="rzp-amount-box">
+                <span>Amount to Pay</span>
+                <h2 id="payModalAmount" class="text-orange">₹0.00</h2>
+            </div>
+            <ul class="rzp-nav">
+                <li id="rzpNavUpi" class="active" onclick="switchRzpTab('upi')"><i class="fa-solid fa-mobile-screen-button"></i> UPI Apps</li>
+                <li id="rzpNavCard" onclick="switchRzpTab('card')"><i class="fa-solid fa-credit-card"></i> Card</li>
+                <li id="rzpNavNet" onclick="switchRzpTab('net')"><i class="fa-solid fa-building-columns"></i> Netbanking</li>
+            </ul>
         </div>
-        <div class="p-3">
-            <h2 class="mb-2 text-center">Total Due: <span id="payModalAmount" class="text-orange">₹0.00</span></h2>
-            
-            <div id="paymentSelection">
-                <p class="small-text mb-3 text-center">Select your preferred payment method:</p>
-                <div class="grid-2">
-                    <button class="secondary-btn hover-pop" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="selectPaymentMethod('upi')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" height="20" alt="UPI">
-                    </button>
-                    <button class="secondary-btn hover-pop" style="background:#333; color:#fff;" onclick="selectPaymentMethod('card')">
-                        <i class="fa-solid fa-credit-card"></i> Card
-                    </button>
+
+        <!-- Right Content Area -->
+        <div class="rzp-content">
+            <div class="rzp-header">
+                <span class="badge light-green-bg"><i class="fa-solid fa-lock"></i> 256-Bit Encrypted</span>
+                <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Tab 1: UPI Apps -->
+            <div id="rzpTabUpi" class="rzp-tab-pane active fade-in">
+                <p class="small-text mb-2">Tap any app to pay with UPI:</p>
+                <div class="rzp-app-grid mb-3">
+                    <div class="rzp-app-item hover-lift" onclick="triggerPinPrompt('Google Pay')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="GPay">
+                        <span>GPay</span>
+                    </div>
+                    <div class="rzp-app-item hover-lift" onclick="triggerPinPrompt('PhonePe')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe">
+                        <span>PhonePe</span>
+                    </div>
+                    <div class="rzp-app-item hover-lift" onclick="triggerPinPrompt('Paytm')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm">
+                        <span>Paytm</span>
+                    </div>
+                    <div class="rzp-app-item hover-lift" onclick="triggerPinPrompt('BHIM UPI')">
+                        <i class="fa-solid fa-qrcode text-orange" style="font-size: 1.8rem;"></i>
+                        <span>BHIM</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Or Enter UPI ID</label>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="customUpiId" placeholder="e.g. mobile@upi" style="font-size:0.9rem;">
+                        <button class="primary-btn sm-btn m-0 hover-pop" style="width: auto; padding: 0 15px;" onclick="triggerPinPrompt('UPI ID')">Verify</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- UPI Form -->
-            <div id="upiForm" class="hidden mt-3 text-center">
-                <h4>UPI Secure Gateway</h4>
-                <p class="small-text mb-2">Enter your 4 or 6 digit UPI PIN</p>
-                <input type="password" id="upiPin" placeholder="Enter UPI PIN" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
-                <button class="primary-btn mt-2 w-100 hover-pop" onclick="processFinalPayment('UPI')">Pay Securely</button>
-                <button class="secondary-btn mt-1 w-100 borderless" style="background:transparent; color:gray;" onclick="backToPaymentSelection()">Cancel</button>
-            </div>
-
-            <!-- Card Form -->
-            <div id="cardForm" class="hidden mt-3">
-                <h4 class="text-center mb-2">Credit / Debit Card</h4>
-                <input type="text" id="cardNumber" placeholder="Card Number (e.g. 4111 1111 1111 1111)" maxlength="19" class="mb-1" style="font-size:0.9rem;">
-                <div class="grid-2 mb-1">
-                    <input type="text" placeholder="MM/YY" maxlength="5" style="font-size:0.9rem;">
-                    <input type="password" id="cardCvv" placeholder="CVV" maxlength="3" style="font-size:0.9rem;">
+            <!-- Tab 2: Cards -->
+            <div id="rzpTabCard" class="rzp-tab-pane hidden fade-in">
+                <p class="small-text mb-2">Enter Debit or Credit Card details:</p>
+                <div class="form-group mb-2">
+                    <input type="text" id="rzpCardNumber" placeholder="Card Number (4111 1111 1111 1111)" maxlength="19">
                 </div>
-                <button class="primary-btn mt-2 w-100 hover-pop" onclick="processFinalPayment('Card')">Pay Securely</button>
-                <button class="secondary-btn mt-1 w-100 borderless text-center" style="background:transparent; color:gray;" onclick="backToPaymentSelection()">Cancel</button>
+                <div class="grid-2 mb-2">
+                    <input type="text" id="rzpCardExpiry" placeholder="MM / YY" maxlength="5">
+                    <input type="password" id="rzpCardCvv" placeholder="CVV" maxlength="3">
+                </div>
+                <div class="form-group mb-3">
+                    <input type="text" id="rzpCardHolder" placeholder="Cardholder Name">
+                </div>
+                <button class="primary-btn w-100 hover-pop" onclick="triggerCardOtpPrompt()">Pay Bill Now</button>
             </div>
 
-            <!-- Loader -->
-            <div id="paymentLoader" class="hidden mt-3 text-center">
-                <i class="fa-solid fa-circle-notch fa-spin fa-3x text-orange"></i>
-                <p class="mt-2" id="paymentStatusText" style="font-weight:600;">Processing your payment...</p>
+            <!-- Tab 3: Netbanking -->
+            <div id="rzpTabNet" class="rzp-tab-pane hidden fade-in">
+                <p class="small-text mb-2">Select your bank:</p>
+                <div class="grid-2 mb-3">
+                    <button class="secondary-btn sm-btn hover-lift" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="triggerPinPrompt('State Bank of India')">SBI</button>
+                    <button class="secondary-btn sm-btn hover-lift" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="triggerPinPrompt('HDFC Bank')">HDFC</button>
+                    <button class="secondary-btn sm-btn hover-lift" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="triggerPinPrompt('ICICI Bank')">ICICI</button>
+                    <button class="secondary-btn sm-btn hover-lift" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="triggerPinPrompt('Axis Bank')">Axis</button>
+                </div>
+            </div>
+
+            <!-- Step: Dummy PIN / OTP Prompt -->
+            <div id="rzpPinPrompt" class="hidden text-center p-3 scale-in">
+                <i class="fa-solid fa-key-skeleton text-orange mb-2" style="font-size: 2rem;"></i>
+                <h4 id="pinPromptTitle">Authorize Transaction</h4>
+                <p class="small-text mb-2">Enter your 4 or 6 digit Security PIN</p>
+                <input type="password" id="rzpPinInput" placeholder="••••" maxlength="6" style="text-align:center; font-size:1.6rem; letter-spacing:10px; max-width:200px; margin:0 auto 15px auto;">
+                <button class="primary-btn w-100 hover-pop" onclick="executeMockPayment()">Submit & Pay</button>
+                <button class="secondary-btn mt-2 w-100 borderless" style="background:transparent; color:gray;" onclick="cancelPinPrompt()">Cancel</button>
+            </div>
+
+            <!-- Step: Loader & Success Screen -->
+            <div id="rzpStatusScreen" class="hidden text-center p-4">
+                <i id="rzpStatusIcon" class="fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3"></i>
+                <h3 id="rzpStatusHeading" style="font-weight:600;">Connecting to Gateway...</h3>
+                <p class="small-text mt-1" id="rzpStatusSub">Please do not refresh or close.</p>
+                <div id="rzpReceipt" class="hidden mt-3 p-2 light-green-bg" style="border-radius:8px; font-size:0.85rem;">
+                    <b>Transaction ID:</b> ESP_<span id="rzpTxnId">892341</span><br>
+                    <span>Status: SUCCESSFUL</span>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Floating AI Button -->
-    <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
+    <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask EcoSpearks Ai">
         <i class="fa-solid fa-robot"></i>
     </button>
 
     <!-- PROPER FLOATING AI POPUP MODAL -->
     <div id="aiChatPopup" class="glass-card hidden scale-in-center popup-modal">
         <div class="chat-header">
-            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> Eco Spark AI <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
+            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
             <button class="close-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="chatBox" class="chat-box">
             <div class="message ai-message fade-in-left">
-                <p data-i18n="aiGreeting">Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!</p>
+                <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
@@ -675,13 +728,12 @@
     </div>
 
     <!-- Background overlay for popup -->
-    <div id="popupOverlay" class="hidden popup-overlay" onclick="toggleAIPopup()"></div>
+    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()"></div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by Eco Sparks Team</small>
     </footer>
 
-    <script src="style.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -26,40 +26,40 @@ body { background-color: var(--bg-color); color: var(--text-color); display: fle
 .hidden { display: none !important; }
 
 /* ANIMATIONS */
-.fade-in { animation: fadeIn 0.5s ease forwards; }
-.fade-in-up { animation: fadeInUp 0.6s ease forwards; }
-.fade-in-down { animation: fadeInDown 0.6s ease forwards; }
-.fade-in-left { animation: fadeInLeft 0.5s ease forwards; }
-.slide-up { animation: slideUp 0.5s ease forwards; }
-.slide-right { animation: slideRight 0.5s ease forwards; }
-.slide-left { animation: slideLeft 0.5s ease forwards; }
-.scale-in { animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-.scale-in-center { animation: scaleInCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-.hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-.hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+.fade-in-up { animation: fadeInUp 0.5s ease forwards; }
+.fade-in-down { animation: fadeInDown 0.5s ease forwards; }
+.fade-in-left { animation: fadeInLeft 0.4s ease forwards; }
+.slide-up { animation: slideUp 0.4s ease forwards; }
+.slide-right { animation: slideRight 0.4s ease forwards; }
+.slide-left { animation: slideLeft 0.4s ease forwards; }
+.scale-in { animation: scaleIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.scale-in-center { animation: scaleInCenter 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.hover-lift { transition: transform 0.25s ease, box-shadow 0.25s ease; cursor: pointer; }
+.hover-lift:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
 .hover-pop { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .hover-pop:hover { transform: scale(1.05); }
-.hover-pop:active { transform: scale(0.95); }
+.hover-pop:active { transform: scale(0.96); }
 .pulse-subtle { animation: pulseSubtle 2s infinite; }
 .pulse-icon { animation: pulseIcon 2s infinite; }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes slideLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-@keyframes scaleInCenter { from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideLeft { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes scaleInCenter { from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes pulseSubtle { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-@keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+@keyframes pulseIcon { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
 /* Utilities */
 .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; } .mb-3 { margin-bottom: 1.5rem; }
 .mt-1 { margin-top: 0.5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; }
 .m-0 { margin: 0 !important; }
-.p-2 { padding: 1rem; } .p-3 { padding: 1.5rem; }
+.p-2 { padding: 1rem; } .p-3 { padding: 1.5rem; } .p-4 { padding: 2rem; }
 .text-right { text-align: right; } .text-center { text-align: center; } .text-left { text-align: left; }
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 .w-100 { width: 100% !important; }
@@ -79,10 +79,10 @@ body { background-color: var(--bg-color); color: var(--text-color); display: fle
 .danger-bg { background: var(--danger); color: white; }
 
 /* Smart Switch IoT Toggle */
-.switch { position: relative; display: inline-block; width: 44px; height: 24px; margin-top:5px; }
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
 .switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px;}
-.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;}
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .3s; border-radius: 50%;}
 input:checked + .slider { background-color: var(--primary); }
 input:checked + .slider:before { transform: translateX(20px); }
 
@@ -178,8 +178,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 .user-row { background: rgba(230, 126, 34, 0.1); border-left: 3px solid var(--orange); font-weight: 600; }
 
 /* TRUE POPUP AI CHAT MODAL */
-#floatingAIBtn { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: var(--orange); color: #fff; border: none; font-size: 1.8rem; box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4); cursor: pointer; z-index: 9998; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
-#floatingAIBtn:hover { transform: scale(1.1); }
+#floatingAIBtn { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: var(--orange); color: #fff; border: none; font-size: 1.8rem; box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4); cursor: pointer; z-index: 9998; display: flex; align-items: center; justify-content: center; }
 
 .popup-modal {
     position: fixed;
@@ -203,7 +202,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 
 /* Suggestions UI */
 .chat-suggestions { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-.chat-suggestions button { background: var(--card-bg); border: 1px solid var(--orange); color: var(--text-color); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: left; cursor: pointer; transition: 0.3s; width: fit-content; }
+.chat-suggestions button { background: var(--card-bg); border: 1px solid var(--orange); color: var(--text-color); padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; text-align: left; cursor: pointer; width: fit-content; }
 .chat-suggestions button:hover { background: var(--orange); color: #fff; }
 
 .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; line-height: 1.5; font-size: 0.95rem; }
@@ -218,6 +217,103 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 .chat-input-area { padding: 15px; display: flex; gap: 10px; background: var(--card-bg); border-top: 1px solid var(--card-border); }
 .chat-input-area input { flex: 1; margin: 0; border-radius: 20px; padding: 10px 15px; border: 1px solid var(--card-border); background: var(--bg-color); outline: none;}
 .chat-input-area button { width: 45px; height: 45px; background: var(--orange); color: #fff; border-radius: 50%; border: none; font-size: 1.2rem; margin: 0; display: flex; align-items: center; justify-content: center;}
+
+/* -------------------------------------------
+   RAZORPAY STYLE MODAL THEMED FOR ECO SPARKS
+------------------------------------------- */
+.rzp-modal-theme {
+    max-width: 650px !important;
+    height: auto !important;
+    min-height: 440px !important;
+    max-height: 90vh !important;
+    display: flex !important;
+    flex-direction: row !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.rzp-sidebar {
+    width: 230px;
+    background: var(--bg-color);
+    border-right: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+}
+.rzp-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.rzp-brand i { font-size: 1.8rem; }
+.rzp-brand h4 { font-size: 0.95rem; margin: 0; }
+.rzp-brand small { font-size: 0.7rem; color: gray; }
+
+.rzp-amount-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.rzp-amount-box span { font-size: 0.75rem; color: gray; display: block; }
+.rzp-amount-box h2 { font-size: 1.4rem; margin: 0; font-weight: 700; }
+
+.rzp-nav { list-style: none; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.rzp-nav li {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: gray;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+.rzp-nav li:hover { background: rgba(0,0,0,0.03); color: var(--text-color); }
+.rzp-nav li.active { background: rgba(230, 126, 34, 0.12); color: var(--orange); font-weight: 600; }
+
+.rzp-content {
+    flex: 1;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+.rzp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+}
+.rzp-header .close-btn { color: gray; }
+
+.rzp-app-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+.rzp-app-item {
+    border: 1px solid var(--card-border);
+    background: var(--bg-color);
+    padding: 12px 6px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 75px;
+}
+.rzp-app-item img { height: 22px; max-width: 100%; object-fit: contain; }
+.rzp-app-item span { font-size: 0.75rem; font-weight: 500; }
 
 .hidden-desktop { display: none !important; }
 .site-footer { text-align: center; padding: 15px; font-size: 0.85rem; color: gray; margin-top: auto; }
@@ -249,4 +345,23 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     
     #floatingAIBtn { right: 20px; bottom: 20px; width: 55px; height: 55px; font-size: 1.4rem; }
     .popup-modal { width: 90%; height: 80vh; max-height: 80vh; border-radius: 16px; }
+
+    .rzp-modal-theme {
+        flex-direction: column !important;
+        height: 90vh !important;
+        max-height: 90vh !important;
+    }
+    .rzp-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+        padding: 12px 15px;
+    }
+    .rzp-nav {
+        flex-direction: row;
+        gap: 5px;
+        overflow-x: auto;
+    }
+    .rzp-nav li { padding: 6px 10px; font-size: 0.75rem; white-space: nowrap; }
+    .rzp-app-grid { grid-template-columns: repeat(2, 1fr); }
 }

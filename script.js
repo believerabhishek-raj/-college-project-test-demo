@@ -7,7 +7,7 @@ const translations = {
         loginBtn: "Secure Login", createAccBtn: "Create Account", adminLoginBtn: "Access Admin Panel",
         dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
         auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
-        powerCutTab: "Outages", aiAdviser: "AI Assistant", profileTab: "Profile", aboutUs: "About",
+        powerCutTab: "Outages", aiAdviser: "EcoSpearks Ai", profileTab: "Profile", aboutUs: "About",
         teamTitle: "Meet The Team", teamDesc: "The creators behind Eco Sparks",
         ecoScore: "Eco Score", ecoScoreSub: "Excellent! You are an eco-warrior.",
         vampirePower: "Vampire Power Loss", vampireSub: "Monthly cost of devices plugged in but turned off.",
@@ -21,7 +21,7 @@ const translations = {
         generateAudit: "Generate Audit Report", downloadReport: "Download Audit PDF/CSV",
         simTitle: "Live Savings Simulator", simDesc: "Adjust your appliance daily usage to see live impact on units and cost.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Compete with neighbors to save the most energy and earn badges!",
-        logout: "Logout", aiGreeting: "Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!"
+        logout: "Logout", aiGreeting: "Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!"
     },
     hi: {
         welcomeAuth: "Eco Sparks में आपका स्वागत है",
@@ -30,7 +30,7 @@ const translations = {
         loginBtn: "सुरक्षित लॉगिन", createAccBtn: "अकाउंट बनाएं", adminLoginBtn: "एडमिन पैनल खोलें",
         dashboardTab: "डैशबोर्ड", applianceTab: "उपकरण", calcTool: "कैलकुलेटर",
         auditTool: "इनसाइट्स", simulator: "सिम्युलेटर", communityTab: "कम्युनिटी",
-        powerCutTab: "पावर कट", aiAdviser: "AI असिस्टेंट", profileTab: "प्रोफ़ाइल", aboutUs: "हमारे बारे में",
+        powerCutTab: "पावर कट", aiAdviser: "EcoSpearks Ai", profileTab: "प्रोफ़ाइल", aboutUs: "हमारे बारे में",
         teamTitle: "हमारी टीम", teamDesc: "Eco Sparks के निर्माता",
         ecoScore: "इको स्कोर", ecoScoreSub: "बहुत बढ़िया! आप पर्यावरण के रक्षक हैं।",
         vampirePower: "वैम्पायर पावर लॉस", vampireSub: "बंद उपकरणों के प्लग लगे रहने से होने वाला अनुमानित खर्च।",
@@ -44,7 +44,7 @@ const translations = {
         generateAudit: "ऑडिट रिपोर्ट जनरेट करें", downloadReport: "ऑडिट PDF/CSV डाउनलोड करें",
         simTitle: "लाइव सेविंग्स सिम्युलेटर", simDesc: "इकाईयों और लागत पर लाइव प्रभाव देखने के लिए उपयोग को समायोजित करें।",
         communityTitle: "मासिक ऊर्जा-बचत चुनौती", communityDesc: "ऊर्जा बचाने और बैज अर्जित करने के लिए पड़ोसियों के साथ प्रतिस्पर्धा करें!",
-        logout: "लॉग आउट", aiGreeting: "नमस्ते! मैं Eco Spark AI हूँ। मैं आपकी कैसे मदद कर सकता हूँ?"
+        logout: "लॉग आउट", aiGreeting: "नमस्ते! मैं EcoSpearks Ai हूँ। मैं आपकी कैसे मदद कर सकता हूँ?"
     },
     hinglish: {
         welcomeAuth: "Eco Sparks me Swagat Hai",
@@ -53,7 +53,7 @@ const translations = {
         loginBtn: "Secure Login", createAccBtn: "Account Banayein", adminLoginBtn: "Admin Panel Kholein",
         dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
         auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
-        powerCutTab: "Outages", aiAdviser: "AI Assistant", profileTab: "Profile", aboutUs: "About Us",
+        powerCutTab: "Outages", aiAdviser: "EcoSpearks Ai", profileTab: "Profile", aboutUs: "About Us",
         teamTitle: "Hamari Team", teamDesc: "Eco Sparks ke creators",
         ecoScore: "Eco Score", ecoScoreSub: "Great! Aap eco-warrior hain.",
         vampirePower: "Vampire Power Loss", vampireSub: "Standby devices se hone wala monthly waste.",
@@ -67,7 +67,7 @@ const translations = {
         generateAudit: "Audit Report Generate Karein", downloadReport: "Audit PDF/CSV Download Karein",
         simTitle: "Live Savings Simulator", simDesc: "Appliance daily usage adjust karein aur live impact dekhein.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Apne dosto ke sath energy save karne ka challenge aur badges jeetein!",
-        logout: "Logout", aiGreeting: "Hello! Main Eco Spark AI hoon. Aaj electricity save karne me main aapki kya madad karu?"
+        logout: "Logout", aiGreeting: "Hello! Main EcoSpearks Ai hoon. Aaj electricity save karne me main aapki kya madad karu?"
     }
 };
 
@@ -330,8 +330,6 @@ function adminAddNewUser() {
     } catch(e) { console.error(e); }
 }
 
-function saveAdminProfile() { alert("Admin Profile updated successfully!"); }
-
 function populateAdminTable(logs) {
     try {
         const tbody = document.getElementById('adminLogsBody');
@@ -459,7 +457,7 @@ function showFeature(featureId, btnElement) {
         
         if(featureId === 'appliances' && pieChartInstance) pieChartInstance.update();
         if(featureId === 'dashboard' && barChartInstance) barChartInstance.update();
-    } catch(e) { console.error("Navigation error:", e); }
+    } catch(e) { console.error(e); }
 }
 
 // ------------------------------------
@@ -470,10 +468,8 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     if(!activeUser) return;
     
-    // Toast Alert
     alert(`Smart Sync: Command sent to turn ${state ? 'ON' : 'OFF'} ${deviceName}.`);
     
-    // Sync to memory
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
     if(users[activeUser.id] && users[activeUser.id].appliances) {
         let appIndex = users[activeUser.id].appliances.findIndex(a => a.name === deviceName);
@@ -483,7 +479,6 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
         }
     }
     
-    // Send to admin logs via server
     try {
         await fetch('/api/iot/toggle', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -493,8 +488,10 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
 }
 
 // ------------------------------------
-// DUMMY PAYMENT MODAL
+// RAZORPAY-THEMED PAYMENT GATEWAY
 // ------------------------------------
+let pendingPaymentApp = 'UPI';
+
 function openPaymentModal() {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     if(!activeUser || !activeUser.appliances) return alert("Calculate your load first!");
@@ -505,16 +502,18 @@ function openPaymentModal() {
     if(totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed.");
     
     safeSetText('payModalAmount', `₹${totalLoad.toFixed(2)}`);
-    document.getElementById('paymentLoader').classList.add('hidden');
     
+    // Reset view inside modal
+    switchRzpTab('upi');
+    cancelPinPrompt();
+    document.getElementById('rzpStatusScreen').classList.add('hidden');
+
     const popup = document.getElementById('paymentModal');
     const overlay = document.getElementById('popupOverlay');
     if(popup && overlay) {
         popup.classList.remove('hidden');
         overlay.classList.remove('hidden');
         popup.classList.add('scale-in-center');
-        
-        // Ensure AI popup is closed
         document.getElementById('aiChatPopup').classList.add('hidden');
     }
 }
@@ -528,54 +527,108 @@ function closePaymentModal() {
     }
 }
 
-function selectPaymentMethod(method) {
-    document.getElementById('paymentSelection').classList.add('hidden');
-    if(method === 'upi') {
-        document.getElementById('upiForm').classList.remove('hidden');
-    } else if (method === 'card') {
-        document.getElementById('cardForm').classList.remove('hidden');
+function closeAllPopups() {
+    closePaymentModal();
+    const aiPopup = document.getElementById('aiChatPopup');
+    if(aiPopup) aiPopup.classList.add('hidden');
+    const overlay = document.getElementById('popupOverlay');
+    if(overlay) overlay.classList.add('hidden');
+}
+
+function switchRzpTab(tabName) {
+    document.querySelectorAll('.rzp-nav li').forEach(li => li.classList.remove('active'));
+    document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
+    cancelPinPrompt();
+    document.getElementById('rzpStatusScreen').classList.add('hidden');
+
+    if(tabName === 'upi') {
+        document.getElementById('rzpNavUpi').classList.add('active');
+        document.getElementById('rzpTabUpi').classList.remove('hidden');
+    } else if(tabName === 'card') {
+        document.getElementById('rzpNavCard').classList.add('active');
+        document.getElementById('rzpTabCard').classList.remove('hidden');
+    } else if(tabName === 'net') {
+        document.getElementById('rzpNavNet').classList.add('active');
+        document.getElementById('rzpTabNet').classList.remove('hidden');
     }
 }
 
-function backToPaymentSelection() {
-    document.getElementById('upiForm').classList.add('hidden');
-    document.getElementById('cardForm').classList.add('hidden');
-    document.getElementById('paymentSelection').classList.remove('hidden');
-}
-
-function processFinalPayment(method) {
-    if(method === 'UPI') {
-        const pin = safeGetVal('upiPin');
-        if(!pin || pin.length < 4) return alert("Please enter a valid UPI PIN.");
+function triggerPinPrompt(appName) {
+    if(appName === 'UPI ID') {
+        const upiVal = safeGetVal('customUpiId');
+        if(!upiVal || !upiVal.includes('@')) return alert("Enter valid UPI ID (e.g. name@bank)");
+        pendingPaymentApp = upiVal;
     } else {
-        const card = safeGetVal('cardNumber');
-        const cvv = safeGetVal('cardCvv');
-        if(!card || !cvv) return alert("Please fill card details completely.");
+        pendingPaymentApp = appName;
     }
 
-    document.getElementById('upiForm').classList.add('hidden');
-    document.getElementById('cardForm').classList.add('hidden');
-    document.getElementById('paymentLoader').classList.remove('hidden');
-    safeSetText('paymentStatusText', 'Verifying details with Bank...');
-    
-    setTimeout(() => {
-        safeSetText('paymentStatusText', 'Processing payment securely...');
-        setTimeout(() => {
-            alert(`Payment of ${document.getElementById('payModalAmount').innerText} Successful via ${method}! Your monthly bill is cleared.`);
-            closePaymentModal();
-            
-            safeSetVal('upiPin', '');
-            safeSetVal('cardNumber', '');
-            safeSetVal('cardCvv', '');
-            document.getElementById('paymentLoader').classList.add('hidden');
-            document.getElementById('paymentSelection').classList.remove('hidden');
-        }, 2000);
-    }, 1500);
+    document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
+    safeSetText('pinPromptTitle', `Authorize via ${pendingPaymentApp}`);
+    safeSetVal('rzpPinInput', '');
+    document.getElementById('rzpPinPrompt').classList.remove('hidden');
 }
 
+function triggerCardOtpPrompt() {
+    const cardNum = safeGetVal('rzpCardNumber');
+    const cvv = safeGetVal('rzpCardCvv');
+    if(!cardNum || !cvv) return alert("Please fill Card Number and CVV completely.");
+
+    pendingPaymentApp = 'Card Payment';
+    document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
+    safeSetText('pinPromptTitle', "Enter 3D-Secure Bank OTP");
+    safeSetVal('rzpPinInput', '');
+    document.getElementById('rzpPinPrompt').classList.remove('hidden');
+}
+
+function cancelPinPrompt() {
+    document.getElementById('rzpPinPrompt').classList.add('hidden');
+    const activeTab = document.querySelector('.rzp-nav li.active');
+    if(activeTab) {
+        if(activeTab.id === 'rzpNavUpi') document.getElementById('rzpTabUpi').classList.remove('hidden');
+        else if(activeTab.id === 'rzpNavCard') document.getElementById('rzpTabCard').classList.remove('hidden');
+        else if(activeTab.id === 'rzpNavNet') document.getElementById('rzpTabNet').classList.remove('hidden');
+    }
+}
+
+function executeMockPayment() {
+    const pin = safeGetVal('rzpPinInput');
+    if(!pin || pin.length < 4) return alert("Please enter valid 4 to 6 digit security PIN / OTP.");
+
+    document.getElementById('rzpPinPrompt').classList.add('hidden');
+    const statusScreen = document.getElementById('rzpStatusScreen');
+    statusScreen.classList.remove('hidden');
+
+    const icon = document.getElementById('rzpStatusIcon');
+    const heading = document.getElementById('rzpStatusHeading');
+    const sub = document.getElementById('rzpStatusSub');
+    const receipt = document.getElementById('rzpReceipt');
+
+    icon.className = "fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3";
+    heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
+    sub.innerText = "Connecting with Bank Server...";
+    receipt.classList.add('hidden');
+
+    setTimeout(() => {
+        heading.innerText = "Debiting Account...";
+        
+        setTimeout(() => {
+            icon.className = "fa-solid fa-circle-check fa-4x green-text mb-3 scale-in";
+            heading.innerText = "Payment Successful!";
+            sub.innerText = `${safeGetText('payModalAmount')} successfully paid for Eco Sparks Bill.`;
+            safeSetText('rzpTxnId', Math.floor(100000 + Math.random() * 900000));
+            receipt.classList.remove('hidden');
+
+            setTimeout(() => {
+                closePaymentModal();
+            }, 3000);
+        }, 1500);
+    }, 1200);
+}
+
+const safeGetText = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
 
 // ------------------------------------
-// PROPER AI POPUP MODAL BEHAVIOR
+// AI POPUP MODAL BEHAVIOR
 // ------------------------------------
 function toggleAIPopup() {
     try {
@@ -587,7 +640,6 @@ function toggleAIPopup() {
                 popup.classList.remove('hidden');
                 overlay.classList.remove('hidden');
                 popup.classList.add('scale-in-center');
-                // Ensure payment modal is closed
                 document.getElementById('paymentModal').classList.add('hidden');
             } else {
                 popup.classList.add('hidden');
@@ -923,6 +975,17 @@ function stopSpeak() {
 }
 
 // --- AI Chat Logic ---
+function askAIToOptimize() {
+    if(userAppliances.length === 0) return alert("Please add some appliances first!");
+    const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
+    
+    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
+    const inputEl = document.getElementById('tabChatInput');
+    if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
+    window.tempAiContext = `User's current appliances: ${appData}`;
+    sendTabChatMessage();
+}
+
 async function sendPopupChatMessage() {
     try {
         const msg = safeGetVal('aiInput').trim();
