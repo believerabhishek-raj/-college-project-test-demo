@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
@@ -19,7 +20,7 @@
         </div>
         
         <div class="nav-controls">
-            <select id="languageSelect" onchange="changeLanguage()">
+            <select id="languageSelect" onchange="changeLanguage(this.value)">
                 <option value="en">EN</option>
                 <option value="hi">HI</option>
                 <option value="hinglish">HIN</option>
@@ -675,7 +676,7 @@
 
             <!-- Step: Dummy PIN / OTP Prompt -->
             <div id="rzpPinPrompt" class="hidden text-center p-3 scale-in">
-                <i class="fa-solid fa-key-skeleton text-orange mb-2" style="font-size: 2rem;"></i>
+                <i class="fa-solid fa-key text-orange mb-2" style="font-size: 2rem;"></i>
                 <h4 id="pinPromptTitle">Authorize Transaction</h4>
                 <p class="small-text mb-2">Enter your 4 or 6 digit Security PIN</p>
                 <input type="password" id="rzpPinInput" placeholder="••••" maxlength="6" style="text-align:center; font-size:1.6rem; letter-spacing:10px; max-width:200px; margin:0 auto 15px auto;">
@@ -683,14 +684,60 @@
                 <button class="secondary-btn mt-2 w-100 borderless" style="background:transparent; color:gray;" onclick="cancelPinPrompt()">Cancel</button>
             </div>
 
-            <!-- Step: Loader & Success Screen -->
-            <div id="rzpStatusScreen" class="hidden text-center p-4">
-                <i id="rzpStatusIcon" class="fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3"></i>
-                <h3 id="rzpStatusHeading" style="font-weight:600;">Connecting to Gateway...</h3>
+            <!-- Step: Loader & Success Screen with Downloadable Invoice -->
+            <div id="rzpStatusScreen" class="hidden text-center p-3" style="max-height: 480px; overflow-y: auto;">
+                <i id="rzpStatusIcon" class="fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2"></i>
+                <h3 id="rzpStatusHeading" style="font-weight:600; font-size: 1.2rem;">Connecting to Gateway...</h3>
                 <p class="small-text mt-1" id="rzpStatusSub">Please do not refresh or close.</p>
-                <div id="rzpReceipt" class="hidden mt-3 p-2 light-green-bg" style="border-radius:8px; font-size:0.85rem;">
-                    <b>Transaction ID:</b> ESP_<span id="rzpTxnId">892341</span><br>
-                    <span>Status: SUCCESSFUL</span>
+                
+                <!-- Printable Real Invoice Template -->
+                <div id="rzpInvoiceTemplate" class="hidden mt-3 p-3 text-left" style="background:#ffffff; border:1px solid #e0e0e0; border-radius:10px; color:#333; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--orange); padding-bottom:8px; margin-bottom:10px;">
+                        <div>
+                            <h3 style="color:var(--orange); margin:0; font-size:1.1rem;"><i class="fa-solid fa-bolt"></i> ECO SPARKS</h3>
+                            <small style="color:gray;">Electricity Bill Receipt</small>
+                        </div>
+                        <span class="badge light-green-bg" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> PAID</span>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px;">
+                        <div><strong style="color:gray;">Receipt No:</strong> <span id="invReceiptNo">ESP-984210</span></div>
+                        <div><strong style="color:gray;">Date:</strong> <span id="invDate">12 Oct 2026</span></div>
+                        <div><strong style="color:gray;">Consumer ID:</strong> <span id="invConsumerId">1001</span></div>
+                        <div><strong style="color:gray;">Consumer Name:</strong> <span id="invConsumerName">Abhishek Kumar</span></div>
+                        <div><strong style="color:gray;">Payment Mode:</strong> <span id="invMode">Google Pay</span></div>
+                        <div><strong style="color:gray;">Status:</strong> <span style="color:#27ae60; font-weight:600;">Success</span></div>
+                    </div>
+
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:10px; font-size:0.8rem;">
+                        <tr style="background:#f8f9fa; border-bottom:1px solid #ddd;">
+                            <th style="padding:6px; text-align:left;">Description</th>
+                            <th style="padding:6px; text-align:right;">Amount</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px;">Monthly Electricity Consumption Bill</td>
+                            <td style="padding:6px; text-align:right;" id="invBaseAmount">₹0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px;">Transaction & Gateway Charges</td>
+                            <td style="padding:6px; text-align:right;">₹0.00 (Waived)</td>
+                        </tr>
+                        <tr style="border-top:1px solid #ddd; font-weight:bold; background:#fafafa;">
+                            <td style="padding:6px;">Total Amount Paid</td>
+                            <td style="padding:6px; text-align:right; color:var(--orange);" id="invTotalAmount">₹0.00</td>
+                        </tr>
+                    </table>
+
+                    <p style="font-size:0.7rem; color:gray; text-align:center; margin:0;">This is a computer-generated receipt issued by Eco Sparks Smart Energy System.</p>
+                </div>
+
+                <div id="invoiceActionButtons" class="hidden mt-3" style="display:flex; gap:10px; justify-content:center;">
+                    <button type="button" class="primary-btn sm-btn hover-pop" style="background:#27ae60; width:auto; padding:8px 15px;" onclick="downloadInvoicePDF()">
+                        <i class="fa-solid fa-file-pdf"></i> Download Invoice PDF
+                    </button>
+                    <button type="button" class="secondary-btn sm-btn hover-pop" style="width:auto; padding:8px 15px;" onclick="closePaymentModal()">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
@@ -716,7 +763,7 @@
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>

@@ -488,7 +488,7 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
 }
 
 // ------------------------------------
-// RAZORPAY-THEMED PAYMENT GATEWAY
+// RAZORPAY-THEMED PAYMENT GATEWAY WITH REAL INVOICE PDF
 // ------------------------------------
 let pendingPaymentApp = 'UPI';
 
@@ -508,14 +508,18 @@ function openPaymentModal() {
     cancelPinPrompt();
     const statusScreen = document.getElementById('rzpStatusScreen');
     if(statusScreen) statusScreen.classList.add('hidden');
+    const invTemplate = document.getElementById('rzpInvoiceTemplate');
+    if(invTemplate) invTemplate.classList.add('hidden');
+    const invBtns = document.getElementById('invoiceActionButtons');
+    if(invBtns) invBtns.classList.add('hidden');
 
     const popup = document.getElementById('paymentModal');
     const overlay = document.getElementById('popupOverlay');
     if(popup && overlay) {
         popup.classList.remove('hidden');
-        popup.style.display = 'flex'; // explicitly show
+        popup.style.display = 'flex';
         overlay.classList.remove('hidden');
-        overlay.style.display = 'block'; // explicitly show
+        overlay.style.display = 'block';
         popup.classList.add('scale-in-center');
         
         const aiPopup = document.getElementById('aiChatPopup');
@@ -531,11 +535,11 @@ function closePaymentModal() {
     const overlay = document.getElementById('popupOverlay');
     if(popup) {
         popup.classList.add('hidden');
-        popup.style.display = 'none'; // explicitly hide
+        popup.style.display = 'none';
     }
     if(overlay) {
         overlay.classList.add('hidden');
-        overlay.style.display = 'none'; // explicitly hide
+        overlay.style.display = 'none';
     }
 }
 
@@ -631,34 +635,66 @@ function executeMockPayment() {
     const icon = document.getElementById('rzpStatusIcon');
     const heading = document.getElementById('rzpStatusHeading');
     const sub = document.getElementById('rzpStatusSub');
-    const receipt = document.getElementById('rzpReceipt');
+    const invoiceTemplate = document.getElementById('rzpInvoiceTemplate');
+    const actionBtns = document.getElementById('invoiceActionButtons');
 
-    if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3";
+    if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2";
     if(heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
-    if(sub) sub.innerText = "Connecting with Bank Server...";
-    if(receipt) receipt.classList.add('hidden');
+    if(sub) sub.innerText = "Connecting with Bank Gateway...";
+    if(invoiceTemplate) invoiceTemplate.classList.add('hidden');
+    if(actionBtns) actionBtns.classList.add('hidden');
 
     setTimeout(() => {
-        if(heading) heading.innerText = "Debiting Account...";
+        if(heading) heading.innerText = "Verifying Credentials...";
         
         setTimeout(() => {
-            if(icon) icon.className = "fa-solid fa-circle-check fa-4x green-text mb-3 scale-in";
+            if(icon) icon.className = "fa-solid fa-circle-check fa-3x green-text mb-2 scale-in";
             if(heading) heading.innerText = "Payment Successful!";
-            if(sub) sub.innerText = `${safeGetText('payModalAmount')} successfully paid for Eco Sparks Bill.`;
-            safeSetText('rzpTxnId', Math.floor(100000 + Math.random() * 900000));
-            if(receipt) receipt.classList.remove('hidden');
+            if(sub) sub.innerText = "Here is your official payment receipt:";
+            
+            // Populate invoice details dynamically
+            const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser')) || { id: "1001", name: "Valued Consumer" };
+            const amountVal = safeGetText('payModalAmount');
+            const receiptNo = "ESP-" + Math.floor(100000 + Math.random() * 900000);
+            const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
-            setTimeout(() => {
-                closePaymentModal();
-            }, 3000);
+            safeSetText('invReceiptNo', receiptNo);
+            safeSetText('invDate', dateStr);
+            safeSetText('invConsumerId', activeUser.id);
+            safeSetText('invConsumerName', activeUser.name);
+            safeSetText('invMode', pendingPaymentApp);
+            safeSetText('invBaseAmount', amountVal);
+            safeSetText('invTotalAmount', amountVal);
+
+            if(invoiceTemplate) invoiceTemplate.classList.remove('hidden');
+            if(actionBtns) {
+                actionBtns.classList.remove('hidden');
+                actionBtns.style.display = 'flex';
+            }
         }, 1500);
     }, 1200);
+}
+
+// REAL CLIENT-SIDE INVOICE PDF GENERATION
+function downloadInvoicePDF() {
+    const invoiceElement = document.getElementById('rzpInvoiceTemplate');
+    if(!invoiceElement) return alert("Invoice details not found.");
+
+    const opt = {
+        margin:       10,
+        filename:     `EcoSparks_Invoice_${safeGetText('invReceiptNo') || 'Receipt'}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(invoiceElement).save();
 }
 
 const safeGetText = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
 
 // ------------------------------------
-// AI POPUP MODAL BEHAVIOR
+// AI POPUP MODAL BEHAVIOR (CRASH-PROOF)
 // ------------------------------------
 function toggleAIPopup() {
     try {
@@ -666,11 +702,12 @@ function toggleAIPopup() {
         const overlay = document.getElementById('popupOverlay');
         
         if(popup && overlay) {
-            if(popup.classList.contains('hidden') || popup.style.display === 'none') {
+            const isHidden = popup.classList.contains('hidden') || popup.style.display === 'none';
+            if(isHidden) {
                 popup.classList.remove('hidden');
-                popup.style.display = 'flex'; // explicitly show
+                popup.style.display = 'flex';
                 overlay.classList.remove('hidden');
-                overlay.style.display = 'block'; // explicitly show
+                overlay.style.display = 'block';
                 popup.classList.add('scale-in-center');
                 
                 const payModal = document.getElementById('paymentModal');
@@ -680,13 +717,13 @@ function toggleAIPopup() {
                 }
             } else {
                 popup.classList.add('hidden');
-                popup.style.display = 'none'; // explicitly hide
+                popup.style.display = 'none';
                 overlay.classList.add('hidden');
-                overlay.style.display = 'none'; // explicitly hide
+                overlay.style.display = 'none';
                 popup.classList.remove('scale-in-center');
             }
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error("AI Popup Error:", e); }
 }
 
 function fillAndSend(text) {
@@ -1013,7 +1050,7 @@ function stopSpeak() {
     } catch(e) { console.error(e); }
 }
 
-// --- AI Chat Logic ---
+// --- AI Chat Logic (Crash-Proof) ---
 function askAIToOptimize() {
     if(userAppliances.length === 0) return alert("Please add some appliances first!");
     const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
@@ -1035,7 +1072,7 @@ async function sendPopupChatMessage() {
         const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
         
         await processAIRequest(msg, loadingId, 'chatBox');
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error("Popup Chat Error:", e); }
 }
 
 async function sendTabChatMessage() {
@@ -1048,7 +1085,7 @@ async function sendTabChatMessage() {
         const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
         
         await processAIRequest(msg, loadingId, 'tabChatBox');
-    } catch(e) { console.error(e); }
+    } catch(e) { console.error("Tab Chat Error:", e); }
 }
 
 async function processAIRequest(msg, loadingId, boxId) {
@@ -1079,7 +1116,7 @@ async function processAIRequest(msg, loadingId, boxId) {
             
             safeSetHTML(loadingId, htmlText + ttsHtml);
         } else {
-            safeSetHTML(loadingId, `<span class="error-text">⚠️ Connection failed.</span>`);
+            safeSetHTML(loadingId, `<span class="error-text">⚠️ Connection failed: ${data.error || 'Server error'}</span>`);
         }
     } catch(err) {
         safeSetHTML(loadingId, `<span class="error-text">⚠️ Network Error. Cannot reach AI server.</span>`);

@@ -24,7 +24,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background-color 0.3s ease, color 0.3s ease; }
 body { background-color: var(--bg-color); color: var(--text-color); display: flex; min-height: 100vh; overflow-x: hidden;}
 
-/* Strict Hidden Utility - OVERRIDES ALL DISPLAY PROPERTIES */
+/* Strict Hidden Utility */
 .hidden { display: none !important; }
 
 /* ANIMATIONS */
@@ -180,10 +180,10 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 .silver-row { background: rgba(189, 195, 199, 0.05); }
 .user-row { background: rgba(230, 126, 34, 0.1); border-left: 3px solid var(--orange); font-weight: 600; }
 
-/* TRUE POPUP AI CHAT MODAL */
+/* Floating AI Button */
 #floatingAIBtn { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; border-radius: 50%; background: var(--orange); color: #fff; border: none; font-size: 1.8rem; box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4); cursor: pointer; z-index: 9998; display: flex; align-items: center; justify-content: center; }
 
-/* Default Modal Classes */
+/* Popups & Modals (Hidden by Default) */
 .popup-modal {
     position: fixed;
     top: 50%; left: 50%;
@@ -196,7 +196,6 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     border-radius: 16px; overflow: hidden;
 }
 
-/* Background overlay for popup */
 .popup-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 9998;
@@ -224,9 +223,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 .chat-input-area input { flex: 1; margin: 0; border-radius: 20px; padding: 10px 15px; border: 1px solid var(--card-border); background: var(--bg-color); outline: none;}
 .chat-input-area button { width: 45px; height: 45px; background: var(--orange); color: #fff; border-radius: 50%; border: none; font-size: 1.2rem; margin: 0; display: flex; align-items: center; justify-content: center;}
 
-/* -------------------------------------------
-   RAZORPAY STYLE MODAL THEMED FOR ECO SPARKS
-------------------------------------------- */
+/* Razorpay Modal Theme */
 .rzp-modal-theme {
     max-width: 650px !important;
     height: auto !important;
@@ -236,15 +233,8 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     overflow: hidden;
 }
 
-/* Flex applied only when modal is active/not hidden */
-.popup-modal:not(.hidden) {
-    display: flex !important;
-}
-
-.rzp-modal-theme:not(.hidden) {
-    display: flex !important;
-    flex-direction: row !important;
-}
+.popup-modal:not(.hidden) { display: flex !important; }
+.rzp-modal-theme:not(.hidden) { display: flex !important; flex-direction: row !important; }
 
 .rzp-sidebar {
     width: 230px;
