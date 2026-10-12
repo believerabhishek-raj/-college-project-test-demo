@@ -247,7 +247,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
                             <!-- PAYMENT BUTTON -->
-                            <button class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
+                            <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on current usage</span>
                     </div>
@@ -585,8 +585,8 @@
         </section>
     </div>
 
-    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL -->
-    <div id="paymentModal" class="glass-card hidden scale-in-center popup-modal rzp-modal-theme">
+    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL (STRICTLY HIDDEN BY DEFAULT) -->
+    <div id="paymentModal" class="hidden scale-in-center popup-modal rzp-modal-theme" style="display: none;">
         
         <!-- Left Sidebar Inside Modal -->
         <div class="rzp-sidebar">
@@ -701,8 +701,8 @@
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- PROPER FLOATING AI POPUP MODAL -->
-    <div id="aiChatPopup" class="glass-card hidden scale-in-center popup-modal">
+    <!-- PROPER FLOATING AI POPUP MODAL (STRICTLY HIDDEN BY DEFAULT) -->
+    <div id="aiChatPopup" class="hidden scale-in-center popup-modal" style="display: none;">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
             <button class="close-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
@@ -727,8 +727,8 @@
         </div>
     </div>
 
-    <!-- Background overlay for popup -->
-    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()"></div>
+    <!-- Background overlay for popups (STRICTLY HIDDEN BY DEFAULT) -->
+    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()" style="display: none;"></div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by Eco Sparks Team</small>

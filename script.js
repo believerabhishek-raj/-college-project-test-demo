@@ -506,50 +506,75 @@ function openPaymentModal() {
     // Reset view inside modal
     switchRzpTab('upi');
     cancelPinPrompt();
-    document.getElementById('rzpStatusScreen').classList.add('hidden');
+    const statusScreen = document.getElementById('rzpStatusScreen');
+    if(statusScreen) statusScreen.classList.add('hidden');
 
     const popup = document.getElementById('paymentModal');
     const overlay = document.getElementById('popupOverlay');
     if(popup && overlay) {
         popup.classList.remove('hidden');
+        popup.style.display = 'flex'; // explicitly show
         overlay.classList.remove('hidden');
+        overlay.style.display = 'block'; // explicitly show
         popup.classList.add('scale-in-center');
-        document.getElementById('aiChatPopup').classList.add('hidden');
+        
+        const aiPopup = document.getElementById('aiChatPopup');
+        if(aiPopup) {
+            aiPopup.classList.add('hidden');
+            aiPopup.style.display = 'none';
+        }
     }
 }
 
 function closePaymentModal() {
     const popup = document.getElementById('paymentModal');
     const overlay = document.getElementById('popupOverlay');
-    if(popup && overlay) {
+    if(popup) {
         popup.classList.add('hidden');
+        popup.style.display = 'none'; // explicitly hide
+    }
+    if(overlay) {
         overlay.classList.add('hidden');
+        overlay.style.display = 'none'; // explicitly hide
     }
 }
 
 function closeAllPopups() {
     closePaymentModal();
     const aiPopup = document.getElementById('aiChatPopup');
-    if(aiPopup) aiPopup.classList.add('hidden');
+    if(aiPopup) {
+        aiPopup.classList.add('hidden');
+        aiPopup.style.display = 'none';
+    }
     const overlay = document.getElementById('popupOverlay');
-    if(overlay) overlay.classList.add('hidden');
+    if(overlay) {
+        overlay.classList.add('hidden');
+        overlay.style.display = 'none';
+    }
 }
 
 function switchRzpTab(tabName) {
     document.querySelectorAll('.rzp-nav li').forEach(li => li.classList.remove('active'));
     document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
     cancelPinPrompt();
-    document.getElementById('rzpStatusScreen').classList.add('hidden');
+    const statusScreen = document.getElementById('rzpStatusScreen');
+    if(statusScreen) statusScreen.classList.add('hidden');
 
     if(tabName === 'upi') {
-        document.getElementById('rzpNavUpi').classList.add('active');
-        document.getElementById('rzpTabUpi').classList.remove('hidden');
+        const nav = document.getElementById('rzpNavUpi');
+        const tab = document.getElementById('rzpTabUpi');
+        if(nav) nav.classList.add('active');
+        if(tab) tab.classList.remove('hidden');
     } else if(tabName === 'card') {
-        document.getElementById('rzpNavCard').classList.add('active');
-        document.getElementById('rzpTabCard').classList.remove('hidden');
+        const nav = document.getElementById('rzpNavCard');
+        const tab = document.getElementById('rzpTabCard');
+        if(nav) nav.classList.add('active');
+        if(tab) tab.classList.remove('hidden');
     } else if(tabName === 'net') {
-        document.getElementById('rzpNavNet').classList.add('active');
-        document.getElementById('rzpTabNet').classList.remove('hidden');
+        const nav = document.getElementById('rzpNavNet');
+        const tab = document.getElementById('rzpTabNet');
+        if(nav) nav.classList.add('active');
+        if(tab) tab.classList.remove('hidden');
     }
 }
 
@@ -565,7 +590,8 @@ function triggerPinPrompt(appName) {
     document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
     safeSetText('pinPromptTitle', `Authorize via ${pendingPaymentApp}`);
     safeSetVal('rzpPinInput', '');
-    document.getElementById('rzpPinPrompt').classList.remove('hidden');
+    const pinBox = document.getElementById('rzpPinPrompt');
+    if(pinBox) pinBox.classList.remove('hidden');
 }
 
 function triggerCardOtpPrompt() {
@@ -577,16 +603,18 @@ function triggerCardOtpPrompt() {
     document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
     safeSetText('pinPromptTitle', "Enter 3D-Secure Bank OTP");
     safeSetVal('rzpPinInput', '');
-    document.getElementById('rzpPinPrompt').classList.remove('hidden');
+    const pinBox = document.getElementById('rzpPinPrompt');
+    if(pinBox) pinBox.classList.remove('hidden');
 }
 
 function cancelPinPrompt() {
-    document.getElementById('rzpPinPrompt').classList.add('hidden');
+    const pinBox = document.getElementById('rzpPinPrompt');
+    if(pinBox) pinBox.classList.add('hidden');
     const activeTab = document.querySelector('.rzp-nav li.active');
     if(activeTab) {
-        if(activeTab.id === 'rzpNavUpi') document.getElementById('rzpTabUpi').classList.remove('hidden');
-        else if(activeTab.id === 'rzpNavCard') document.getElementById('rzpTabCard').classList.remove('hidden');
-        else if(activeTab.id === 'rzpNavNet') document.getElementById('rzpTabNet').classList.remove('hidden');
+        if(activeTab.id === 'rzpNavUpi') { const t = document.getElementById('rzpTabUpi'); if(t) t.classList.remove('hidden'); }
+        else if(activeTab.id === 'rzpNavCard') { const t = document.getElementById('rzpTabCard'); if(t) t.classList.remove('hidden'); }
+        else if(activeTab.id === 'rzpNavNet') { const t = document.getElementById('rzpTabNet'); if(t) t.classList.remove('hidden'); }
     }
 }
 
@@ -594,29 +622,31 @@ function executeMockPayment() {
     const pin = safeGetVal('rzpPinInput');
     if(!pin || pin.length < 4) return alert("Please enter valid 4 to 6 digit security PIN / OTP.");
 
-    document.getElementById('rzpPinPrompt').classList.add('hidden');
+    const pinBox = document.getElementById('rzpPinPrompt');
+    if(pinBox) pinBox.classList.add('hidden');
+    
     const statusScreen = document.getElementById('rzpStatusScreen');
-    statusScreen.classList.remove('hidden');
+    if(statusScreen) statusScreen.classList.remove('hidden');
 
     const icon = document.getElementById('rzpStatusIcon');
     const heading = document.getElementById('rzpStatusHeading');
     const sub = document.getElementById('rzpStatusSub');
     const receipt = document.getElementById('rzpReceipt');
 
-    icon.className = "fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3";
-    heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
-    sub.innerText = "Connecting with Bank Server...";
-    receipt.classList.add('hidden');
+    if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-4x text-orange mb-3";
+    if(heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
+    if(sub) sub.innerText = "Connecting with Bank Server...";
+    if(receipt) receipt.classList.add('hidden');
 
     setTimeout(() => {
-        heading.innerText = "Debiting Account...";
+        if(heading) heading.innerText = "Debiting Account...";
         
         setTimeout(() => {
-            icon.className = "fa-solid fa-circle-check fa-4x green-text mb-3 scale-in";
-            heading.innerText = "Payment Successful!";
-            sub.innerText = `${safeGetText('payModalAmount')} successfully paid for Eco Sparks Bill.`;
+            if(icon) icon.className = "fa-solid fa-circle-check fa-4x green-text mb-3 scale-in";
+            if(heading) heading.innerText = "Payment Successful!";
+            if(sub) sub.innerText = `${safeGetText('payModalAmount')} successfully paid for Eco Sparks Bill.`;
             safeSetText('rzpTxnId', Math.floor(100000 + Math.random() * 900000));
-            receipt.classList.remove('hidden');
+            if(receipt) receipt.classList.remove('hidden');
 
             setTimeout(() => {
                 closePaymentModal();
@@ -636,14 +666,23 @@ function toggleAIPopup() {
         const overlay = document.getElementById('popupOverlay');
         
         if(popup && overlay) {
-            if(popup.classList.contains('hidden')) {
+            if(popup.classList.contains('hidden') || popup.style.display === 'none') {
                 popup.classList.remove('hidden');
+                popup.style.display = 'flex'; // explicitly show
                 overlay.classList.remove('hidden');
+                overlay.style.display = 'block'; // explicitly show
                 popup.classList.add('scale-in-center');
-                document.getElementById('paymentModal').classList.add('hidden');
+                
+                const payModal = document.getElementById('paymentModal');
+                if(payModal) {
+                    payModal.classList.add('hidden');
+                    payModal.style.display = 'none';
+                }
             } else {
                 popup.classList.add('hidden');
+                popup.style.display = 'none'; // explicitly hide
                 overlay.classList.add('hidden');
+                overlay.style.display = 'none'; // explicitly hide
                 popup.classList.remove('scale-in-center');
             }
         }
