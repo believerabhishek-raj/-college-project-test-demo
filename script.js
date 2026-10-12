@@ -528,12 +528,49 @@ function closePaymentModal() {
     }
 }
 
-function processDummyPayment(methodName) {
+function selectPaymentMethod(method) {
+    document.getElementById('paymentSelection').classList.add('hidden');
+    if(method === 'upi') {
+        document.getElementById('upiForm').classList.remove('hidden');
+    } else if (method === 'card') {
+        document.getElementById('cardForm').classList.remove('hidden');
+    }
+}
+
+function backToPaymentSelection() {
+    document.getElementById('upiForm').classList.add('hidden');
+    document.getElementById('cardForm').classList.add('hidden');
+    document.getElementById('paymentSelection').classList.remove('hidden');
+}
+
+function processFinalPayment(method) {
+    if(method === 'UPI') {
+        const pin = safeGetVal('upiPin');
+        if(!pin || pin.length < 4) return alert("Please enter a valid UPI PIN.");
+    } else {
+        const card = safeGetVal('cardNumber');
+        const cvv = safeGetVal('cardCvv');
+        if(!card || !cvv) return alert("Please fill card details completely.");
+    }
+
+    document.getElementById('upiForm').classList.add('hidden');
+    document.getElementById('cardForm').classList.add('hidden');
     document.getElementById('paymentLoader').classList.remove('hidden');
+    safeSetText('paymentStatusText', 'Verifying details with Bank...');
+    
     setTimeout(() => {
-        alert(`Payment Successful via ${methodName}! Your monthly bill is cleared.`);
-        closePaymentModal();
-    }, 2000);
+        safeSetText('paymentStatusText', 'Processing payment securely...');
+        setTimeout(() => {
+            alert(`Payment of ${document.getElementById('payModalAmount').innerText} Successful via ${method}! Your monthly bill is cleared.`);
+            closePaymentModal();
+            
+            safeSetVal('upiPin', '');
+            safeSetVal('cardNumber', '');
+            safeSetVal('cardCvv', '');
+            document.getElementById('paymentLoader').classList.add('hidden');
+            document.getElementById('paymentSelection').classList.remove('hidden');
+        }, 2000);
+    }, 1500);
 }
 
 
@@ -672,7 +709,7 @@ function renderAppliances() {
         let appLoads = [];
         
         if(userAppliances.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="text-center">No appliances added yet.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No appliances added yet.</td></tr>';
         } else {
             userAppliances.forEach(app => {
                 totalLoad += parseFloat(app.monthlyKwh);
@@ -690,7 +727,8 @@ function renderAppliances() {
                             <span class="slider"></span>
                         </label>
                     </td>
-                    <td><button type="button" class="sm-btn" onclick="deleteAppliance(${app.id})"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="text-orange">₹${app.monthlyCost}</td>
+                    <td><button type="button" class="sm-btn danger-bg borderless" onclick="deleteAppliance(${app.id})" style="color:white; padding:5px 10px;"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
             });
         }
@@ -885,17 +923,6 @@ function stopSpeak() {
 }
 
 // --- AI Chat Logic ---
-function askAIToOptimize() {
-    if(userAppliances.length === 0) return alert("Please add some appliances first!");
-    const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
-    
-    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
-    const inputEl = document.getElementById('tabChatInput');
-    if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
-    window.tempAiContext = `User's current appliances: ${appData}`;
-    sendTabChatMessage();
-}
-
 async function sendPopupChatMessage() {
     try {
         const msg = safeGetVal('aiInput').trim();

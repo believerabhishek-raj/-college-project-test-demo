@@ -20,9 +20,9 @@
         
         <div class="nav-controls">
             <select id="languageSelect" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="hi">हिंदी</option>
-                <option value="hinglish">Hinglish</option>
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="hinglish">HIN</option>
             </select>
             <button id="themeToggle" onclick="toggleTheme()" title="Toggle Theme">
                 <i class="fa-solid fa-moon"></i>
@@ -73,7 +73,7 @@
             <i class="fa-solid fa-bolt text-orange pulse-icon"></i> Eco Sparks
         </div>
         <div class="nav-controls">
-            <select id="languageSelectMobile" onchange="changeLanguage()">
+            <select id="languageSelectMobile" onchange="changeLanguage(this.value)">
                 <option value="en">EN</option>
                 <option value="hi">HI</option>
                 <option value="hinglish">HIN</option>
@@ -246,8 +246,8 @@
                         <p class="card-label" data-i18n="dashBill">Est. Monthly Cost</p>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
-                            <!-- PAYMENT BUTTON DUMMY -->
-                            <button class="primary-btn sm-btn" style="padding:4px 8px; font-size:0.75rem;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
+                            <!-- PAYMENT BUTTON -->
+                            <button class="primary-btn sm-btn hover-pop" style="padding:4px 8px; font-size:0.75rem;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Now</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on current usage</span>
                     </div>
@@ -302,6 +302,14 @@
                             </div>
                             <span class="badge light-green-bg hidden-mobile">Instant ROI</span>
                         </div>
+                        <div class="action-item mt-2 hover-lift">
+                            <div class="icon-box red-bg"><i class="fa-solid fa-lightbulb"></i></div>
+                            <div class="action-details">
+                                <h4>Switch to 5-Star Appliances</h4>
+                                <p>Estimated Savings: <b class="green-text">₹800/mo</b></p>
+                            </div>
+                            <span class="badge light-red-bg hidden-mobile">High Cost</span>
+                        </div>
                     </div>
 
                     <div class="clean-card dashed-border slide-left pulse-subtle">
@@ -311,11 +319,11 @@
                 </div>
             </div>
 
-            <!-- APPLIANCES & SMART IOT CONTROLS -->
+            <!-- APPLIANCES & IOT -->
             <div id="appliances" class="feature-content hidden">
                 <div class="clean-card mb-3 slide-down">
                     <h2 data-i18n="appTitle">Appliance Load Calculator & Smart Control</h2>
-                    <p data-i18n="appDesc">Add your home appliances to build your energy profile and control them via WiFi.</p>
+                    <p data-i18n="appDesc">Add your home appliances to build your profile and control them remotely.</p>
                     
                     <div class="appliance-form mt-3">
                         <div class="grid-2">
@@ -335,12 +343,12 @@
                     
                     <div class="clean-card hover-lift">
                         <div class="flex-between mb-2">
-                            <h3><i class="fa-solid fa-wifi text-primary"></i> Smart Appliance Control</h3>
+                            <h3><i class="fa-solid fa-wifi" style="color:var(--primary);"></i> Smart Appliances List</h3>
                             <button class="sm-btn hover-pop" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
                         </div>
                         <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                             <table class="admin-table">
-                                <thead><tr><th>Appliance</th><th>Power</th><th>Control (IoT)</th><th>Action</th></tr></thead>
+                                <thead><tr><th>Appliance</th><th>Power</th><th>Control (IoT)</th><th>Cost/Mo</th><th>Action</th></tr></thead>
                                 <tbody id="applianceList"></tbody>
                             </table>
                         </div>
@@ -585,29 +593,57 @@
         </section>
     </div>
 
-    <!-- DUMMY PAYMENT MODAL -->
-    <div id="paymentModal" class="glass-card hidden scale-in-center popup-modal" style="height: auto; min-height:300px; z-index: 10000;">
+    <!-- IMPROVED PAYMENT MODAL (WITH DUMMY INPUTS) -->
+    <div id="paymentModal" class="glass-card hidden scale-in-center popup-modal" style="height: auto; min-height:400px; z-index: 10000;">
         <div class="chat-header" style="background: var(--primary);">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-wallet"></i> Secure Bill Payment</h3>
             <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="p-3 text-center">
-            <h2 class="mb-2">Total Due: <span id="payModalAmount" class="text-orange">₹0.00</span></h2>
-            <p class="small-text mb-3">Select your preferred payment method:</p>
+        <div class="p-3">
+            <h2 class="mb-2 text-center">Total Due: <span id="payModalAmount" class="text-orange">₹0.00</span></h2>
             
-            <div class="grid-2">
-                <button class="secondary-btn hover-pop" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="processDummyPayment('UPI (GPay/PhonePe)')"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" height="20" alt="UPI"></button>
-                <button class="secondary-btn hover-pop" style="background:#003087; color:#fff;" onclick="processDummyPayment('Paytm')">Paytm</button>
-                <button class="secondary-btn hover-pop" style="background:#333; color:#fff; grid-column: span 2;" onclick="processDummyPayment('Credit/Debit Card')"><i class="fa-solid fa-credit-card"></i> Credit / Debit Card</button>
+            <div id="paymentSelection">
+                <p class="small-text mb-3 text-center">Select your preferred payment method:</p>
+                <div class="grid-2">
+                    <button class="secondary-btn hover-pop" style="background:#fff; color:#000; border:1px solid #ccc;" onclick="selectPaymentMethod('upi')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" height="20" alt="UPI">
+                    </button>
+                    <button class="secondary-btn hover-pop" style="background:#333; color:#fff;" onclick="selectPaymentMethod('card')">
+                        <i class="fa-solid fa-credit-card"></i> Card
+                    </button>
+                </div>
             </div>
-            <div id="paymentLoader" class="hidden mt-3">
-                <i class="fa-solid fa-spinner fa-spin fa-2x text-orange"></i>
-                <p class="mt-1">Processing...</p>
+
+            <!-- UPI Form -->
+            <div id="upiForm" class="hidden mt-3 text-center">
+                <h4>UPI Secure Gateway</h4>
+                <p class="small-text mb-2">Enter your 4 or 6 digit UPI PIN</p>
+                <input type="password" id="upiPin" placeholder="Enter UPI PIN" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:10px;">
+                <button class="primary-btn mt-2 w-100 hover-pop" onclick="processFinalPayment('UPI')">Pay Securely</button>
+                <button class="secondary-btn mt-1 w-100 borderless" style="background:transparent; color:gray;" onclick="backToPaymentSelection()">Cancel</button>
+            </div>
+
+            <!-- Card Form -->
+            <div id="cardForm" class="hidden mt-3">
+                <h4 class="text-center mb-2">Credit / Debit Card</h4>
+                <input type="text" id="cardNumber" placeholder="Card Number (e.g. 4111 1111 1111 1111)" maxlength="19" class="mb-1" style="font-size:0.9rem;">
+                <div class="grid-2 mb-1">
+                    <input type="text" placeholder="MM/YY" maxlength="5" style="font-size:0.9rem;">
+                    <input type="password" id="cardCvv" placeholder="CVV" maxlength="3" style="font-size:0.9rem;">
+                </div>
+                <button class="primary-btn mt-2 w-100 hover-pop" onclick="processFinalPayment('Card')">Pay Securely</button>
+                <button class="secondary-btn mt-1 w-100 borderless text-center" style="background:transparent; color:gray;" onclick="backToPaymentSelection()">Cancel</button>
+            </div>
+
+            <!-- Loader -->
+            <div id="paymentLoader" class="hidden mt-3 text-center">
+                <i class="fa-solid fa-circle-notch fa-spin fa-3x text-orange"></i>
+                <p class="mt-2" id="paymentStatusText" style="font-weight:600;">Processing your payment...</p>
             </div>
         </div>
     </div>
 
-    <!-- Floating AI Button (Visible on Desktop and Mobile) -->
+    <!-- Floating AI Button -->
     <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask Eco Spark AI">
         <i class="fa-solid fa-robot"></i>
     </button>
@@ -620,14 +656,14 @@
         </div>
         <div id="chatBox" class="chat-box">
             <div class="message ai-message fade-in-left">
-                <p>Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!</p>
+                <p data-i18n="aiGreeting">Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
                     <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am Eco Spark AI. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
