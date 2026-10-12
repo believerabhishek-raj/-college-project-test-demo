@@ -547,16 +547,12 @@ function toggleAIPopup() {
         
         if(popup && overlay) {
             if(popup.classList.contains('hidden')) {
-                // Open Popup
                 popup.classList.remove('hidden');
                 overlay.classList.remove('hidden');
-                
-                // Add pop animation classes explicitly
                 popup.classList.add('scale-in-center');
                 // Ensure payment modal is closed
                 document.getElementById('paymentModal').classList.add('hidden');
             } else {
-                // Close Popup
                 popup.classList.add('hidden');
                 overlay.classList.add('hidden');
                 popup.classList.remove('scale-in-center');
@@ -948,8 +944,7 @@ async function processAIRequest(msg, loadingId, boxId) {
             const htmlText = renderMarkdownToHTML(rawText);
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
-/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -977,8 +972,7 @@ function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
-/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 }
 
 // --- Live Energy Audit ---
@@ -1012,19 +1006,12 @@ function downloadReport() {
         const { units, rate, bill, savings, carbon } = window.lastAudit;
         
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "ECO SPARKS - PROOF OF IMPACT REPORT
-
-"
-            + `Total Units Consumed,${units} kWh
-`
-            + `Tariff Rate,₹${rate} per unit
-`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}
-`
-            + `Estimated Carbon Footprint,${carbon} kg CO2
-`
-            + `Target Monthly Savings,₹${savings.toFixed(2)}
-`;
+            + "ECO SPARKS - PROOF OF IMPACT REPORT\n\n"
+            + `Total Units Consumed,${units} kWh\n`
+            + `Tariff Rate,₹${rate} per unit\n`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
+            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
+            + `Target Monthly Savings,₹${savings.toFixed(2)}\n`;
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
