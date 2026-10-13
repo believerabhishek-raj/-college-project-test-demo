@@ -544,7 +544,7 @@
                 </div>
             </div>
             
-            <!-- DEDICATED AI ASSISTANT TAB (EcoSpearks Ai) -->
+            <!-- DEDICATED AI ASSISTANT TAB -->
             <div id="assistant" class="feature-content hidden">
                 <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
                     <div class="flex-between mb-2">
@@ -621,10 +621,10 @@
     </div>
 
     <!-- ADMIN MODAL: USER DETAILS -->
-    <div id="adminUserDetailsModal" class="hidden scale-in-center popup-modal" style="display: none; max-width: 600px; height: 90vh;">
+    <div id="adminUserDetailsModal" class="hidden scale-in-center popup-modal">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-user-check"></i> Consumer Details</h3>
-            <button class="close-btn hover-pop" type="button" onclick="closeAdminUserModal()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="p-3" style="overflow-y: auto; flex: 1;">
             <div class="flex-between mb-2 border-bottom pb-2">
@@ -650,8 +650,8 @@
         </div>
     </div>
 
-    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL (STRICTLY HIDDEN BY DEFAULT) -->
-    <div id="paymentModal" class="hidden scale-in-center popup-modal rzp-modal-theme" style="display: none;">
+    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL -->
+    <div id="paymentModal" class="hidden scale-in-center popup-modal rzp-modal-theme">
         
         <!-- Left Sidebar Inside Modal -->
         <div class="rzp-sidebar">
@@ -677,7 +677,7 @@
         <div class="rzp-content">
             <div class="rzp-header">
                 <span class="badge light-green-bg"><i class="fa-solid fa-lock"></i> 256-Bit Encrypted</span>
-                <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
+                <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <!-- Tab 1: UPI Apps -->
@@ -799,7 +799,7 @@
                     <button type="button" class="primary-btn sm-btn hover-pop" style="background:#27ae60; width:auto; padding:8px 15px;" onclick="downloadInvoicePDF()">
                         <i class="fa-solid fa-file-pdf"></i> Download Invoice PDF
                     </button>
-                    <button type="button" class="secondary-btn sm-btn hover-pop" style="width:auto; padding:8px 15px;" onclick="closePaymentModal()">
+                    <button type="button" class="secondary-btn sm-btn hover-pop" style="width:auto; padding:8px 15px;" onclick="closeAllPopups()">
                         Close
                     </button>
                 </div>
@@ -812,11 +812,11 @@
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- PROPER FLOATING AI POPUP MODAL (STRICTLY HIDDEN BY DEFAULT) -->
-    <div id="aiChatPopup" class="hidden scale-in-center popup-modal" style="display: none;">
+    <!-- PROPER FLOATING AI POPUP MODAL -->
+    <div id="aiChatPopup" class="hidden scale-in-center popup-modal">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
-            <button class="close-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="chatBox" class="chat-box">
             <div class="message ai-message fade-in-left">
@@ -838,8 +838,8 @@
         </div>
     </div>
 
-    <!-- Background overlay for popups (STRICTLY HIDDEN BY DEFAULT) -->
-    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()" style="display: none;"></div>
+    <!-- Background overlay for popups -->
+    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()"></div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by EMCS Team</small>

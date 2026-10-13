@@ -279,7 +279,6 @@ function loadAdminData() {
                 });
             }
             
-            // Highlight: onclick triggers admin user details modal
             tbody.innerHTML += `<tr onclick="openAdminUserDetails('${u.id}')" title="Click to view details">
                 <td><strong>${u.id}</strong></td>
                 <td class="text-primary" style="font-weight:600;">${u.name} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; margin-left:5px;"></i></td>
@@ -347,8 +346,16 @@ function populateAdminTable(logs) {
 }
 
 // ------------------------------------
-// ADMIN USER DETAILS MODAL
+// ALL MODAL CLOSING LOGIC (BULLETPROOF)
 // ------------------------------------
+function closeAllPopups() {
+    const popups = ['paymentModal', 'aiChatPopup', 'adminUserDetailsModal', 'popupOverlay'];
+    popups.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+    });
+}
+
 function openAdminUserDetails(userId) {
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
     let user = users[userId];
@@ -375,22 +382,19 @@ function openAdminUserDetails(userId) {
         });
     }
 
+    closeAllPopups();
     const modal = document.getElementById('adminUserDetailsModal');
     const overlay = document.getElementById('popupOverlay');
     if(modal && overlay) {
         modal.classList.remove('hidden');
         overlay.classList.remove('hidden');
-        modal.classList.add('scale-in-center');
     }
 
     renderAdminUserChart(totalLoad);
 }
 
 function closeAdminUserModal() {
-    const modal = document.getElementById('adminUserDetailsModal');
-    const overlay = document.getElementById('popupOverlay');
-    if(modal) modal.classList.add('hidden');
-    if(overlay) overlay.classList.add('hidden');
+    closeAllPopups();
 }
 
 function renderAdminUserChart(totalLoad) {
@@ -595,7 +599,6 @@ function openPaymentModal() {
     
     safeSetText('payModalAmount', `₹${totalLoad.toFixed(2)}`);
     
-    // Reset view inside modal
     switchRzpTab('upi');
     cancelPinPrompt();
     const statusScreen = document.getElementById('rzpStatusScreen');
@@ -605,49 +608,17 @@ function openPaymentModal() {
     const invBtns = document.getElementById('invoiceActionButtons');
     if(invBtns) invBtns.classList.add('hidden');
 
+    closeAllPopups(); // Ensure a clean slate
     const popup = document.getElementById('paymentModal');
     const overlay = document.getElementById('popupOverlay');
     if(popup && overlay) {
         popup.classList.remove('hidden');
-        popup.style.display = 'flex'; // explicitly show
         overlay.classList.remove('hidden');
-        overlay.style.display = 'block'; // explicitly show
-        popup.classList.add('scale-in-center');
-        
-        const aiPopup = document.getElementById('aiChatPopup');
-        if(aiPopup) {
-            aiPopup.classList.add('hidden');
-            aiPopup.style.display = 'none';
-        }
     }
 }
 
 function closePaymentModal() {
-    const popup = document.getElementById('paymentModal');
-    const overlay = document.getElementById('popupOverlay');
-    if(popup) {
-        popup.classList.add('hidden');
-        popup.style.display = 'none'; // explicitly hide
-    }
-    if(overlay) {
-        overlay.classList.add('hidden');
-        overlay.style.display = 'none'; // explicitly hide
-    }
-}
-
-function closeAllPopups() {
-    closePaymentModal();
-    closeAdminUserModal();
-    const aiPopup = document.getElementById('aiChatPopup');
-    if(aiPopup) {
-        aiPopup.classList.add('hidden');
-        aiPopup.style.display = 'none';
-    }
-    const overlay = document.getElementById('popupOverlay');
-    if(overlay) {
-        overlay.classList.add('hidden');
-        overlay.style.display = 'none';
-    }
+    closeAllPopups();
 }
 
 function switchRzpTab(tabName) {
@@ -762,7 +733,6 @@ function executeMockPayment() {
             if(invoiceTemplate) invoiceTemplate.classList.remove('hidden');
             if(actionBtns) {
                 actionBtns.classList.remove('hidden');
-                actionBtns.style.display = 'flex';
             }
         }, 1500);
     }, 1200);
@@ -792,26 +762,13 @@ function toggleAIPopup() {
         const popup = document.getElementById('aiChatPopup');
         const overlay = document.getElementById('popupOverlay');
         
-        if(popup && overlay) {
-            const isHidden = popup.classList.contains('hidden') || popup.style.display === 'none';
-            if(isHidden) {
+        if (popup && overlay) {
+            if (popup.classList.contains('hidden')) {
+                closeAllPopups(); // Ensure everything else is closed first
                 popup.classList.remove('hidden');
-                popup.style.display = 'flex';
                 overlay.classList.remove('hidden');
-                overlay.style.display = 'block';
-                popup.classList.add('scale-in-center');
-                
-                const payModal = document.getElementById('paymentModal');
-                if(payModal) {
-                    payModal.classList.add('hidden');
-                    payModal.style.display = 'none';
-                }
             } else {
-                popup.classList.add('hidden');
-                popup.style.display = 'none';
-                overlay.classList.add('hidden');
-                overlay.style.display = 'none';
-                popup.classList.remove('scale-in-center');
+                closeAllPopups();
             }
         }
     } catch(e) { console.error("AI Popup Error:", e); }
@@ -1113,12 +1070,19 @@ function downloadReport() {
         const { units, rate, bill, savings, carbon } = window.lastAudit;
         
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "EMCS - AUTOMATED ENERGY AUDIT REPORT\n\n"
-            + `Total Active Units Consumed,${units} kWh\n`
-            + `Estimated Tariff Rate,₹${rate} per unit\n`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
-            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
-            + `Target Optimized Savings,₹${savings.toFixed(2)}\n`;
+            + "EMCS - AUTOMATED ENERGY AUDIT REPORT
+
+"
+            + `Total Active Units Consumed,${units} kWh
+`
+            + `Estimated Tariff Rate,₹${rate} per unit
+`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}
+`
+            + `Estimated Carbon Footprint,${carbon} kg CO2
+`
+            + `Target Optimized Savings,₹${savings.toFixed(2)}
+`;
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
@@ -1319,10 +1283,6 @@ async function processAIRequest(msg, loadingId, boxId) {
         const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
         
         const payload = { prompt: msg, language: currentLang, userId: userId };
-        if(window.tempAiContext) {
-            payload.customContext = window.tempAiContext;
-            window.tempAiContext = null; 
-        }
         
         const response = await fetch('/api/chat', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1335,7 +1295,8 @@ async function processAIRequest(msg, loadingId, boxId) {
             const htmlText = renderMarkdownToHTML(rawText);
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
+/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -1363,5 +1324,6 @@ function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
+/g, '<br>');
 }
