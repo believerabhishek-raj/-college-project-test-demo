@@ -1,73 +1,58 @@
 // FULL TRANSLATIONS INTEGRATED
 const translations = {
     en: {
-        welcomeAuth: "Welcome to Eco Sparks",
+        welcomeAuth: "Welcome to EMCS",
         authSubtitle: "Log in or create an account to start saving energy.",
         loginTab: "User Login", registerTab: "Create Account", adminTab: "Admin",
         loginBtn: "Secure Login", createAccBtn: "Create Account", adminLoginBtn: "Access Admin Panel",
         dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
         auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
-        powerCutTab: "Outages", aiAdviser: "EcoSpearks Ai", profileTab: "Profile", aboutUs: "About",
-        teamTitle: "Meet The Team", teamDesc: "The creators behind Eco Sparks",
-        ecoScore: "Eco Score", ecoScoreSub: "Excellent! You are an eco-warrior.",
-        vampirePower: "Vampire Power Loss", vampireSub: "Monthly cost of devices plugged in but turned off.",
-        dashLoad: "Total Appliance Load", dashBill: "Est. Monthly Bill",
-        trendChart: "Energy Usage Trend", trendSub: "Enter your weekly reading to plot your actual consumption graph.",
-        updateGraph: "Update Graph", appTitle: "Appliance Load Calculator",
-        appDesc: "Add your home appliances to build your energy profile.", addApp: "Add Appliance",
-        calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
-        auditTitle: "Live Energy Audit", auditDesc: "Proof of Impact: Enter details to generate a comprehensive report.",
-        monthlyUnits: "Last Month Units (kWh)", tariffRate: "Tariff Rate (₹ per unit)",
-        generateAudit: "Generate Audit Report", downloadReport: "Download Audit PDF/CSV",
+        powerCutTab: "Outages", paymentTab: "Bill Payment", profileTab: "Profile", aboutUs: "About",
+        ecoScore: "Eco Score", dashLoad: "Total Appliance Load", dashBill: "Est. Monthly Bill",
+        vampirePower: "Vampire Power Loss", trendChart: "Appliance Usage Analysis",
+        appTitle: "Appliance Load Calculator", appDesc: "Add your home appliances to build your energy profile.",
+        addApp: "Add Appliance", calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
+        auditTitle: "Live Energy Audit", auditDesc: "Proof of Impact: Real-time analysis based on your active appliances.",
+        generateAudit: "Generate Audit Report", downloadReport: "Download Audit PDF",
         simTitle: "Live Savings Simulator", simDesc: "Adjust your appliance daily usage to see live impact on units and cost.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Compete with neighbors to save the most energy and earn badges!",
-        logout: "Logout", aiGreeting: "Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!"
+        logout: "Logout"
     },
     hi: {
-        welcomeAuth: "Eco Sparks में आपका स्वागत है",
+        welcomeAuth: "EMCS में आपका स्वागत है",
         authSubtitle: "बिजली बचाने के लिए लॉगिन करें या अकाउंट बनाएं।",
         loginTab: "लॉगिन", registerTab: "अकाउंट बनाएं", adminTab: "एडमिन",
         loginBtn: "सुरक्षित लॉगिन", createAccBtn: "अकाउंट बनाएं", adminLoginBtn: "एडमिन पैनल खोलें",
         dashboardTab: "डैशबोर्ड", applianceTab: "उपकरण", calcTool: "कैलकुलेटर",
         auditTool: "इनसाइट्स", simulator: "सिम्युलेटर", communityTab: "कम्युनिटी",
-        powerCutTab: "पावर कट", aiAdviser: "EcoSpearks Ai", profileTab: "प्रोफ़ाइल", aboutUs: "हमारे बारे में",
-        teamTitle: "हमारी टीम", teamDesc: "Eco Sparks के निर्माता",
-        ecoScore: "इको स्कोर", ecoScoreSub: "बहुत बढ़िया! आप पर्यावरण के रक्षक हैं।",
-        vampirePower: "वैम्पायर पावर लॉस", vampireSub: "बंद उपकरणों के प्लग लगे रहने से होने वाला अनुमानित खर्च।",
-        dashLoad: "कुल उपकरण लोड", dashBill: "अनुमानित मासिक बिल",
-        trendChart: "ऊर्जा उपयोग प्रवृत्ति", trendSub: "अपना साप्ताहिक डेटा दर्ज करें और ग्राफ अपडेट करें।",
-        updateGraph: "ग्राफ अपडेट करें", appTitle: "उपकरण लोड कैलकुलेटर",
-        appDesc: "जानें कि आपके घर की बिजली कहाँ खर्च हो रही है।", addApp: "उपकरण जोड़ें",
-        calcEstimator: "सामान्य अनुमानक", calcOhm: "ओम का नियम हेल्पर",
-        auditTitle: "लाइव एनर्जी ऑडिट", auditDesc: "प्रभाव का प्रमाण: विस्तृत रिपोर्ट के लिए विवरण दर्ज करें।",
-        monthlyUnits: "पिछले महीने की यूनिट्स (kWh)", tariffRate: "टैरिफ रेट (₹ प्रति यूनिट)",
-        generateAudit: "ऑडिट रिपोर्ट जनरेट करें", downloadReport: "ऑडिट PDF/CSV डाउनलोड करें",
+        powerCutTab: "पावर कट", paymentTab: "बिल भुगतान", profileTab: "प्रोफ़ाइल", aboutUs: "हमारे बारे में",
+        ecoScore: "इको स्कोर", dashLoad: "कुल उपकरण लोड", dashBill: "अनुमानित मासिक बिल",
+        vampirePower: "वैम्पायर पावर लॉस", trendChart: "उपकरण उपयोग विश्लेषण",
+        appTitle: "उपकरण लोड कैलकुलेटर", appDesc: "जानें कि आपके घर की बिजली कहाँ खर्च हो रही है।",
+        addApp: "उपकरण जोड़ें", calcEstimator: "सामान्य अनुमानक", calcOhm: "ओम का नियम हेल्पर",
+        auditTitle: "लाइव एनर्जी ऑडिट", auditDesc: "आपके सक्रिय उपकरणों के आधार पर रीयल-टाइम विश्लेषण।",
+        generateAudit: "ऑडिट रिपोर्ट जनरेट करें", downloadReport: "ऑडिट PDF डाउनलोड करें",
         simTitle: "लाइव सेविंग्स सिम्युलेटर", simDesc: "इकाईयों और लागत पर लाइव प्रभाव देखने के लिए उपयोग को समायोजित करें।",
         communityTitle: "मासिक ऊर्जा-बचत चुनौती", communityDesc: "ऊर्जा बचाने और बैज अर्जित करने के लिए पड़ोसियों के साथ प्रतिस्पर्धा करें!",
-        logout: "लॉग आउट", aiGreeting: "नमस्ते! मैं EcoSpearks Ai हूँ। मैं आपकी कैसे मदद कर सकता हूँ?"
+        logout: "लॉग आउट"
     },
     hinglish: {
-        welcomeAuth: "Eco Sparks me Swagat Hai",
+        welcomeAuth: "EMCS me Swagat Hai",
         authSubtitle: "Login karein ya naya account banayein energy save karne ke liye.",
         loginTab: "User Login", registerTab: "Naya Account", adminTab: "Admin",
         loginBtn: "Secure Login", createAccBtn: "Account Banayein", adminLoginBtn: "Admin Panel Kholein",
         dashboardTab: "Dashboard", applianceTab: "Appliances", calcTool: "Calculators",
         auditTool: "Insights", simulator: "Simulator", communityTab: "Community",
-        powerCutTab: "Outages", aiAdviser: "EcoSpearks Ai", profileTab: "Profile", aboutUs: "About Us",
-        teamTitle: "Hamari Team", teamDesc: "Eco Sparks ke creators",
-        ecoScore: "Eco Score", ecoScoreSub: "Great! Aap eco-warrior hain.",
-        vampirePower: "Vampire Power Loss", vampireSub: "Standby devices se hone wala monthly waste.",
-        dashLoad: "Total Load", dashBill: "Est. Monthly Bill",
-        trendChart: "Energy Usage Trend", trendSub: "Apna weekly data enter karein aur graph update karein.",
-        updateGraph: "Update Graph", appTitle: "Appliance Load Calculator",
-        appDesc: "Add karein apne appliances aur dekhein energy kahan use ho rahi hai.", addApp: "Add Appliance",
-        calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
-        auditTitle: "Live Energy Audit", auditDesc: "Proof of Impact: Complete report ke liye details daalein.",
-        monthlyUnits: "Last Month Units (kWh)", tariffRate: "Tariff Rate (₹ per unit)",
-        generateAudit: "Audit Report Generate Karein", downloadReport: "Audit PDF/CSV Download Karein",
+        powerCutTab: "Outages", paymentTab: "Bill Payment", profileTab: "Profile", aboutUs: "About Us",
+        ecoScore: "Eco Score", dashLoad: "Total Load", dashBill: "Est. Monthly Bill",
+        vampirePower: "Vampire Power Loss", trendChart: "Appliance Usage Analysis",
+        appTitle: "Appliance Load Calculator", appDesc: "Add karein apne appliances aur dekhein energy kahan use ho rahi hai.",
+        addApp: "Add Appliance", calcEstimator: "Generic Estimator", calcOhm: "Ohm's Law Helper",
+        auditTitle: "Live Energy Audit", auditDesc: "Real-time analysis aapke active appliances ke basis par.",
+        generateAudit: "Audit Report Generate Karein", downloadReport: "Audit PDF Download Karein",
         simTitle: "Live Savings Simulator", simDesc: "Appliance daily usage adjust karein aur live impact dekhein.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Apne dosto ke sath energy save karne ka challenge aur badges jeetein!",
-        logout: "Logout", aiGreeting: "Hello! Main EcoSpearks Ai hoon. Aaj electricity save karne me main aapki kya madad karu?"
+        logout: "Logout"
     }
 };
 
@@ -79,10 +64,17 @@ const greetingsDB = {
     evening: ["Wind down and power down", "Time to switch off extra lights", "Great evening to you", "A cozy and green evening"]
 };
 
+const CHART_COLORS = ['#E67E22', '#27AE60', '#2980B9', '#E74C3C', '#8e44ad', '#16a085', '#f39c12', '#d35400'];
+
 let barChartInstance;
 let pieChartInstance;
+let auditHistoryChartInstance;
+let adminUserChartInstance;
+let applianceTrendChartInstance;
 let userAppliances = [];
 let chartType = 'line'; 
+let applianceChartType = 'line';
+let auditChartType = 'bar';
 
 const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 const safeSetHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
@@ -95,9 +87,9 @@ function seedDummyData() {
         const dummies = {
             "1001": { name: "Ramesh Sharma", id: "1001", pin: "1234", appliances: [{id:1, name:"AC 1.5 Ton", power:1500, hours:5, monthlyKwh:225, monthlyCost:1800, state:true}] },
             "1002": { name: "Sunita Verma", id: "1002", pin: "1234", appliances: [{id:2, name:"Refrigerator", power:200, hours:24, monthlyKwh:144, monthlyCost:1152, state:true}] },
-            "1003": { name: "Amit Kumar", id: "1003", pin: "1234", appliances: [{id:3, name:"Ceiling Fan", power:75, hours:12, monthlyKwh:27, monthlyCost:216, state:false}] },
+            "1003": { name: "Amit Kumar", id: "1003", pin: "1234", appliances: [{id:3, name:"Ceiling Fan", power:75, hours:12, monthlyKwh:27, monthlyCost:216, state:false}, {id:4, name:"TV", power:100, hours:6, monthlyKwh:18, monthlyCost:144, state:true}] },
             "1004": { name: "Priya Singh", id: "1004", pin: "1234", appliances: [] },
-            "1005": { name: "Vikash Gupta", id: "1005", pin: "1234", appliances: [{id:4, name:"Water Heater", power:2000, hours:1, monthlyKwh:60, monthlyCost:480, state:false}] }
+            "1005": { name: "Vikash Gupta", id: "1005", pin: "1234", appliances: [{id:5, name:"Water Heater", power:2000, hours:1, monthlyKwh:60, monthlyCost:480, state:false}] }
         };
         localStorage.setItem('ecoUsers', JSON.stringify(dummies));
     }
@@ -254,7 +246,7 @@ async function handleAdminLogin(e) {
         }
         btnEl.innerText = "Access Admin Panel";
     } catch (err) { 
-        showError("Server Error"); 
+        showError("Server Connection Error"); 
         const btnEl = document.getElementById('adminLoginSubmitBtn');
         if(btnEl) btnEl.innerText = "Access Admin Panel";
     }
@@ -287,13 +279,16 @@ function loadAdminData() {
                 });
             }
             
-            tbody.innerHTML += `<tr>
+            // Highlight: onclick triggers admin user details modal
+            tbody.innerHTML += `<tr onclick="openAdminUserDetails('${u.id}')" title="Click to view details">
                 <td><strong>${u.id}</strong></td>
-                <td>${u.name}</td>
+                <td class="text-primary" style="font-weight:600;">${u.name} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7rem; margin-left:5px;"></i></td>
                 <td>${numApps} devices</td>
                 <td>${tLoad.toFixed(2)} kWh</td>
                 <td class="text-orange">₹${tCost.toFixed(2)}</td>
-                <td><button type="button" class="sm-btn" onclick="adminDeleteUser('${u.id}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                <td onclick="event.stopPropagation();">
+                    <button type="button" class="sm-btn danger-bg borderless" onclick="adminDeleteUser('${u.id}')" style="color:white; padding:5px 10px;"><i class="fa-solid fa-trash"></i></button>
+                </td>
             </tr>`;
         });
     } catch(e) { console.error(e); }
@@ -349,6 +344,92 @@ function populateAdminTable(logs) {
             </tr>`;
         });
     } catch(e) { console.error(e); }
+}
+
+// ------------------------------------
+// ADMIN USER DETAILS MODAL
+// ------------------------------------
+function openAdminUserDetails(userId) {
+    let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
+    let user = users[userId];
+    if(!user) return;
+
+    safeSetText('modalUserName', user.name);
+    safeSetText('modalUserId', user.id);
+
+    const tbody = document.getElementById('modalUserAppliances');
+    tbody.innerHTML = '';
+    let totalLoad = 0;
+    
+    if(!user.appliances || user.appliances.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No appliances registered.</td></tr>';
+    } else {
+        user.appliances.forEach(app => {
+            totalLoad += parseFloat(app.monthlyKwh || 0);
+            tbody.innerHTML += `<tr>
+                <td><strong>${app.name}</strong></td>
+                <td>${app.power}W</td>
+                <td>${app.hours} hrs/day</td>
+                <td class="text-orange">₹${app.monthlyCost}</td>
+            </tr>`;
+        });
+    }
+
+    const modal = document.getElementById('adminUserDetailsModal');
+    const overlay = document.getElementById('popupOverlay');
+    if(modal && overlay) {
+        modal.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+        modal.classList.add('scale-in-center');
+    }
+
+    renderAdminUserChart(totalLoad);
+}
+
+function closeAdminUserModal() {
+    const modal = document.getElementById('adminUserDetailsModal');
+    const overlay = document.getElementById('popupOverlay');
+    if(modal) modal.classList.add('hidden');
+    if(overlay) overlay.classList.add('hidden');
+}
+
+function renderAdminUserChart(totalLoad) {
+    try {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#E0E0E0' : '#888888';
+        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+        let baseKwh = totalLoad > 0 ? totalLoad : 150;
+        let histData = [baseKwh*1.1, baseKwh*0.9, baseKwh*1.2, baseKwh*0.85, baseKwh*1.05, totalLoad];
+
+        const ctxHist = document.getElementById('adminUserChart');
+        if(ctxHist && typeof Chart !== 'undefined') {
+            if(adminUserChartInstance) adminUserChartInstance.destroy();
+            adminUserChartInstance = new Chart(ctxHist.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                    datasets: [{ 
+                        label: 'Usage (kWh)', 
+                        data: histData, 
+                        borderColor: '#27AE60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    scales: { 
+                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
+                        x: { grid: {display: false}, ticks: {color: textColor}}
+                    },
+                    plugins: { legend: { display: false } } 
+                }
+            });
+        }
+    } catch (e) { console.error("Admin Chart Error:", e); }
 }
 
 function loadProfileFields(user) {
@@ -457,7 +538,19 @@ function showFeature(featureId, btnElement) {
         
         if(featureId === 'appliances' && pieChartInstance) pieChartInstance.update();
         if(featureId === 'dashboard' && barChartInstance) barChartInstance.update();
-    } catch(e) { console.error(e); }
+        if(featureId === 'audit' && auditHistoryChartInstance) auditHistoryChartInstance.update();
+        if(featureId === 'appliances' && applianceTrendChartInstance) applianceTrendChartInstance.update();
+    } catch(e) { console.error("Navigation error:", e); }
+}
+
+function goToPaymentTab() {
+    const items = document.querySelectorAll('.nav-item');
+    for(let item of items) {
+        if(item.getAttribute('onclick').includes('payment')) {
+            showFeature('payment', item);
+            break;
+        }
+    }
 }
 
 // ------------------------------------
@@ -468,8 +561,7 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
     if(!activeUser) return;
     
-    alert(`Smart Sync: Command sent to turn ${state ? 'ON' : 'OFF'} ${deviceName}.`);
-    
+    // Sync to memory
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
     if(users[activeUser.id] && users[activeUser.id].appliances) {
         let appIndex = users[activeUser.id].appliances.findIndex(a => a.name === deviceName);
@@ -488,18 +580,18 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
 }
 
 // ------------------------------------
-// RAZORPAY-THEMED PAYMENT GATEWAY WITH REAL INVOICE PDF
+// RAZORPAY-THEMED PAYMENT GATEWAY
 // ------------------------------------
 let pendingPaymentApp = 'UPI';
 
 function openPaymentModal() {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    if(!activeUser || !activeUser.appliances) return alert("Calculate your load first!");
+    if(!activeUser || !activeUser.appliances) return alert("Add appliances to calculate your load first!");
     
     let totalLoad = 0;
     activeUser.appliances.forEach(a => totalLoad += parseFloat(a.monthlyCost || 0));
     
-    if(totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed.");
+    if(totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed at this moment.");
     
     safeSetText('payModalAmount', `₹${totalLoad.toFixed(2)}`);
     
@@ -517,9 +609,9 @@ function openPaymentModal() {
     const overlay = document.getElementById('popupOverlay');
     if(popup && overlay) {
         popup.classList.remove('hidden');
-        popup.style.display = 'flex';
+        popup.style.display = 'flex'; // explicitly show
         overlay.classList.remove('hidden');
-        overlay.style.display = 'block';
+        overlay.style.display = 'block'; // explicitly show
         popup.classList.add('scale-in-center');
         
         const aiPopup = document.getElementById('aiChatPopup');
@@ -535,16 +627,17 @@ function closePaymentModal() {
     const overlay = document.getElementById('popupOverlay');
     if(popup) {
         popup.classList.add('hidden');
-        popup.style.display = 'none';
+        popup.style.display = 'none'; // explicitly hide
     }
     if(overlay) {
         overlay.classList.add('hidden');
-        overlay.style.display = 'none';
+        overlay.style.display = 'none'; // explicitly hide
     }
 }
 
 function closeAllPopups() {
     closePaymentModal();
+    closeAdminUserModal();
     const aiPopup = document.getElementById('aiChatPopup');
     if(aiPopup) {
         aiPopup.classList.add('hidden');
@@ -640,7 +733,7 @@ function executeMockPayment() {
 
     if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2";
     if(heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
-    if(sub) sub.innerText = "Connecting with Bank Gateway...";
+    if(sub) sub.innerText = "Connecting with Bank Server...";
     if(invoiceTemplate) invoiceTemplate.classList.add('hidden');
     if(actionBtns) actionBtns.classList.add('hidden');
 
@@ -655,7 +748,7 @@ function executeMockPayment() {
             // Populate invoice details dynamically
             const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser')) || { id: "1001", name: "Valued Consumer" };
             const amountVal = safeGetText('payModalAmount');
-            const receiptNo = "ESP-" + Math.floor(100000 + Math.random() * 900000);
+            const receiptNo = "EMCS-" + Math.floor(100000 + Math.random() * 900000);
             const dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
             safeSetText('invReceiptNo', receiptNo);
@@ -682,7 +775,7 @@ function downloadInvoicePDF() {
 
     const opt = {
         margin:       10,
-        filename:     `EcoSparks_Invoice_${safeGetText('invReceiptNo') || 'Receipt'}.pdf`,
+        filename:     `EMCS_Invoice_${safeGetText('invReceiptNo') || 'Receipt'}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'mm', format: 'a5', orientation: 'portrait' }
@@ -690,8 +783,6 @@ function downloadInvoicePDF() {
 
     html2pdf().set(opt).from(invoiceElement).save();
 }
-
-const safeGetText = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
 
 // ------------------------------------
 // AI POPUP MODAL BEHAVIOR (CRASH-PROOF)
@@ -833,22 +924,18 @@ function renderAppliances() {
         
         tbody.innerHTML = '';
         let totalLoad = 0;
-        let appNames = [];
-        let appLoads = [];
         
         if(userAppliances.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No appliances added yet.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No appliances added yet.</td></tr>';
         } else {
             userAppliances.forEach(app => {
                 totalLoad += parseFloat(app.monthlyKwh);
-                appNames.push(app.name);
-                appLoads.push(app.monthlyKwh);
-                
                 const checkedAttr = app.state ? 'checked' : '';
                 
                 tbody.innerHTML += `<tr>
                     <td><strong>${app.name}</strong></td>
                     <td>${app.power}W</td>
+                    <td><span class="badge light-green-bg">${app.hours} hrs</span></td>
                     <td>
                         <label class="switch">
                             <input type="checkbox" ${checkedAttr} onchange="toggleIoTDevice('${app.name}', this)">
@@ -875,21 +962,219 @@ function renderAppliances() {
         if(totalLoad === 0) ecoScore = 85;
         safeSetText('ecoScoreDisplay', `${Math.floor(ecoScore)}%`);
 
-        if(pieChartInstance) {
-            if(appNames.length > 0) {
-                pieChartInstance.data.labels = appNames;
-                pieChartInstance.data.datasets[0].data = appLoads;
-                pieChartInstance.data.datasets[0].backgroundColor = ['#E67E22', '#27AE60', '#2980B9', '#E74C3C', '#8e44ad', '#16a085'];
-            } else {
-                pieChartInstance.data.labels = ['No Data'];
-                pieChartInstance.data.datasets[0].data = [100];
-                pieChartInstance.data.datasets[0].backgroundColor = ['#f5f5f5'];
-            }
-            pieChartInstance.update();
-        }
+        updateApplianceGraph();
+        updateAutomaticAudit(totalLoad);
     } catch(e) { console.error(e); }
 }
 
+// --- Dynamic Appliance Graphs ---
+function switchApplianceGraph(type, btnEl) {
+    try {
+        const parent = btnEl.closest('.graph-toggles');
+        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        if(btnEl) btnEl.classList.add('active');
+        applianceChartType = type;
+        updateApplianceGraph();
+    } catch(e) { console.error(e); }
+}
+
+function updateApplianceGraph() {
+    try {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#E0E0E0' : '#888888';
+        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+        let labels = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'];
+        
+        let datasets = [];
+        if(userAppliances.length === 0) {
+            datasets.push({ label: 'No Appliances', data: [0,0,0,0,0,0,0], backgroundColor: '#ccc' });
+        } else {
+            userAppliances.forEach((app, index) => {
+                let baseDaily = (parseFloat(app.monthlyKwh) / 30);
+                // Creating slight dummy variations for the past 7 days
+                let data = [
+                    baseDaily * 0.9, baseDaily * 1.1, baseDaily * 0.8, 
+                    baseDaily * 1.0, baseDaily * 1.2, baseDaily * 0.95, baseDaily
+                ];
+                
+                let color = CHART_COLORS[index % CHART_COLORS.length];
+                
+                let dataset = {
+                    label: app.name,
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    tension: 0.4
+                };
+
+                if(applianceChartType === 'bar') {
+                    dataset.backgroundColor = color + 'CC';
+                    dataset.borderRadius = 4;
+                } else {
+                    dataset.backgroundColor = color + '33'; // transparent fill
+                    dataset.fill = true;
+                }
+                datasets.push(dataset);
+            });
+        }
+
+        const chartEl = document.getElementById('applianceHistoryChart');
+        if(chartEl && typeof Chart !== 'undefined') {
+            if(applianceTrendChartInstance) {
+                applianceTrendChartInstance.destroy();
+            }
+            
+            applianceTrendChartInstance = new Chart(chartEl.getContext('2d'), {
+                type: applianceChartType,
+                data: { labels: labels, datasets: datasets },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    scales: { 
+                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}, title: {display:true, text:'kWh / Day'} }, 
+                        x: { grid: {display: false}, ticks: {color: textColor}}
+                    }, 
+                    plugins: { legend: { position: 'bottom', labels: {color: textColor} } } 
+                }
+            });
+        }
+
+        // Keep the Pie chart updated too
+        const pieEl = document.getElementById('pieChart');
+        if(pieEl && typeof Chart !== 'undefined') {
+            let pieLabels = userAppliances.length > 0 ? userAppliances.map(a => a.name) : ['No Data'];
+            let pieData = userAppliances.length > 0 ? userAppliances.map(a => a.monthlyKwh) : [100];
+            let pieColors = userAppliances.length > 0 ? CHART_COLORS.slice(0, userAppliances.length) : ['#f5f5f5'];
+
+            if(pieChartInstance) pieChartInstance.destroy();
+            pieChartInstance = new Chart(pieEl.getContext('2d'), {
+                type: 'doughnut',
+                data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: pieColors }] },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, cutout: '75%',
+                    plugins: { legend: { position: 'right', labels: {color: textColor, font: {family: 'Poppins', size: 11}, boxWidth: 12} } } 
+                }
+            });
+        }
+    } catch (e) { console.error("Graph Update Error:", e); }
+}
+
+// --- Automatic Audit Insights & History Graph ---
+function switchAuditGraph(type, btnEl) {
+    try {
+        const parent = btnEl.closest('.graph-toggles');
+        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        if(btnEl) btnEl.classList.add('active');
+        auditChartType = type;
+        if(window.lastTotalLoad) updateAutomaticAudit(window.lastTotalLoad);
+    } catch(e) { console.error(e); }
+}
+
+function updateAutomaticAudit(totalLoad) {
+    try {
+        window.lastTotalLoad = totalLoad;
+        const rate = 8;
+        const bill = totalLoad * rate;
+        const savings = bill * 0.18; 
+        const carbon = (totalLoad * 0.70).toFixed(1); 
+
+        safeSetText('autoAuditUnits', `${totalLoad.toFixed(2)} kWh`);
+        safeSetText('autoAuditBill', `₹${bill.toFixed(2)}`);
+        safeSetText('autoAuditSavings', `₹${savings.toFixed(2)}`);
+        safeSetText('autoAuditCarbon', `${carbon} kg CO2`);
+        safeSetText('paymentTabAmount', `₹${bill.toFixed(2)}`);
+        
+        window.lastAudit = { units: totalLoad.toFixed(2), rate, bill, savings, carbon };
+
+        // Dummy 6 Month History
+        let baseBill = bill > 0 ? bill : 1500;
+        let baseKwh = totalLoad > 0 ? totalLoad : 180;
+        
+        let histBills = [baseBill*1.1, baseBill*0.9, baseBill*1.2, baseBill*0.85, baseBill*1.05, bill];
+        let histKwh = [baseKwh*1.1, baseKwh*0.9, baseKwh*1.2, baseKwh*0.85, baseKwh*1.05, totalLoad];
+        let months = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct (Now)'];
+
+        const ctxHist = document.getElementById('auditHistoryChart');
+        if(ctxHist && typeof Chart !== 'undefined') {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            const textColor = isDark ? '#E0E0E0' : '#888888';
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+            if(auditHistoryChartInstance) auditHistoryChartInstance.destroy();
+            
+            auditHistoryChartInstance = new Chart(ctxHist.getContext('2d'), {
+                type: auditChartType,
+                data: {
+                    labels: months,
+                    datasets: [{ 
+                        label: 'Paid Bill (₹)', 
+                        data: histBills, 
+                        backgroundColor: auditChartType === 'bar' ? '#2980B9CC' : 'rgba(41, 128, 185, 0.2)', 
+                        borderColor: '#2980B9',
+                        borderWidth: 2,
+                        fill: auditChartType === 'line',
+                        tension: 0.4,
+                        borderRadius: auditChartType === 'bar' ? 4 : 0
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    scales: { 
+                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor} }, 
+                        x: { grid: {display: false}, ticks: {color: textColor} }
+                    },
+                    plugins: { legend: { display: false } } 
+                }
+            });
+        }
+
+        // Populate Table
+        const histTable = document.getElementById('sixMonthTableBody');
+        if(histTable) {
+            histTable.innerHTML = '';
+            for(let i=0; i<6; i++) {
+                let dateDummy = `${10 + i} ${months[i]} 2026`;
+                let statusBadge = i === 5 && bill > 0 ? `<span class="badge light-red-bg">Pending</span>` : `<span class="badge light-green-bg">Paid</span>`;
+                
+                histTable.innerHTML += `<tr>
+                    <td><strong>${months[i]}</strong></td>
+                    <td>${histKwh[i].toFixed(1)}</td>
+                    <td class="text-orange">₹${histBills[i].toFixed(0)}</td>
+                    <td>${dateDummy} <br> ${statusBadge}</td>
+                </tr>`;
+            }
+        }
+    } catch (e) { console.error("Auto Audit Error:", e); }
+}
+
+function downloadReport() { 
+    try {
+        if(!window.lastAudit) return alert("Add appliances to generate an audit first!");
+        const { units, rate, bill, savings, carbon } = window.lastAudit;
+        
+        const csvContent = "data:text/csv;charset=utf-8,"
+            + "EMCS - AUTOMATED ENERGY AUDIT REPORT
+
+"
+            + `Total Active Units Consumed,${units} kWh
+`
+            + `Estimated Tariff Rate,₹${rate} per unit
+`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}
+`
+            + `Estimated Carbon Footprint,${carbon} kg CO2
+`
+            + `Target Optimized Savings,₹${savings.toFixed(2)}
+`;
+
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", `EMCS_Audit_Report.csv`);
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    } catch(e) { console.error(e); }
+}
+
+// --- General Calculators ---
 function runCalculator() {
     try {
         const w = parseFloat(safeGetVal('calcWatts'));
@@ -924,104 +1209,102 @@ function runOhmCalculator() {
     } catch(e) { console.error(e); }
 }
 
-// --- Visual Energy Flowchart/Trend ---
+// --- Dashboard General Graph ---
 function switchGraphType(type, btnEl) {
     try {
-        document.querySelectorAll('.graph-toggles .toggle-btn').forEach(b => b.classList.remove('active'));
+        const parent = btnEl.closest('.graph-toggles');
+        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
         if(btnEl) btnEl.classList.add('active');
         chartType = type;
-        initCharts();
         updateManualChart();
     } catch(e) { console.error(e); }
 }
 
 function initCharts() {
-    try {
-        const isDark = document.body.getAttribute('data-theme') === 'dark';
-        const textColor = isDark ? '#E0E0E0' : '#888888';
-        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-
-        const chartEl = document.getElementById('energyChart');
-        if(chartEl && typeof Chart !== 'undefined') {
-            const ctxBar = chartEl.getContext('2d');
-            if(barChartInstance) barChartInstance.destroy();
-            
-            barChartInstance = new Chart(ctxBar, {
-                type: chartType, 
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Energy Usage (kWh)',
-                        data: [40, 55, 30, 60, 45, 70, 50, 40, 65, 35, 50, 45], 
-                        borderColor: '#E67E22', 
-                        backgroundColor: chartType === 'line' ? 'rgba(230, 126, 34, 0.15)' : '#E67E22',
-                        borderWidth: 2,
-                        borderRadius: chartType === 'bar' ? 4 : 0,
-                        fill: chartType === 'line',
-                        tension: 0.4, 
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#E67E22',
-                        pointRadius: 4
-                    }]
-                },
-                options: { 
-                    responsive: true, maintainAspectRatio: false, 
-                    scales: { 
-                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
-                        x: { grid: {display: false}, ticks: {color: textColor}}
-                    }, 
-                    plugins: { legend: {display: false} } 
-                }
-            });
-        }
-
-        const pieEl = document.getElementById('pieChart');
-        if(pieEl && typeof Chart !== 'undefined') {
-            const ctxPie = pieEl.getContext('2d');
-            if(pieChartInstance) pieChartInstance.destroy();
-            pieChartInstance = new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: ['No Data'],
-                    datasets: [{ data: [100], backgroundColor: ['#f5f5f5'], borderWidth: 0 }]
-                },
-                options: { 
-                    responsive: true, maintainAspectRatio: false, cutout: '75%',
-                    plugins: { legend: { position: 'right', labels: {color: textColor, font: {family: 'Poppins', size: 11}, boxWidth: 12} } } 
-                }
-            });
-        }
-    } catch (e) { console.error("Chart Init Error:", e); }
+    updateApplianceGraph(); 
+    updateManualChart();
 }
 
 function updateChartColors() {
     try {
-        if(!barChartInstance || !pieChartInstance) return;
         const isDark = document.body.getAttribute('data-theme') === 'dark';
         const textColor = isDark ? '#E0E0E0' : '#888888';
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
         
-        barChartInstance.options.scales.y.grid.color = gridColor;
-        barChartInstance.options.scales.y.ticks.color = textColor;
-        barChartInstance.options.scales.x.ticks.color = textColor;
-        barChartInstance.update();
-
-        pieChartInstance.options.plugins.legend.labels.color = textColor;
-        pieChartInstance.update();
+        if(barChartInstance) {
+            barChartInstance.options.scales.y.grid.color = gridColor;
+            barChartInstance.options.scales.y.ticks.color = textColor;
+            barChartInstance.options.scales.x.ticks.color = textColor;
+            barChartInstance.update();
+        }
+        if(pieChartInstance) {
+            pieChartInstance.options.plugins.legend.labels.color = textColor;
+            pieChartInstance.update();
+        }
+        if(auditHistoryChartInstance) {
+            auditHistoryChartInstance.options.scales.y.grid.color = gridColor;
+            auditHistoryChartInstance.options.scales.y.ticks.color = textColor;
+            auditHistoryChartInstance.options.scales.x.ticks.color = textColor;
+            auditHistoryChartInstance.update();
+        }
+        if(applianceTrendChartInstance) {
+            applianceTrendChartInstance.options.scales.y.grid.color = gridColor;
+            applianceTrendChartInstance.options.scales.y.ticks.color = textColor;
+            applianceTrendChartInstance.options.scales.x.ticks.color = textColor;
+            applianceTrendChartInstance.update();
+        }
+        if(adminUserChartInstance) {
+            adminUserChartInstance.options.scales.y.grid.color = gridColor;
+            adminUserChartInstance.options.scales.y.ticks.color = textColor;
+            adminUserChartInstance.options.scales.x.ticks.color = textColor;
+            adminUserChartInstance.update();
+        }
     } catch(e) { console.error(e); }
 }
 
 function updateManualChart() {
     try {
-        const w1 = parseFloat(safeGetVal('graphW1')) || 0;
-        const w2 = parseFloat(safeGetVal('graphW2')) || 0;
-        const w3 = parseFloat(safeGetVal('graphW3')) || 0;
-        const w4 = parseFloat(safeGetVal('graphW4')) || 0;
+        const w1 = parseFloat(safeGetVal('graphW1')) || 45;
+        const w2 = parseFloat(safeGetVal('graphW2')) || 62;
+        const w3 = parseFloat(safeGetVal('graphW3')) || 38;
+        const w4 = parseFloat(safeGetVal('graphW4')) || 55;
 
-        if(barChartInstance) {
-            barChartInstance.data.datasets[0].data = [w1, w2, w3, w4, 45, 70, 50, 40, 65, 35, 50, 45];
-            barChartInstance.update();
-        }
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#E0E0E0' : '#888888';
+        const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+        const chartEl = document.getElementById('energyChart');
+        if(!chartEl || typeof Chart === 'undefined') return;
+
+        if(barChartInstance) barChartInstance.destroy();
+        
+        barChartInstance = new Chart(chartEl.getContext('2d'), {
+            type: chartType, 
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'W1', 'W2', 'W3', 'W4'],
+                datasets: [{
+                    label: 'Overall Trend (kWh)',
+                    data: [40, 55, 30, 60, 45, 70, 50, 40, 65, w1, w2, w3, w4], 
+                    borderColor: '#E67E22', 
+                    backgroundColor: chartType === 'line' ? 'rgba(230, 126, 34, 0.15)' : '#E67E22CC',
+                    borderWidth: 2,
+                    borderRadius: chartType === 'bar' ? 4 : 0,
+                    fill: chartType === 'line',
+                    tension: 0.4, 
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#E67E22',
+                    pointRadius: 4
+                }]
+            },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
+                scales: { 
+                    y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
+                    x: { grid: {display: false}, ticks: {color: textColor}}
+                }, 
+                plugins: { legend: {display: false} } 
+            }
+        });
     } catch(e) { console.error(e); }
 }
 
@@ -1051,17 +1334,6 @@ function stopSpeak() {
 }
 
 // --- AI Chat Logic (Crash-Proof) ---
-function askAIToOptimize() {
-    if(userAppliances.length === 0) return alert("Please add some appliances first!");
-    const appData = userAppliances.map(a => `${a.name} (${a.power}W, ${a.hours}hrs)`).join(", ");
-    
-    showFeature('assistant', document.querySelector('.nav-item[onclick*="assistant"]'));
-    const inputEl = document.getElementById('tabChatInput');
-    if(inputEl) inputEl.value = "Analyze my current appliances and give me 3 specific tips to save energy.";
-    window.tempAiContext = `User's current appliances: ${appData}`;
-    sendTabChatMessage();
-}
-
 async function sendPopupChatMessage() {
     try {
         const msg = safeGetVal('aiInput').trim();
@@ -1110,7 +1382,8 @@ async function processAIRequest(msg, loadingId, boxId) {
             const htmlText = renderMarkdownToHTML(rawText);
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
+/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -1138,50 +1411,6 @@ function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
-}
-
-// --- Live Energy Audit ---
-function generateAudit() {
-    try {
-        const unitsStr = safeGetVal('auditUnits');
-        const rateStr = safeGetVal('auditRate');
-        if(!unitsStr || !rateStr) return alert("Please enter both Units and Tariff Rate.");
-        
-        const units = parseFloat(unitsStr);
-        const rate = parseFloat(rateStr);
-        
-        const bill = units * rate;
-        const savings = bill * 0.18; 
-        const carbon = (units * 0.70).toFixed(1); 
-
-        const resEl = document.getElementById('auditResult');
-        if(resEl) resEl.classList.remove('hidden');
-        
-        safeSetHTML('auditBill', `Estimated Bill: ₹${bill.toFixed(2)}`);
-        safeSetHTML('auditSavings', `Possible Savings: ₹${savings.toFixed(2)}`);
-        safeSetText('auditCarbon', `${carbon} kg CO2`);
-        
-        window.lastAudit = { units, rate, bill, savings, carbon };
-    } catch(e) { console.error(e); }
-}
-
-function downloadReport() { 
-    try {
-        if(!window.lastAudit) return alert("Generate an audit first!");
-        const { units, rate, bill, savings, carbon } = window.lastAudit;
-        
-        const csvContent = "data:text/csv;charset=utf-8,"
-            + "ECO SPARKS - PROOF OF IMPACT REPORT\n\n"
-            + `Total Units Consumed,${units} kWh\n`
-            + `Tariff Rate,₹${rate} per unit\n`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
-            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
-            + `Target Monthly Savings,₹${savings.toFixed(2)}\n`;
-
-        const link = document.createElement("a");
-        link.setAttribute("href", encodeURI(csvContent));
-        link.setAttribute("download", `Eco_Sparks_Audit.csv`);
-        document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    } catch(e) { console.error(e); }
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
+/g, '<br>');
 }

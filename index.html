@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Sparks - Smart Energy Saver</title>
+    <title>EMCS - Powered By EcoSparks</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,8 +15,8 @@
     <!-- Desktop Sidebar -->
     <nav class="sidebar hidden-mobile fade-in-left">
         <div class="logo">
-            <i class="fa-solid fa-bolt text-orange pulse-icon"></i>
-            <span class="logo-text">Eco Sparks</span>
+            <div class="logo-main"><i class="fa-solid fa-bolt text-orange pulse-icon"></i> EMCS</div>
+            <div class="logo-sub">Powered By EcoSparks</div>
         </div>
         
         <div class="nav-controls">
@@ -41,7 +41,7 @@
                 <i class="fa-solid fa-calculator"></i> <span class="link-text" data-i18n="calcTool">Calculators</span>
             </li>
             <li class="nav-item" onclick="showFeature('audit', this)">
-                <i class="fa-solid fa-file-invoice"></i> <span class="link-text" data-i18n="auditTool">Insights</span>
+                <i class="fa-solid fa-chart-line"></i> <span class="link-text" data-i18n="auditTool">Insights</span>
             </li>
             <li class="nav-item" onclick="showFeature('simulator', this)">
                 <i class="fa-solid fa-sliders"></i> <span class="link-text" data-i18n="simulator">Simulator</span>
@@ -51,6 +51,9 @@
             </li>
             <li class="nav-item" onclick="showFeature('powercut', this)">
                 <i class="fa-solid fa-triangle-exclamation"></i> <span class="link-text" data-i18n="powerCutTab">Outages</span>
+            </li>
+            <li class="nav-item" onclick="showFeature('payment', this)">
+                <i class="fa-solid fa-file-invoice-dollar"></i> <span class="link-text" data-i18n="paymentTab">Bill Payment</span>
             </li>
             <li class="nav-item" onclick="showFeature('assistant', this)">
                 <i class="fa-solid fa-robot"></i> <span class="link-text">EcoSpearks Ai</span>
@@ -71,7 +74,8 @@
     <!-- Mobile Top Nav -->
     <nav class="navbar hidden-desktop fade-in-down">
         <div class="logo">
-            <i class="fa-solid fa-bolt text-orange pulse-icon"></i> Eco Sparks
+            <div class="logo-main"><i class="fa-solid fa-bolt text-orange pulse-icon"></i> EMCS</div>
+            <div class="logo-sub">Powered By EcoSparks</div>
         </div>
         <div class="nav-controls">
             <select id="languageSelectMobile" onchange="changeLanguage(this.value)">
@@ -91,7 +95,7 @@
         <!-- Auth Section -->
         <section id="authSection" class="active-section scale-in">
             <div class="glass-card auth-wrapper slide-up">
-                <h2 data-i18n="welcomeAuth">Welcome to Eco Sparks</h2>
+                <h2 data-i18n="welcomeAuth">Welcome to EMCS</h2>
                 <p data-i18n="authSubtitle" class="subtitle mb-3">Log in or create an account to start saving energy.</p>
                 
                 <div class="auth-tabs">
@@ -121,10 +125,10 @@
             </div>
         </section>
 
-        <!-- Admin Dashboard -->
+        <!-- Admin Super Dashboard -->
         <section id="adminSection" class="hidden fade-in-up">
             <div class="admin-header glass-card mb-2">
-                <h2><i class="fa-solid fa-shield-halved"></i> Super Admin Control Panel</h2>
+                <h2><i class="fa-solid fa-shield-halved"></i> EMCS Super Admin</h2>
                 <span class="badge danger-bg">Prince Kumar (Root Access)</span>
             </div>
             
@@ -165,19 +169,22 @@
                     </div>
                 </div>
 
+                <p class="small-text mb-2"><i class="fa-solid fa-info-circle text-primary"></i> Click on any <b>Consumer Name</b> to view their detailed appliances and 6-month graph.</p>
+
                 <div class="table-container">
-                    <table class="admin-table">
+                    <table class="admin-table user-list-table">
                         <thead>
                             <tr>
                                 <th>Consumer ID</th>
-                                <th>Full Name</th>
+                                <th>Full Name (Click to View Details)</th>
                                 <th>Total Appliances</th>
                                 <th>Est. Usage Load</th>
                                 <th>Est. Monthly Bill</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="adminUserListBody"></tbody>
+                        <tbody id="adminUserListBody">
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -207,9 +214,9 @@
                 <button class="nav-btn hover-pop" onclick="showFeature('simulator', this)" data-i18n="simulator">Simulator</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('community', this)" data-i18n="communityTab">Community</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('powercut', this)" data-i18n="powerCutTab">Outages</button>
+                <button class="nav-btn hover-pop" onclick="showFeature('payment', this)" data-i18n="paymentTab">Payment</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('assistant', this)">EcoSpearks Ai</button>
                 <button class="nav-btn hover-pop" onclick="showFeature('profile', this)" data-i18n="profileTab">Profile</button>
-                <button class="nav-btn hover-pop" onclick="showFeature('about', this)" data-i18n="aboutUs">About</button>
             </div>
 
             <div class="top-header mb-3 hidden-mobile slide-down">
@@ -227,8 +234,10 @@
                 <p id="dailyMotivation" class="motivation-text">A fresh morning to save energy</p>
             </div>
 
-            <!-- DASHBOARD -->
+            <!-- MEGA DASHBOARD -->
             <div id="dashboard" class="feature-content active-feature">
+                
+                <!-- 4 Quick Stats -->
                 <div class="grid-4 mb-3">
                     <div class="clean-card p-2 hover-lift">
                         <p class="card-label" data-i18n="dashLoad">Total Load (kWh)</p>
@@ -244,9 +253,10 @@
                         <p class="card-label" data-i18n="dashBill">Est. Monthly Cost</p>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
-                            <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="openPaymentModal()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
+                            <!-- Redirect to Payment Tab -->
+                            <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="goToPaymentTab()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
-                        <span class="badge light-red-bg mt-1">Based on current usage</span>
+                        <span class="badge light-red-bg mt-1">Based on active appliances</span>
                     </div>
                     <div class="clean-card p-2 hover-lift" style="border-left: 3px solid var(--secondary);">
                         <p class="card-label" data-i18n="vampirePower">Vampire Power Loss</p>
@@ -255,28 +265,7 @@
                     </div>
                 </div>
 
-                <!-- 2D Graph -->
-                <div class="clean-card mb-3 slide-up">
-                    <div class="flex-between mb-2">
-                        <h3 data-i18n="trendChart">Energy Usage Trend</h3>
-                        <div class="graph-toggles">
-                            <button class="toggle-btn active hover-pop" type="button" onclick="switchGraphType('line', this)">Smooth</button>
-                            <button class="toggle-btn hover-pop" type="button" onclick="switchGraphType('bar', this)">2D Bar</button>
-                        </div>
-                    </div>
-                    
-                    <div class="graph-input-grid mt-2 mb-2">
-                        <input type="number" id="graphW1" placeholder="W1 kWh" value="45">
-                        <input type="number" id="graphW2" placeholder="W2 kWh" value="62">
-                        <input type="number" id="graphW3" placeholder="W3 kWh" value="38">
-                        <input type="number" id="graphW4" placeholder="W4 kWh" value="55">
-                        <button class="primary-btn m-0 hover-pop" type="button" onclick="updateManualChart()"><i class="fa-solid fa-arrows-rotate"></i> Update Graph</button>
-                    </div>
-
-                    <div class="chart-container" style="height: 350px;"><canvas id="energyChart"></canvas></div>
-                </div>
-
-                <!-- Best Action First & Tips -->
+                <!-- Lower Section: Best Action First & Tips -->
                 <div class="grid-2">
                     <div class="clean-card slide-right">
                         <div class="flex-between mb-2">
@@ -308,7 +297,7 @@
                 </div>
             </div>
 
-            <!-- APPLIANCES -->
+            <!-- APPLIANCES & IOT -->
             <div id="appliances" class="feature-content hidden">
                 <div class="clean-card mb-3 slide-down">
                     <h2 data-i18n="appTitle">Appliance Load Calculator & Smart Control</h2>
@@ -324,6 +313,18 @@
                     </div>
                 </div>
 
+                <div class="clean-card mb-3 hover-lift">
+                    <div class="flex-between mb-2">
+                        <h3><i class="fa-solid fa-chart-area text-orange"></i> Appliance Daily Trend (7 Days)</h3>
+                        <div class="graph-toggles">
+                            <button class="toggle-btn active hover-pop" type="button" onclick="switchApplianceGraph('line', this)">Flowgraph</button>
+                            <button class="toggle-btn hover-pop" type="button" onclick="switchApplianceGraph('bar', this)">Colorful 2D</button>
+                        </div>
+                    </div>
+                    <p class="small-text mb-2">This graph tracks daily kWh/Hours for all your added appliances uniquely.</p>
+                    <div class="chart-container" style="height: 300px;"><canvas id="applianceHistoryChart"></canvas></div>
+                </div>
+
                 <div class="grid-2 mb-3">
                     <div class="clean-card hover-lift">
                         <h3><i class="fa-solid fa-chart-pie text-orange"></i> Load Breakdown</h3>
@@ -332,12 +333,12 @@
                     
                     <div class="clean-card hover-lift">
                         <div class="flex-between mb-2">
-                            <h3><i class="fa-solid fa-wifi" style="color:var(--primary);"></i> Smart Appliances List</h3>
+                            <h3><i class="fa-solid fa-wifi" style="color:var(--primary);"></i> Appliances List</h3>
                             <button class="sm-btn hover-pop" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
                         </div>
                         <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                             <table class="admin-table">
-                                <thead><tr><th>Appliance</th><th>Power</th><th>Control (IoT)</th><th>Cost/Mo</th><th>Action</th></tr></thead>
+                                <thead><tr><th>Appliance</th><th>Power</th><th>Usage</th><th>Control (IoT)</th><th>Action</th></tr></thead>
                                 <tbody id="applianceList"></tbody>
                             </table>
                         </div>
@@ -345,7 +346,24 @@
                 </div>
             </div>
 
-            <!-- CALCULATORS -->
+            <!-- DEDICATED BILL PAYMENT TAB -->
+            <div id="payment" class="feature-content hidden">
+                <div class="clean-card text-center slide-up" style="max-width: 500px; margin: 0 auto; padding: 3rem 1.5rem;">
+                    <h2><i class="fa-solid fa-file-invoice-dollar text-orange pulse-icon" style="font-size: 3.5rem; margin-bottom: 1rem;"></i></h2>
+                    <h2 data-i18n="paymentTab">Your Monthly Electricity Bill</h2>
+                    <p class="small-text mb-3">Review your consumption and pay securely.</p>
+                    
+                    <div style="background: rgba(230, 126, 34, 0.05); border-radius: 12px; padding: 20px; border: 1px dashed var(--orange); margin-bottom: 20px;">
+                        <h1 class="text-orange" id="paymentTabAmount" style="font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 700;">₹0.00</h1>
+                        <p class="mb-1" style="font-weight: 500;">Due Date: <b class="danger-text">15 Oct 2026</b></p>
+                        <p class="small-text">Includes all smart appliances usage till date.</p>
+                    </div>
+
+                    <button class="primary-btn hover-pop w-100" style="font-size: 1.2rem; padding: 15px;" onclick="openPaymentModal()"><i class="fa-solid fa-shield-halved"></i> Proceed to Pay Securely</button>
+                </div>
+            </div>
+
+            <!-- CALCULATORS (Generic Offline) -->
             <div id="calculators" class="feature-content hidden">
                 <div class="grid-2">
                     <div class="clean-card hover-lift slide-right">
@@ -372,45 +390,56 @@
                 </div>
             </div>
 
-            <!-- INSIGHTS & AUDIT -->
+            <!-- AUTOMATIC INSIGHTS & AUDIT -->
             <div id="audit" class="feature-content hidden">
-                <div class="grid-2">
-                    <div class="clean-card hover-lift slide-right">
-                        <h2 data-i18n="auditTitle"><i class="fa-solid fa-file-invoice text-orange"></i> Live Energy Audit</h2>
-                        <p class="small-text mb-2" data-i18n="auditDesc">Proof of Impact: Enter details to generate a comprehensive report.</p>
+                <div class="clean-card mb-3 slide-up">
+                    <div class="flex-between mb-2">
+                        <h3><i class="fa-solid fa-chart-line text-orange"></i> 6-Month Energy Audit History</h3>
+                        <div class="graph-toggles">
+                            <button class="toggle-btn hover-pop" type="button" onclick="switchAuditGraph('line', this)">Flowgraph</button>
+                            <button class="toggle-btn active hover-pop" type="button" onclick="switchAuditGraph('bar', this)">Colorful 2D</button>
+                        </div>
+                    </div>
+                    <div class="chart-container" style="height: 250px; width: 100%;"><canvas id="auditHistoryChart"></canvas></div>
+                </div>
+
+                <div class="grid-2 mb-3">
+                    <div class="clean-card hover-lift slide-right green-bg" style="border: 1px solid var(--primary);">
+                        <h2><i class="fa-solid fa-file-invoice text-primary"></i> Live Energy Audit</h2>
+                        <p class="small-text mb-2">Real-time analysis based on your active appliances.</p>
                         
-                        <div class="form-group">
-                            <label data-i18n="monthlyUnits">Total Monthly Units (kWh)</label>
-                            <input type="number" id="auditUnits" placeholder="e.g. 250">
+                        <div class="mt-3" style="background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow);">
+                            <div class="flex-between mb-1">
+                                <span style="font-size: 1.1rem; color: gray;">Est. Consumption:</span>
+                                <b id="autoAuditUnits" class="text-primary" style="font-size: 1.2rem;">0 kWh</b>
+                            </div>
+                            <div class="flex-between mb-1">
+                                <span style="font-size: 1.1rem; color: gray;">Estimated Bill:</span>
+                                <b id="autoAuditBill" class="danger-text" style="font-size: 1.2rem;">₹0</b>
+                            </div>
+                            <div class="flex-between mb-1">
+                                <span style="font-size: 1.1rem; color: gray;">Optimized Savings:</span>
+                                <b id="autoAuditSavings" class="green-text" style="font-size: 1.2rem;">₹0</b>
+                            </div>
+                            <hr style="border: none; border-top: 1px dashed #ccc; margin: 10px 0;">
+                            <div class="text-center">
+                                <p style="font-size: 0.9rem;" class="text-secondary"><i class="fa-solid fa-leaf green-text"></i> Est. Carbon Footprint: <b id="autoAuditCarbon">0 kg CO2</b></p>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label data-i18n="tariffRate">Tariff Rate (₹ per unit)</label>
-                            <input type="number" id="auditRate" placeholder="e.g. 7.5">
-                        </div>
-                        <button class="primary-btn hover-pop" type="button" onclick="generateAudit()" data-i18n="generateAudit">Generate Audit Report</button>
-                        
-                        <div id="auditResult" class="hidden mt-3 p-3 result-box green-bg scale-in" style="border-radius: 8px;">
-                            <h3 class="mb-2">Audit Summary</h3>
-                            <p id="auditBill" style="font-size: 1.2rem;">Estimated Bill: ₹0</p>
-                            <p id="auditSavings" style="font-size: 1.2rem;" class="green-text mb-2">Possible Savings: ₹0</p>
-                            <p class="small-text">Estimated Carbon Reduction: <b id="auditCarbon">0 kg CO2</b> if optimized.</p>
-                            <button class="secondary-btn mt-2 hover-pop" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> <span data-i18n="downloadReport">Download Audit CSV</span></button>
-                        </div>
+                        <button class="primary-btn mt-3 hover-pop w-100" type="button" onclick="downloadReport()"><i class="fa-solid fa-download"></i> Download Official Audit PDF</button>
                     </div>
 
                     <div class="clean-card hover-lift slide-left">
-                        <h2><i class="fa-solid fa-scale-balanced text-orange"></i> Bill Comparison Check</h2>
-                        <p class="small-text mb-2">Before/After Comparison of your usage.</p>
-                        <div class="form-group">
-                            <label>Previous Month (kWh)</label>
-                            <input type="number" id="prevKwh" placeholder="e.g. 240">
+                        <h3><i class="fa-solid fa-clock-rotate-left text-orange"></i> Previous Bills (Dummy Data)</h3>
+                        <p class="small-text mb-2">Your past 6 months bill payment details.</p>
+                        <div class="table-container" style="max-height: 260px; overflow-y: auto;">
+                            <table class="admin-table">
+                                <thead><tr><th>Month</th><th>Usage (kWh)</th><th>Bill Paid</th><th>Date</th></tr></thead>
+                                <tbody id="sixMonthTableBody">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="form-group">
-                            <label>Latest Month (kWh)</label>
-                            <input type="number" id="latestKwh" placeholder="e.g. 210">
-                        </div>
-                        <button class="secondary-btn hover-pop" type="button" onclick="compareUsage()">Compare Bills</button>
-                        <div id="compareResult" class="mt-3 text-center fade-in" style="font-size: 1.2rem; font-weight: 600;"></div>
                     </div>
                 </div>
             </div>
@@ -450,7 +479,7 @@
                 </div>
             </div>
 
-            <!-- COMMUNITY -->
+            <!-- COMMUNITY CHALLENGE -->
             <div id="community" class="feature-content hidden">
                 <div class="clean-card slide-up">
                     <h2 class="mb-1" data-i18n="communityTitle"><i class="fa-solid fa-trophy text-yellow"></i> Monthly Energy-Saving Challenge</h2>
@@ -461,7 +490,7 @@
                             <h3>Your Monthly Goal</h3>
                             <p class="small-text mt-1">Reduce consumption by 10% compared to last month.</p>
                             <div style="width: 100%; background: #e0e0e0; height: 10px; border-radius: 5px; margin-top: 15px; overflow: hidden;">
-                                <div style="width: 60%; background: #27AE60; height: 100%;"></div>
+                                <div style="width: 60%; background: #27AE60; height: 100%; transition: width 1s ease;"></div>
                             </div>
                             <p class="small-text mt-1">60% Completed</p>
                         </div>
@@ -486,7 +515,7 @@
                 </div>
             </div>
 
-            <!-- OUTAGES -->
+            <!-- SMART POWER CUT NOTIFICATION -->
             <div id="powercut" class="feature-content hidden">
                 <div class="clean-card text-center slide-down" style="max-width: 600px; margin: 0 auto;">
                     <h2><i class="fa-solid fa-triangle-exclamation danger-text"></i> Smart Power-Cut Monitor</h2>
@@ -505,19 +534,19 @@
                 </div>
             </div>
             
-            <!-- AI ASSISTANT TAB -->
+            <!-- DEDICATED AI ASSISTANT TAB (EcoSpearks Ai) -->
             <div id="assistant" class="feature-content hidden">
                 <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
                     <div class="flex-between mb-2">
                         <h3><i class="fa-solid fa-robot green-text"></i> EcoSpearks Ai</h3>
-                        <span class="badge light-green-bg pulse-subtle">Voice & Memory Active</span>
+                        <span class="badge light-green-bg pulse-subtle">Memory & Voice Active</span>
                     </div>
                     
                     <div id="tabChatBox" class="chat-box" style="flex:1; background: rgba(0,0,0,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--card-border); overflow-y: auto;">
                         <div class="message ai-message fade-in">
                             <p>Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                             <div class="tts-controls mt-1">
-                                <button class="tts-btn hover-pop" type="button" onclick="speakStoredText('greeting')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                                <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                                 <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                             </div>
                         </div>
@@ -530,7 +559,7 @@
                 </div>
             </div>
 
-            <!-- PROFILE -->
+            <!-- PROFILE SETTINGS -->
             <div id="profile" class="feature-content hidden">
                 <div class="clean-card slide-up" style="max-width: 600px; margin: 0 auto;">
                     <h2 data-i18n="profileTab"><i class="fa-solid fa-user-pen text-orange"></i> My Profile Settings</h2>
@@ -581,14 +610,45 @@
         </section>
     </div>
 
-    <!-- RAZORPAY THEMED PAYMENT MODAL (WITH REAL INVOICE & PDF) -->
+    <!-- ADMIN MODAL: USER DETAILS -->
+    <div id="adminUserDetailsModal" class="hidden scale-in-center popup-modal" style="display: none; max-width: 600px; height: 90vh;">
+        <div class="chat-header">
+            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-user-check"></i> Consumer Details</h3>
+            <button class="close-btn hover-pop" type="button" onclick="closeAdminUserModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="p-3" style="overflow-y: auto; flex: 1;">
+            <div class="flex-between mb-2 border-bottom pb-2">
+                <div>
+                    <h2 id="modalUserName" class="text-orange">Username</h2>
+                    <p class="small-text">ID: <span id="modalUserId"></span></p>
+                </div>
+                <div class="text-right">
+                    <span class="badge light-green-bg">Active Connection</span>
+                </div>
+            </div>
+
+            <h4><i class="fa-solid fa-plug text-primary"></i> Added Appliances</h4>
+            <div class="table-container mb-3">
+                <table class="admin-table">
+                    <thead><tr><th>Appliance</th><th>Power</th><th>Usage</th><th>Est. Cost</th></tr></thead>
+                    <tbody id="modalUserAppliances"></tbody>
+                </table>
+            </div>
+
+            <h4><i class="fa-solid fa-chart-line text-orange"></i> 6-Month Usage History</h4>
+            <div class="chart-container mt-2" style="height: 250px;"><canvas id="adminUserChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- RAZORPAY-STYLE THEMED PAYMENT MODAL (STRICTLY HIDDEN BY DEFAULT) -->
     <div id="paymentModal" class="hidden scale-in-center popup-modal rzp-modal-theme" style="display: none;">
         
+        <!-- Left Sidebar Inside Modal -->
         <div class="rzp-sidebar">
             <div class="rzp-brand">
                 <i class="fa-solid fa-bolt text-orange"></i>
                 <div>
-                    <h4>Eco Sparks Pay</h4>
+                    <h4>EMCS Pay</h4>
                     <small>Official Energy Gateway</small>
                 </div>
             </div>
@@ -603,13 +663,14 @@
             </ul>
         </div>
 
+        <!-- Right Content Area -->
         <div class="rzp-content">
             <div class="rzp-header">
                 <span class="badge light-green-bg"><i class="fa-solid fa-lock"></i> 256-Bit Encrypted</span>
                 <button class="close-btn hover-pop" type="button" onclick="closePaymentModal()"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Tab 1: UPI -->
+            <!-- Tab 1: UPI Apps -->
             <div id="rzpTabUpi" class="rzp-tab-pane active fade-in">
                 <p class="small-text mb-2">Tap any app to pay with UPI:</p>
                 <div class="rzp-app-grid mb-3">
@@ -667,7 +728,7 @@
                 </div>
             </div>
 
-            <!-- PIN / OTP Prompt -->
+            <!-- Step: Dummy PIN / OTP Prompt -->
             <div id="rzpPinPrompt" class="hidden text-center p-3 scale-in">
                 <i class="fa-solid fa-key text-orange mb-2" style="font-size: 2rem;"></i>
                 <h4 id="pinPromptTitle">Authorize Transaction</h4>
@@ -677,24 +738,24 @@
                 <button class="secondary-btn mt-2 w-100 borderless" style="background:transparent; color:gray;" onclick="cancelPinPrompt()">Cancel</button>
             </div>
 
-            <!-- Loader & Real Printable Invoice -->
+            <!-- Step: Loader & Success Screen with Downloadable Invoice -->
             <div id="rzpStatusScreen" class="hidden text-center p-3" style="max-height: 480px; overflow-y: auto;">
                 <i id="rzpStatusIcon" class="fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2"></i>
                 <h3 id="rzpStatusHeading" style="font-weight:600; font-size: 1.2rem;">Connecting to Gateway...</h3>
                 <p class="small-text mt-1" id="rzpStatusSub">Please do not refresh or close.</p>
                 
-                <!-- Real PDF-Ready Invoice -->
+                <!-- Printable Real Invoice Template -->
                 <div id="rzpInvoiceTemplate" class="hidden mt-3 p-3 text-left" style="background:#ffffff; border:1px solid #e0e0e0; border-radius:10px; color:#333; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--orange); padding-bottom:8px; margin-bottom:10px;">
                         <div>
-                            <h3 style="color:var(--orange); margin:0; font-size:1.1rem;"><i class="fa-solid fa-bolt"></i> ECO SPARKS</h3>
-                            <small style="color:gray;">Official Energy Bill Receipt</small>
+                            <h3 style="color:var(--orange); margin:0; font-size:1.1rem;"><i class="fa-solid fa-bolt"></i> EMCS</h3>
+                            <small style="color:gray;">Electricity Bill Receipt</small>
                         </div>
                         <span class="badge light-green-bg" style="font-size:0.75rem;"><i class="fa-solid fa-circle-check"></i> PAID</span>
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px;">
-                        <div><strong style="color:gray;">Receipt No:</strong> <span id="invReceiptNo">ESP-984210</span></div>
+                        <div><strong style="color:gray;">Receipt No:</strong> <span id="invReceiptNo">EMCS-984210</span></div>
                         <div><strong style="color:gray;">Date:</strong> <span id="invDate">12 Oct 2026</span></div>
                         <div><strong style="color:gray;">Consumer ID:</strong> <span id="invConsumerId">1001</span></div>
                         <div><strong style="color:gray;">Consumer Name:</strong> <span id="invConsumerName">Abhishek Kumar</span></div>
@@ -712,7 +773,7 @@
                             <td style="padding:6px; text-align:right;" id="invBaseAmount">₹0.00</td>
                         </tr>
                         <tr>
-                            <td style="padding:6px;">Gateway Convenience Fee</td>
+                            <td style="padding:6px;">Transaction & Gateway Charges</td>
                             <td style="padding:6px; text-align:right;">₹0.00 (Waived)</td>
                         </tr>
                         <tr style="border-top:1px solid #ddd; font-weight:bold; background:#fafafa;">
@@ -721,7 +782,7 @@
                         </tr>
                     </table>
 
-                    <p style="font-size:0.7rem; color:gray; text-align:center; margin:0;">This is a computer-generated receipt issued by Eco Sparks Smart Energy System.</p>
+                    <p style="font-size:0.7rem; color:gray; text-align:center; margin:0;">This is a computer-generated receipt issued by EMCS Smart Energy System.</p>
                 </div>
 
                 <div id="invoiceActionButtons" class="hidden mt-3" style="display:flex; gap:10px; justify-content:center;">
@@ -736,12 +797,12 @@
         </div>
     </div>
 
-    <!-- Floating AI Circle Button -->
+    <!-- Floating AI Button -->
     <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask EcoSpearks Ai">
         <i class="fa-solid fa-robot"></i>
     </button>
 
-    <!-- CRASH-PROOF FLOATING AI POPUP -->
+    <!-- PROPER FLOATING AI POPUP MODAL (STRICTLY HIDDEN BY DEFAULT) -->
     <div id="aiChatPopup" class="hidden scale-in-center popup-modal" style="display: none;">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
@@ -751,12 +812,12 @@
             <div class="message ai-message fade-in-left">
                 <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn hover-pop" type="button" onclick="speakStoredText('greeting')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
@@ -767,11 +828,11 @@
         </div>
     </div>
 
-    <!-- Background overlay -->
+    <!-- Background overlay for popups (STRICTLY HIDDEN BY DEFAULT) -->
     <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()" style="display: none;"></div>
 
     <footer class="site-footer">
-        <small>Made with ❤️ by Eco Sparks Team</small>
+        <small>Made with ❤️ by EMCS Team</small>
     </footer>
 
     <script src="script.js"></script>
