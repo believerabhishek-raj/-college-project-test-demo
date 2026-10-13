@@ -1070,19 +1070,12 @@ function downloadReport() {
         const { units, rate, bill, savings, carbon } = window.lastAudit;
         
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "EMCS - AUTOMATED ENERGY AUDIT REPORT
-
-"
-            + `Total Active Units Consumed,${units} kWh
-`
-            + `Estimated Tariff Rate,₹${rate} per unit
-`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}
-`
-            + `Estimated Carbon Footprint,${carbon} kg CO2
-`
-            + `Target Optimized Savings,₹${savings.toFixed(2)}
-`;
+            + "EMCS - AUTOMATED ENERGY AUDIT REPORT\n\n"
+            + `Total Active Units Consumed,${units} kWh\n`
+            + `Estimated Tariff Rate,₹${rate} per unit\n`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
+            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
+            + `Target Optimized Savings,₹${savings.toFixed(2)}\n`;
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
@@ -1250,7 +1243,7 @@ function stopSpeak() {
     } catch(e) { console.error(e); }
 }
 
-// --- AI Chat Logic (Crash-Proof) ---
+// --- AI Chat Logic (100% Crash-Proof) ---
 async function sendPopupChatMessage() {
     try {
         const msg = safeGetVal('aiInput').trim();
@@ -1283,6 +1276,10 @@ async function processAIRequest(msg, loadingId, boxId) {
         const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
         
         const payload = { prompt: msg, language: currentLang, userId: userId };
+        if(window.tempAiContext) {
+            payload.customContext = window.tempAiContext;
+            window.tempAiContext = null; 
+        }
         
         const response = await fetch('/api/chat', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -1292,11 +1289,13 @@ async function processAIRequest(msg, loadingId, boxId) {
         
         if(response.ok && data.response) {
             const rawText = data.response;
-            const htmlText = renderMarkdownToHTML(rawText);
+            
+            // SUPER SAFE STRING PARSING (No Regex Newline crash)
+            const htmlText = rawText.split('\\n').join('<br>').replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.*?)\\*/g, '<em>$1</em>');
+            const ttsCleanText = rawText.replace(/"/g, "'").split('\\n').join(' ');
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
-/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${ttsCleanText}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -1323,7 +1322,7 @@ function addMessageToChat(boxId, sender, text) {
 function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
+// This function is kept for legacy support if needed elsewhere
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
-/g, '<br>');
+    return text.split('\\n').join('<br>').replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.*?)\\*/g, '<em>$1</em>');
 }

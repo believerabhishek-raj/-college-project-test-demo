@@ -98,6 +98,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 .sidebar { width: var(--sidebar-width); background: var(--card-bg); border-right: 1px solid var(--card-border); padding: 1.5rem 1rem; display: flex; flex-direction: column; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; }
 .sidebar .logo { font-size: 1.8rem; font-weight: 700; color: var(--text-color); margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0px; padding-left: 10px;}
 .logo-main { display: flex; align-items: center; gap: 10px; }
+.logo-sub { display: none !important; }
 
 .nav-controls { display: flex; gap: 10px; margin-bottom: 20px; padding: 0 10px;}
 .nav-controls select { padding: 5px; border-radius: 6px; background: var(--bg-color); color: var(--text-color); border: 1px solid var(--card-border); outline: none; font-size:0.85rem;}
@@ -203,7 +204,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     height: 80vh; max-height: 600px;
     z-index: 9999; 
     display: flex; 
-    flex-direction: column;
+    flex-direction: column !important; /* FIXED ALIGNMENT CRASH */
     padding: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     background: var(--card-bg); border: 1px solid var(--card-border);
     border-radius: 16px; overflow: hidden;
@@ -211,12 +212,11 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 
 #aiChatPopup .chat-header { width: 100%; flex-shrink: 0; }
 #aiChatPopup .chat-box { flex: 1; overflow-y: auto; width: 100%; }
-#aiChatPopup .chat-input-area { width: 100%; flex-shrink: 0; display: flex; flex-direction: row; }
+#aiChatPopup .chat-input-area { width: 100%; flex-shrink: 0; display: flex; flex-direction: row !important; }
 
 .popup-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.5); backdrop-filter: blur(3px); z-index: 9998;
-    display: block;
 }
 
 .chat-header { background: var(--orange); color: #fff; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
@@ -243,14 +243,16 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
 
 /* Razorpay Modal Theme */
 .rzp-modal-theme {
-    max-width: 650px;
-    height: auto;
-    min-height: 440px;
-    max-height: 90vh;
-    border-radius: 16px;
+    max-width: 650px !important;
+    height: auto !important;
+    min-height: 440px !important;
+    max-height: 90vh !important;
+    border-radius: 16px !important;
     overflow: hidden;
-    flex-direction: row;
 }
+
+.popup-modal:not(.hidden) { display: flex !important; }
+.rzp-modal-theme:not(.hidden) { display: flex !important; flex-direction: row !important; }
 
 .rzp-sidebar {
     width: 230px;
@@ -346,7 +348,7 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     
     .sidebar { display: none; } 
     .navbar { display: flex; padding: 1rem; } 
-    
+
     .features-nav { display: flex; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
     .features-nav::-webkit-scrollbar { height: 4px; }
     .features-nav::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
@@ -364,9 +366,10 @@ th { background: rgba(0,0,0,0.02); font-weight: 600; color: gray; font-size: 0.8
     .action-details { margin: 0; }
     
     #floatingAIBtn { right: 20px; bottom: 20px; width: 55px; height: 55px; font-size: 1.4rem; }
+    
     .popup-modal { width: 90%; height: 80vh; max-height: 80vh; border-radius: 16px; }
 
-    .rzp-modal-theme {
+    .rzp-modal-theme:not(.hidden) {
         flex-direction: column !important;
         height: 90vh !important;
         max-height: 90vh !important;
