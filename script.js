@@ -733,7 +733,7 @@ function executeMockPayment() {
 
     if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2";
     if(heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
-    if(sub) sub.innerText = "Connecting with Bank Server...";
+    if(sub) sub.innerText = "Connecting with Bank Gateway...";
     if(invoiceTemplate) invoiceTemplate.classList.add('hidden');
     if(actionBtns) actionBtns.classList.add('hidden');
 
@@ -826,47 +826,7 @@ function fillAndSend(text) {
     } catch(e) { console.error(e); }
 }
 
-function compareUsage() {
-    try {
-        const prevStr = safeGetVal('prevKwh');
-        const latestStr = safeGetVal('latestKwh');
-        if(!prevStr || !latestStr) return alert("Enter both month values to compare.");
-        
-        const prev = parseFloat(prevStr);
-        const latest = parseFloat(latestStr);
-        
-        const diff = latest - prev;
-        const pct = ((diff / prev) * 100).toFixed(1);
-        
-        if(diff > 0) {
-            safeSetHTML('compareResult', `<span class="danger-text">Your usage increased by ${pct}% (+${diff} kWh). Check appliances!</span>`);
-        } else if (diff < 0) {
-            safeSetHTML('compareResult', `<span class="green-text">Great job! Usage decreased by ${Math.abs(pct)}% (${Math.abs(diff)} kWh).</span>`);
-        } else {
-            safeSetHTML('compareResult', "Your usage is exactly the same.");
-        }
-    } catch(e) { console.error(e); }
-}
-
-function calculateSimulator() {
-    try {
-        const units = parseFloat(safeGetVal('simUserUnits')) || 300;
-        const rate = parseFloat(safeGetVal('simUserRate')) || 8;
-        const pct = parseFloat(safeGetVal('simSlider')) || 15;
-        
-        safeSetText('simPctVal', pct);
-
-        const savedUnits = (units * (pct / 100));
-        const savedMoney = (savedUnits * rate).toFixed(0); 
-        
-        safeSetText('simUnitsResult', `${savedUnits.toFixed(1)} kWh`);
-        safeSetText('simSavingsResult', `₹ ${savedMoney}`);
-    } catch(e) { console.error(e); }
-}
-
-function updateSim() { calculateSimulator(); }
-
-// --- APPLIANCES ---
+// --- APPLIANCES & AUTOMATIC AUDIT ---
 function loadAppliances() {
     try {
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
@@ -1153,19 +1113,12 @@ function downloadReport() {
         const { units, rate, bill, savings, carbon } = window.lastAudit;
         
         const csvContent = "data:text/csv;charset=utf-8,"
-            + "EMCS - AUTOMATED ENERGY AUDIT REPORT
-
-"
-            + `Total Active Units Consumed,${units} kWh
-`
-            + `Estimated Tariff Rate,₹${rate} per unit
-`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}
-`
-            + `Estimated Carbon Footprint,${carbon} kg CO2
-`
-            + `Target Optimized Savings,₹${savings.toFixed(2)}
-`;
+            + "EMCS - AUTOMATED ENERGY AUDIT REPORT\n\n"
+            + `Total Active Units Consumed,${units} kWh\n`
+            + `Estimated Tariff Rate,₹${rate} per unit\n`
+            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
+            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
+            + `Target Optimized Savings,₹${savings.toFixed(2)}\n`;
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
@@ -1382,8 +1335,7 @@ async function processAIRequest(msg, loadingId, boxId) {
             const htmlText = renderMarkdownToHTML(rawText);
             
             const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/
-/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                <button type="button" class="tts-btn" onclick="speakText(\`${rawText.replace(/"/g, "'").replace(/\n/g, ' ')}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
                 <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
             </div>`;
             
@@ -1411,6 +1363,5 @@ function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
 function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 
 function renderMarkdownToHTML(text) {
-    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/
-/g, '<br>');
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
 }

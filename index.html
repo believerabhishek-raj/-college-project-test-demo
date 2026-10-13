@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EMCS - Powered By EcoSparks</title>
+    <title>EMCS - Energy Management Control System</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,7 +16,6 @@
     <nav class="sidebar hidden-mobile fade-in-left">
         <div class="logo">
             <div class="logo-main"><i class="fa-solid fa-bolt text-orange pulse-icon"></i> EMCS</div>
-            <div class="logo-sub">Powered By EcoSparks</div>
         </div>
         
         <div class="nav-controls">
@@ -75,7 +74,6 @@
     <nav class="navbar hidden-desktop fade-in-down">
         <div class="logo">
             <div class="logo-main"><i class="fa-solid fa-bolt text-orange pulse-icon"></i> EMCS</div>
-            <div class="logo-sub">Powered By EcoSparks</div>
         </div>
         <div class="nav-controls">
             <select id="languageSelectMobile" onchange="changeLanguage(this.value)">
@@ -253,7 +251,6 @@
                         <p class="card-label" data-i18n="dashBill">Est. Monthly Cost</p>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
-                            <!-- Redirect to Payment Tab -->
                             <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="goToPaymentTab()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on active appliances</span>
@@ -263,6 +260,19 @@
                         <h2 id="vampireDisplay" class="text-secondary count-up">₹0.00</h2>
                         <span class="badge light-red-bg mt-1"><i class="fa-solid fa-plug"></i> Wasted energy</span>
                     </div>
+                </div>
+
+                <!-- Appliance Driven Graph Area -->
+                <div class="clean-card mb-3 slide-up">
+                    <div class="flex-between mb-2">
+                        <h3><i class="fa-solid fa-chart-area text-orange"></i> Appliance Usage Analysis</h3>
+                        <div class="graph-toggles">
+                            <button class="toggle-btn active hover-pop" type="button" onclick="switchGraphType('line', this)">Flowgraph</button>
+                            <button class="toggle-btn hover-pop" type="button" onclick="switchGraphType('bar', this)">Colorful 2D</button>
+                        </div>
+                    </div>
+                    <p class="small-text mb-2">This graph automatically tracks the consumption (kWh) of your added appliances.</p>
+                    <div class="chart-container" style="height: 350px;"><canvas id="energyChart"></canvas></div>
                 </div>
 
                 <!-- Lower Section: Best Action First & Tips -->
@@ -333,12 +343,12 @@
                     
                     <div class="clean-card hover-lift">
                         <div class="flex-between mb-2">
-                            <h3><i class="fa-solid fa-wifi" style="color:var(--primary);"></i> Appliances List</h3>
+                            <h3><i class="fa-solid fa-wifi" style="color:var(--primary);"></i> Smart Appliances List</h3>
                             <button class="sm-btn hover-pop" style="background: var(--primary);" type="button" onclick="askAIToOptimize()"><i class="fa-solid fa-robot"></i> AI Optimize</button>
                         </div>
                         <div class="table-container" style="max-height: 250px; overflow-y: auto;">
                             <table class="admin-table">
-                                <thead><tr><th>Appliance</th><th>Power</th><th>Usage</th><th>Control (IoT)</th><th>Action</th></tr></thead>
+                                <thead><tr><th>Appliance</th><th>Power</th><th>Usage</th><th>Control (IoT)</th><th>Cost/Mo</th><th>Action</th></tr></thead>
                                 <tbody id="applianceList"></tbody>
                             </table>
                         </div>
@@ -817,7 +827,7 @@
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
