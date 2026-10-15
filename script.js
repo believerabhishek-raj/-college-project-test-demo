@@ -1326,3 +1326,95 @@ function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
 function renderMarkdownToHTML(text) {
     return text.split('\\n').join('<br>').replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.*?)\\*/g, '<em>$1</em>');
 }
+// ===================================================================
+// AI VISION (CAMERA) INTEGRATION WITH GEMINI FREE API
+// ===================================================================
+
+let videoStream = null;
+
+// ⚠️ APNA GEMINI API KEY YAHAN DAALO
+const GEMINI_API_KEY = "YAHAN_APNI_API_KEY_DAALO"; 
+
+async function startCamera() {
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('cameraVideo');
+    const suggestions = document.getElementById('chatSuggestions');
+    
+    try {
+        // Back camera open karne ki koshish karega phone me
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = videoStream;
+        cameraContainer.classList.remove('hidden');
+        if(suggestions) suggestions.style.display = 'none';
+    } catch (err) {
+        alert("Camera access denied! Please allow camera permissions.");
+        console.error(err);
+    }
+}
+
+function closeCamera() {
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+    }
+    document.getElementById('cameraContainer').classList.add('hidden');
+}
+
+async function captureAndAnalyze() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    
+    // Video frame ko canvas me draw karo
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Canvas se Base64 image nikal lo (Gemini API ko yahi chahiye)
+    const base64Image = canvas.toDataURL('image/jpeg').split(',')[1]; 
+    
+    closeCamera(); // Photo lete hi camera band
+    
+    // Chat box me loading message daalo
+    addMessageToChat('chatBox', 'user', '📸 *Image Uploaded for Analysis*');
+    const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Processing image with EcoSpearks Vision...');
+    
+    await analyzeImageWithGemini(base64Image, loadingId);
+}
+
+async function analyzeImageWithGemini(base64Data, loadingId) {
+    if(GEMINI_API_KEY === "YAHAN_APNI_API_KEY_DAALO") {
+        renderAIResponse(loadingId, "⚠️ Error: Please insert your Gemini API Key in the script.js file first!");
+        return;
+    }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const payload = {
+        contents: [{
+            parts: [
+                { text: "You are an expert electrical energy advisor. Look at this image. Identify the electrical appliance, meter, or setup. Estimate its power consumption (Watts). Give 2 smart safety or energy-saving tips to lower the electricity bill for this specific item. Keep it concise." },
+                { inlineData: { mimeType: "image/jpeg", data: base64Data } }
+            ]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        if (data.candidates && data.candidates.length > 0) {
+            const aiText = data.candidates[0].content.parts[0].text;
+            renderAIResponse(loadingId, aiText);
+        } else {
+            renderAIResponse(loadingId, "⚠️ Could not analyze the image clearly. Please try again with better lighting.");
+        }
+    } catch (err) {
+        console.error(err);
+        renderAIResponse(loadingId, "⚠️ Network Error. The AI Vision server is currently unreachable.");
+    }
+}
