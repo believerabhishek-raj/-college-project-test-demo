@@ -16,7 +16,7 @@ const translations = {
         generateAudit: "Generate Audit Report", downloadReport: "Download Audit PDF",
         simTitle: "Live Savings Simulator", simDesc: "Adjust your appliance daily usage to see live impact on units and cost.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Compete with neighbors to save the most energy and earn badges!",
-        logout: "Logout"
+        logout: "Logout", aiGreeting: "Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!"
     },
     hi: {
         welcomeAuth: "EMCS में आपका स्वागत है",
@@ -34,7 +34,7 @@ const translations = {
         generateAudit: "ऑडिट रिपोर्ट जनरेट करें", downloadReport: "ऑडिट PDF डाउनलोड करें",
         simTitle: "लाइव सेविंग्स सिम्युलेटर", simDesc: "इकाईयों और लागत पर लाइव प्रभाव देखने के लिए उपयोग को समायोजित करें।",
         communityTitle: "मासिक ऊर्जा-बचत चुनौती", communityDesc: "ऊर्जा बचाने और बैज अर्जित करने के लिए पड़ोसियों के साथ प्रतिस्पर्धा करें!",
-        logout: "लॉग आउट"
+        logout: "लॉग आउट", aiGreeting: "नमस्ते! मैं EcoSpearks Ai हूँ। मैं आपकी ऊर्जा बचाने में मदद कर सकता हूँ!"
     },
     hinglish: {
         welcomeAuth: "EMCS me Swagat Hai",
@@ -52,7 +52,7 @@ const translations = {
         generateAudit: "Audit Report Generate Karein", downloadReport: "Audit PDF Download Karein",
         simTitle: "Live Savings Simulator", simDesc: "Appliance daily usage adjust karein aur live impact dekhein.",
         communityTitle: "Monthly Energy-Saving Challenge", communityDesc: "Apne dosto ke sath energy save karne ka challenge aur badges jeetein!",
-        logout: "Logout"
+        logout: "Logout", aiGreeting: "Hello! Main EcoSpearks Ai hoon. Aaj electricity save karne me main aapki kya madad karu?"
     }
 };
 
@@ -66,35 +66,65 @@ const greetingsDB = {
 
 const CHART_COLORS = ['#E67E22', '#27AE60', '#2980B9', '#E74C3C', '#8e44ad', '#16a085', '#f39c12', '#d35400'];
 
-let barChartInstance;
-let pieChartInstance;
-let auditHistoryChartInstance;
-let adminUserChartInstance;
-let applianceTrendChartInstance;
+let barChartInstance = null;
+let pieChartInstance = null;
+let auditHistoryChartInstance = null;
+let adminUserChartInstance = null;
+let applianceTrendChartInstance = null;
+
 let userAppliances = [];
 let chartType = 'line'; 
 let applianceChartType = 'line';
 let auditChartType = 'bar';
+let pendingPaymentApp = 'Google Pay';
 
+// Global registry for reliable text-to-speech audio
+window.aiTtsRegistry = window.aiTtsRegistry || {};
+
+// DOM Helper functions
 const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
 const safeSetHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
 const safeGetVal = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
 const safeSetVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+const safeGetText = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
 
-// SEED DUMMY USERS FOR ADMIN PANEL
+// Dummy user database initialization
 function seedDummyData() {
-    if(!localStorage.getItem('ecoUsers')) {
+    if (!localStorage.getItem('ecoUsers')) {
         const dummies = {
-            "1001": { name: "Ramesh Sharma", id: "1001", pin: "1234", appliances: [{id:1, name:"AC 1.5 Ton", power:1500, hours:5, monthlyKwh:225, monthlyCost:1800, state:true}] },
-            "1002": { name: "Sunita Verma", id: "1002", pin: "1234", appliances: [{id:2, name:"Refrigerator", power:200, hours:24, monthlyKwh:144, monthlyCost:1152, state:true}] },
-            "1003": { name: "Amit Kumar", id: "1003", pin: "1234", appliances: [{id:3, name:"Ceiling Fan", power:75, hours:12, monthlyKwh:27, monthlyCost:216, state:false}, {id:4, name:"TV", power:100, hours:6, monthlyKwh:18, monthlyCost:144, state:true}] },
+            "1001": { 
+                name: "Ramesh Sharma", id: "1001", pin: "1234", 
+                appliances: [
+                    { id: 1, name: "AC 1.5 Ton", power: 1500, hours: 5, monthlyKwh: 225, monthlyCost: 1800, state: true },
+                    { id: 2, name: "Ceiling Fan", power: 75, hours: 14, monthlyKwh: 31.5, monthlyCost: 252, state: true }
+                ] 
+            },
+            "1002": { 
+                name: "Sunita Verma", id: "1002", pin: "1234", 
+                appliances: [
+                    { id: 3, name: "Refrigerator", power: 200, hours: 24, monthlyKwh: 144, monthlyCost: 1152, state: true }
+                ] 
+            },
+            "1003": { 
+                name: "Amit Kumar", id: "1003", pin: "1234", 
+                appliances: [
+                    { id: 4, name: "Ceiling Fan", power: 75, hours: 12, monthlyKwh: 27, monthlyCost: 216, state: false },
+                    { id: 5, name: "Smart TV", power: 100, hours: 6, monthlyKwh: 18, monthlyCost: 144, state: true }
+                ] 
+            },
             "1004": { name: "Priya Singh", id: "1004", pin: "1234", appliances: [] },
-            "1005": { name: "Vikash Gupta", id: "1005", pin: "1234", appliances: [{id:5, name:"Water Heater", power:2000, hours:1, monthlyKwh:60, monthlyCost:480, state:false}] }
+            "1005": { 
+                name: "Vikash Gupta", id: "1005", pin: "1234", 
+                appliances: [
+                    { id: 6, name: "Water Heater", power: 2000, hours: 1, monthlyKwh: 60, monthlyCost: 480, state: false }
+                ] 
+            }
         };
         localStorage.setItem('ecoUsers', JSON.stringify(dummies));
     }
 }
 
+// App Initialization
 document.addEventListener('DOMContentLoaded', () => {
     try {
         seedDummyData();
@@ -107,14 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
         changeLanguage(savedLang);
 
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        if(activeUser) {
+        if (activeUser) {
             showMainApp(activeUser);
             loadAppliances();
         }
         calculateSimulator(); 
-    } catch(err) { console.error("Init Error:", err); }
+    } catch(err) { 
+        console.error("Init Error:", err); 
+    }
 });
 
+// Theme Toggle
 function toggleTheme() {
     try {
         const body = document.body;
@@ -122,9 +155,12 @@ function toggleTheme() {
         body.setAttribute('data-theme', newTheme);
         localStorage.setItem('ecoTheme', newTheme);
         updateChartColors();
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e); 
+    }
 }
 
+// Language Switcher
 function changeLanguage(langCode) {
     try {
         currentLang = langCode || safeGetVal('languageSelect') || 'en';
@@ -132,35 +168,43 @@ function changeLanguage(langCode) {
         
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if(translations[currentLang] && translations[currentLang][key]) {
+            if (translations[currentLang] && translations[currentLang][key]) {
                 el.innerText = translations[currentLang][key];
             }
         });
         
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        if(activeUser) updateGreeting(activeUser.name);
-    } catch (e) { console.error(e); }
+        if (activeUser) updateGreeting(activeUser.name);
+    } catch (e) { 
+        console.error(e); 
+    }
 }
 
+// Authentication Tabs
 function switchAuthTab(tab, btnElement) {
     try {
         document.querySelectorAll('.auth-tabs button').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
         
-        if(btnElement) btnElement.classList.add('active');
+        if (btnElement) btnElement.classList.add('active');
         const formEl = document.getElementById(tab + 'Form');
-        if(formEl) formEl.classList.add('active');
+        if (formEl) formEl.classList.add('active');
         
         safeSetText('authError', '');
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
-function showError(msg) { safeSetText('authError', msg); }
+function showError(msg) { 
+    safeSetText('authError', msg); 
+}
 
 async function trackUserAction(userId, name, action, details) {
     try {
         await fetch('/api/track', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId, name, action, details })
         });
     } catch(err) {}
@@ -173,10 +217,10 @@ function handleRegister(e) {
         const id = safeGetVal('regId').trim();
         const pin = safeGetVal('regPin');
         
-        if(!name || !id || !pin) return;
+        if (!name || !id || !pin) return;
         
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-        if(users[id]) return showError("Consumer Number already registered!");
+        if (users[id]) return showError("Consumer Number already registered!");
         
         users[id] = { name, id, pin, appliances: [] };
         localStorage.setItem('ecoUsers', JSON.stringify(users));
@@ -184,7 +228,9 @@ function handleRegister(e) {
         showError("Account created! Please login.");
         
         switchAuthTab('login', document.querySelector('.auth-tabs button'));
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e); 
+    }
 }
 
 function handleLogin(e) {
@@ -193,10 +239,10 @@ function handleLogin(e) {
         const id = safeGetVal('loginId').trim();
         const pin = safeGetVal('loginPin');
         
-        if(!id || !pin) return;
+        if (!id || !pin) return;
         
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-        if(users[id] && users[id].pin === pin) {
+        if (users[id] && users[id].pin === pin) {
             localStorage.setItem('ecoActiveUser', JSON.stringify(users[id]));
             trackUserAction(id, users[id].name, 'Logged In', 'Standard Login');
             showMainApp(users[id]);
@@ -204,7 +250,9 @@ function handleLogin(e) {
         } else {
             showError("Invalid Consumer Number or PIN");
         }
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e); 
+    }
 }
 
 async function handleAdminLogin(e) {
@@ -212,35 +260,38 @@ async function handleAdminLogin(e) {
     try {
         const pwd = safeGetVal('adminPassword');
         const btnEl = document.getElementById('adminLoginSubmitBtn');
-        if(!pwd || !btnEl) return;
+        if (!pwd || !btnEl) return;
 
         btnEl.innerText = "Verifying...";
         const res = await fetch('/api/admin/login', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: pwd })
         });
         const data = await res.json();
         
         if (res.ok && data.success) {
             const authSec = document.getElementById('authSection');
-            if(authSec) authSec.classList.add('hidden');
+            if (authSec) authSec.classList.add('hidden');
             
             const mainAppSec = document.getElementById('mainAppSection');
-            if(mainAppSec) mainAppSec.classList.add('hidden');
+            if (mainAppSec) mainAppSec.classList.add('hidden');
             
             const adminSec = document.getElementById('adminSection');
-            if(adminSec) adminSec.classList.remove('hidden');
+            if (adminSec) adminSec.classList.remove('hidden');
             
             const sb = document.querySelector('.sidebar');
-            if(sb) sb.classList.add('hidden');
+            if (sb) sb.classList.add('hidden');
             const mn = document.getElementById('mobileNav');
-            if(mn) mn.classList.add('hidden');
+            if (mn) mn.classList.add('hidden');
 
             loadAdminData(); 
             
-            const statsRes = await fetch('/api/admin/stats');
-            const statsData = await statsRes.json();
-            populateAdminTable(statsData.analytics);
+            try {
+                const statsRes = await fetch('/api/admin/stats');
+                const statsData = await statsRes.json();
+                populateAdminTable(statsData.analytics);
+            } catch (err) {}
         } else {
             showError("Invalid Admin Password");
         }
@@ -248,10 +299,11 @@ async function handleAdminLogin(e) {
     } catch (err) { 
         showError("Server Connection Error"); 
         const btnEl = document.getElementById('adminLoginSubmitBtn');
-        if(btnEl) btnEl.innerText = "Access Admin Panel";
+        if (btnEl) btnEl.innerText = "Access Admin Panel";
     }
 }
 
+// Admin Panel Controller
 function loadAdminData() {
     try {
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
@@ -259,10 +311,10 @@ function loadAdminData() {
         safeSetText('adminUserCount', totalUsers);
         
         const tbody = document.getElementById('adminUserListBody');
-        if(!tbody) return;
+        if (!tbody) return;
         tbody.innerHTML = '';
         
-        if(totalUsers === 0) {
+        if (totalUsers === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">No users registered yet.</td></tr>';
             return;
         }
@@ -272,7 +324,7 @@ function loadAdminData() {
             let tLoad = 0; let tCost = 0;
             let numApps = u.appliances ? u.appliances.length : 0;
             
-            if(u.appliances) {
+            if (u.appliances) {
                 u.appliances.forEach(a => {
                     tLoad += parseFloat(a.monthlyKwh || 0);
                     tCost += parseFloat(a.monthlyCost || 0);
@@ -290,18 +342,27 @@ function loadAdminData() {
                 </td>
             </tr>`;
         });
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function adminDeleteUser(userId) {
     try {
-        if(confirm("Are you sure you want to delete this user?")) {
+        if (confirm("Are you sure you want to delete this user?")) {
             let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
             delete users[userId];
             localStorage.setItem('ecoUsers', JSON.stringify(users));
             loadAdminData(); 
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
+}
+
+function openAdminAddUserBox() {
+    const el = document.getElementById('adminAddUserBox');
+    if (el) el.classList.toggle('hidden');
 }
 
 function adminAddNewUser() {
@@ -310,10 +371,10 @@ function adminAddNewUser() {
         const id = safeGetVal('adminNewId').trim();
         const pin = safeGetVal('adminNewPin').trim();
         
-        if(!name || !id || pin.length !== 4) return alert("Fill all fields properly (PIN 4 digits).");
+        if (!name || !id || pin.length !== 4) return alert("Fill all fields properly (PIN 4 digits).");
         
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-        if(users[id]) return alert("Consumer ID already exists!");
+        if (users[id]) return alert("Consumer ID already exists!");
         
         users[id] = { name, id, pin, appliances: [] };
         localStorage.setItem('ecoUsers', JSON.stringify(users));
@@ -321,15 +382,17 @@ function adminAddNewUser() {
         safeSetVal('adminNewName', ''); safeSetVal('adminNewId', ''); safeSetVal('adminNewPin', '');
         alert("User successfully added by Admin.");
         loadAdminData();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function populateAdminTable(logs) {
     try {
         const tbody = document.getElementById('adminLogsBody');
-        if(!tbody) return;
+        if (!tbody) return;
         tbody.innerHTML = '';
-        if(!logs || logs.length === 0) {
+        if (!logs || logs.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5">No live network activity recorded yet.</td></tr>';
             return;
         }
@@ -342,59 +405,74 @@ function populateAdminTable(logs) {
                 <td><small>${log.device}</small></td>
             </tr>`;
         });
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
-// ------------------------------------
-// ALL MODAL CLOSING LOGIC (BULLETPROOF)
-// ------------------------------------
-function closeAllPopups() {
-    const popups = ['paymentModal', 'aiChatPopup', 'adminUserDetailsModal', 'popupOverlay'];
-    popups.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
+// ===================================================================
+// MODAL MANAGER SYSTEM (PREVENTS OVERLAPPING & LOCKS)
+// ===================================================================
+
+function openPopup(modalId) {
+    // 1. Hide all active modals first
+    document.querySelectorAll('.popup-modal').forEach(el => {
+        el.classList.add('hidden');
     });
+    
+    // 2. Open targeted modal
+    const target = document.getElementById(modalId);
+    const overlay = document.getElementById('popupOverlay');
+    
+    if (target && overlay) {
+        target.classList.remove('hidden');
+        overlay.classList.remove('hidden');
+    }
+}
+
+function closeAllPopups() {
+    // Stop camera if running
+    closeCamera();
+    
+    document.querySelectorAll('.popup-modal').forEach(el => {
+        el.classList.add('hidden');
+    });
+    const overlay = document.getElementById('popupOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
 }
 
 function openAdminUserDetails(userId) {
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
     let user = users[userId];
-    if(!user) return;
+    if (!user) return;
 
     safeSetText('modalUserName', user.name);
     safeSetText('modalUserId', user.id);
 
     const tbody = document.getElementById('modalUserAppliances');
-    tbody.innerHTML = '';
-    let totalLoad = 0;
-    
-    if(!user.appliances || user.appliances.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No appliances registered.</td></tr>';
-    } else {
-        user.appliances.forEach(app => {
-            totalLoad += parseFloat(app.monthlyKwh || 0);
-            tbody.innerHTML += `<tr>
-                <td><strong>${app.name}</strong></td>
-                <td>${app.power}W</td>
-                <td>${app.hours} hrs/day</td>
-                <td class="text-orange">₹${app.monthlyCost}</td>
-            </tr>`;
-        });
+    if (tbody) {
+        tbody.innerHTML = '';
+        let totalLoad = 0;
+        
+        if (!user.appliances || user.appliances.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center">No appliances registered.</td></tr>';
+        } else {
+            user.appliances.forEach(app => {
+                totalLoad += parseFloat(app.monthlyKwh || 0);
+                tbody.innerHTML += `<tr>
+                    <td><strong>${app.name}</strong></td>
+                    <td>${app.power}W</td>
+                    <td>${app.hours} hrs/day</td>
+                    <td class="text-orange">₹${app.monthlyCost}</td>
+                </tr>`;
+            });
+        }
+        renderAdminUserChart(totalLoad);
     }
 
-    closeAllPopups();
-    const modal = document.getElementById('adminUserDetailsModal');
-    const overlay = document.getElementById('popupOverlay');
-    if(modal && overlay) {
-        modal.classList.remove('hidden');
-        overlay.classList.remove('hidden');
-    }
-
-    renderAdminUserChart(totalLoad);
-}
-
-function closeAdminUserModal() {
-    closeAllPopups();
+    openPopup('adminUserDetailsModal');
 }
 
 function renderAdminUserChart(totalLoad) {
@@ -404,11 +482,11 @@ function renderAdminUserChart(totalLoad) {
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
         let baseKwh = totalLoad > 0 ? totalLoad : 150;
-        let histData = [baseKwh*1.1, baseKwh*0.9, baseKwh*1.2, baseKwh*0.85, baseKwh*1.05, totalLoad];
+        let histData = [baseKwh * 1.1, baseKwh * 0.9, baseKwh * 1.2, baseKwh * 0.85, baseKwh * 1.05, totalLoad];
 
         const ctxHist = document.getElementById('adminUserChart');
-        if(ctxHist && typeof Chart !== 'undefined') {
-            if(adminUserChartInstance) adminUserChartInstance.destroy();
+        if (ctxHist && typeof Chart !== 'undefined') {
+            if (adminUserChartInstance) adminUserChartInstance.destroy();
             adminUserChartInstance = new Chart(ctxHist.getContext('2d'), {
                 type: 'line',
                 data: {
@@ -424,102 +502,116 @@ function renderAdminUserChart(totalLoad) {
                     }]
                 },
                 options: { 
-                    responsive: true, maintainAspectRatio: false, 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
                     scales: { 
-                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
-                        x: { grid: {display: false}, ticks: {color: textColor}}
+                        y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, 
+                        x: { grid: { display: false }, ticks: { color: textColor } }
                     },
                     plugins: { legend: { display: false } } 
                 }
             });
         }
-    } catch (e) { console.error("Admin Chart Error:", e); }
+    } catch (e) { 
+        console.error("Admin Chart Error:", e); 
+    }
 }
 
+// User Profile Details
 function loadProfileFields(user) {
     try {
         safeSetVal('profileName', user.name || '');
         safeSetVal('profileId', user.id || '');
         const avatarEl = document.getElementById('userAvatarInitials');
-        if(avatarEl && user.name) {
+        if (avatarEl && user.name) {
             avatarEl.innerText = user.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function saveUserProfile() {
     try {
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        if(!activeUser) return;
+        if (!activeUser) return;
         
         const name = safeGetVal('profileName').trim();
         const pin = safeGetVal('profilePin').trim();
         
-        if(!name || pin.length !== 4) return alert("Please provide valid Name and 4-digit PIN.");
+        if (!name || pin.length !== 4) return alert("Please provide valid Name and 4-digit PIN.");
         
         activeUser.name = name;
         activeUser.pin = pin;
         localStorage.setItem('ecoActiveUser', JSON.stringify(activeUser));
         
         let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-        if(users[activeUser.id]) {
+        if (users[activeUser.id]) {
             users[activeUser.id].name = name;
             users[activeUser.id].pin = pin;
             localStorage.setItem('ecoUsers', JSON.stringify(users));
         }
         
         const msgEl = document.getElementById('profileMsg');
-        if(msgEl) {
+        if (msgEl) {
             msgEl.classList.remove('hidden');
             msgEl.innerText = "Profile updated successfully!";
         }
         updateGreeting(name);
-        setTimeout(() => { if(msgEl) msgEl.innerText = ''; }, 3000);
-    } catch(e) { console.error(e); }
+        setTimeout(() => { if (msgEl) msgEl.innerText = ''; }, 3000);
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function logout() {
     try {
         localStorage.removeItem('ecoActiveUser');
         location.reload();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function showMainApp(user) {
     try {
         const authSec = document.getElementById('authSection');
-        if(authSec) authSec.classList.add('hidden');
+        if (authSec) authSec.classList.add('hidden');
         
         const mainAppSec = document.getElementById('mainAppSection');
-        if(mainAppSec) mainAppSec.classList.remove('hidden');
+        if (mainAppSec) mainAppSec.classList.remove('hidden');
         
-        if(window.innerWidth <= 768) {
+        if (window.innerWidth <= 768) {
             const nav = document.querySelector('.features-nav');
-            if(nav) nav.style.display = 'flex';
+            if (nav) nav.style.display = 'flex';
         } else {
             const logoutBox = document.getElementById('logoutBox');
-            if(logoutBox) logoutBox.classList.remove('hidden');
+            if (logoutBox) logoutBox.classList.remove('hidden');
         }
 
         updateGreeting(user.name);
         loadProfileFields(user);
         initCharts();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function updateGreeting(name) {
     try {
         const hour = new Date().getHours();
         let category = 'morning', timeG = 'Good Morning', icon = '☀️';
-        if(hour >= 12 && hour < 17) { category = 'afternoon'; timeG = 'Good Afternoon'; icon = '🌤️'; }
-        else if(hour >= 17) { category = 'evening'; timeG = 'Good Evening'; icon = '🌙'; }
+        if (hour >= 12 && hour < 17) { category = 'afternoon'; timeG = 'Good Afternoon'; icon = '🌤️'; }
+        else if (hour >= 17) { category = 'evening'; timeG = 'Good Evening'; icon = '🌙'; }
         
         const pool = greetingsDB[category];
         const randomMotivation = pool[Math.floor(Math.random() * pool.length)];
         
         safeSetHTML('userGreeting', `${timeG}, ${name}! <span id="timeIcon">${icon}</span>`);
         safeSetHTML('dailyMotivation', randomMotivation);
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function showFeature(featureId, btnElement) {
@@ -527,7 +619,7 @@ function showFeature(featureId, btnElement) {
         document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
         
-        if(btnElement) btnElement.classList.add('active');
+        if (btnElement) btnElement.classList.add('active');
         
         document.querySelectorAll('.feature-content').forEach(fc => {
             fc.classList.add('hidden');
@@ -535,41 +627,40 @@ function showFeature(featureId, btnElement) {
         });
         
         const targetSection = document.getElementById(featureId);
-        if(targetSection) {
+        if (targetSection) {
             targetSection.classList.remove('hidden');
             targetSection.classList.add('active-feature');
         }
         
-        if(featureId === 'appliances' && pieChartInstance) pieChartInstance.update();
-        if(featureId === 'dashboard' && barChartInstance) barChartInstance.update();
-        if(featureId === 'audit' && auditHistoryChartInstance) auditHistoryChartInstance.update();
-        if(featureId === 'appliances' && applianceTrendChartInstance) applianceTrendChartInstance.update();
-    } catch(e) { console.error("Navigation error:", e); }
+        if (featureId === 'appliances' && pieChartInstance) pieChartInstance.update();
+        if (featureId === 'dashboard' && barChartInstance) barChartInstance.update();
+        if (featureId === 'audit' && auditHistoryChartInstance) auditHistoryChartInstance.update();
+        if (featureId === 'appliances' && applianceTrendChartInstance) applianceTrendChartInstance.update();
+    } catch(e) { 
+        console.error("Navigation error:", e); 
+    }
 }
 
 function goToPaymentTab() {
     const items = document.querySelectorAll('.nav-item');
-    for(let item of items) {
-        if(item.getAttribute('onclick').includes('payment')) {
+    for (let item of items) {
+        if (item.getAttribute('onclick') && item.getAttribute('onclick').includes('payment')) {
             showFeature('payment', item);
             break;
         }
     }
 }
 
-// ------------------------------------
-// SMART IOT DUMMY
-// ------------------------------------
+// IoT Device Toggle
 async function toggleIoTDevice(deviceName, checkboxEl) {
     const state = checkboxEl.checked;
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    if(!activeUser) return;
+    if (!activeUser) return;
     
-    // Sync to memory
     let users = JSON.parse(localStorage.getItem('ecoUsers')) || {};
-    if(users[activeUser.id] && users[activeUser.id].appliances) {
+    if (users[activeUser.id] && users[activeUser.id].appliances) {
         let appIndex = users[activeUser.id].appliances.findIndex(a => a.name === deviceName);
-        if(appIndex !== -1) {
+        if (appIndex !== -1) {
             users[activeUser.id].appliances[appIndex].state = state;
             localStorage.setItem('ecoUsers', JSON.stringify(users));
         }
@@ -577,48 +668,38 @@ async function toggleIoTDevice(deviceName, checkboxEl) {
     
     try {
         await fetch('/api/iot/toggle', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: activeUser.id, name: activeUser.name, deviceName, state })
         });
     } catch(e) {}
 }
 
-// ------------------------------------
-// RAZORPAY-THEMED PAYMENT GATEWAY
-// ------------------------------------
-let pendingPaymentApp = 'UPI';
+// ===================================================================
+// BILL PAYMENT & INVOICE PDF GENERATION
+// ===================================================================
 
 function openPaymentModal() {
     const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-    if(!activeUser || !activeUser.appliances) return alert("Add appliances to calculate your load first!");
+    if (!activeUser || !activeUser.appliances) return alert("Add appliances to calculate your load first!");
     
     let totalLoad = 0;
     activeUser.appliances.forEach(a => totalLoad += parseFloat(a.monthlyCost || 0));
     
-    if(totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed at this moment.");
+    if (totalLoad === 0) return alert("Your estimated bill is ₹0. No payment needed at this moment.");
     
     safeSetText('payModalAmount', `₹${totalLoad.toFixed(2)}`);
     
     switchRzpTab('upi');
     cancelPinPrompt();
     const statusScreen = document.getElementById('rzpStatusScreen');
-    if(statusScreen) statusScreen.classList.add('hidden');
+    if (statusScreen) statusScreen.classList.add('hidden');
     const invTemplate = document.getElementById('rzpInvoiceTemplate');
-    if(invTemplate) invTemplate.classList.add('hidden');
+    if (invTemplate) invTemplate.classList.add('hidden');
     const invBtns = document.getElementById('invoiceActionButtons');
-    if(invBtns) invBtns.classList.add('hidden');
+    if (invBtns) invBtns.classList.add('hidden');
 
-    closeAllPopups(); // Ensure a clean slate
-    const popup = document.getElementById('paymentModal');
-    const overlay = document.getElementById('popupOverlay');
-    if(popup && overlay) {
-        popup.classList.remove('hidden');
-        overlay.classList.remove('hidden');
-    }
-}
-
-function closePaymentModal() {
-    closeAllPopups();
+    openPopup('paymentModal');
 }
 
 function switchRzpTab(tabName) {
@@ -626,30 +707,30 @@ function switchRzpTab(tabName) {
     document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
     cancelPinPrompt();
     const statusScreen = document.getElementById('rzpStatusScreen');
-    if(statusScreen) statusScreen.classList.add('hidden');
+    if (statusScreen) statusScreen.classList.add('hidden');
 
-    if(tabName === 'upi') {
+    if (tabName === 'upi') {
         const nav = document.getElementById('rzpNavUpi');
         const tab = document.getElementById('rzpTabUpi');
-        if(nav) nav.classList.add('active');
-        if(tab) tab.classList.remove('hidden');
-    } else if(tabName === 'card') {
+        if (nav) nav.classList.add('active');
+        if (tab) tab.classList.remove('hidden');
+    } else if (tabName === 'card') {
         const nav = document.getElementById('rzpNavCard');
         const tab = document.getElementById('rzpTabCard');
-        if(nav) nav.classList.add('active');
-        if(tab) tab.classList.remove('hidden');
-    } else if(tabName === 'net') {
+        if (nav) nav.classList.add('active');
+        if (tab) tab.classList.remove('hidden');
+    } else if (tabName === 'net') {
         const nav = document.getElementById('rzpNavNet');
         const tab = document.getElementById('rzpTabNet');
-        if(nav) nav.classList.add('active');
-        if(tab) tab.classList.remove('hidden');
+        if (nav) nav.classList.add('active');
+        if (tab) tab.classList.remove('hidden');
     }
 }
 
 function triggerPinPrompt(appName) {
-    if(appName === 'UPI ID') {
+    if (appName === 'UPI ID') {
         const upiVal = safeGetVal('customUpiId');
-        if(!upiVal || !upiVal.includes('@')) return alert("Enter valid UPI ID (e.g. name@bank)");
+        if (!upiVal || !upiVal.includes('@')) return alert("Enter valid UPI ID (e.g. name@bank)");
         pendingPaymentApp = upiVal;
     } else {
         pendingPaymentApp = appName;
@@ -659,42 +740,42 @@ function triggerPinPrompt(appName) {
     safeSetText('pinPromptTitle', `Authorize via ${pendingPaymentApp}`);
     safeSetVal('rzpPinInput', '');
     const pinBox = document.getElementById('rzpPinPrompt');
-    if(pinBox) pinBox.classList.remove('hidden');
+    if (pinBox) pinBox.classList.remove('hidden');
 }
 
 function triggerCardOtpPrompt() {
     const cardNum = safeGetVal('rzpCardNumber');
     const cvv = safeGetVal('rzpCardCvv');
-    if(!cardNum || !cvv) return alert("Please fill Card Number and CVV completely.");
+    if (!cardNum || !cvv) return alert("Please fill Card Number and CVV completely.");
 
     pendingPaymentApp = 'Card Payment';
     document.querySelectorAll('.rzp-tab-pane').forEach(pane => pane.classList.add('hidden'));
     safeSetText('pinPromptTitle', "Enter 3D-Secure Bank OTP");
     safeSetVal('rzpPinInput', '');
     const pinBox = document.getElementById('rzpPinPrompt');
-    if(pinBox) pinBox.classList.remove('hidden');
+    if (pinBox) pinBox.classList.remove('hidden');
 }
 
 function cancelPinPrompt() {
     const pinBox = document.getElementById('rzpPinPrompt');
-    if(pinBox) pinBox.classList.add('hidden');
+    if (pinBox) pinBox.classList.add('hidden');
     const activeTab = document.querySelector('.rzp-nav li.active');
-    if(activeTab) {
-        if(activeTab.id === 'rzpNavUpi') { const t = document.getElementById('rzpTabUpi'); if(t) t.classList.remove('hidden'); }
-        else if(activeTab.id === 'rzpNavCard') { const t = document.getElementById('rzpTabCard'); if(t) t.classList.remove('hidden'); }
-        else if(activeTab.id === 'rzpNavNet') { const t = document.getElementById('rzpTabNet'); if(t) t.classList.remove('hidden'); }
+    if (activeTab) {
+        if (activeTab.id === 'rzpNavUpi') { const t = document.getElementById('rzpTabUpi'); if (t) t.classList.remove('hidden'); }
+        else if (activeTab.id === 'rzpNavCard') { const t = document.getElementById('rzpTabCard'); if (t) t.classList.remove('hidden'); }
+        else if (activeTab.id === 'rzpNavNet') { const t = document.getElementById('rzpTabNet'); if (t) t.classList.remove('hidden'); }
     }
 }
 
 function executeMockPayment() {
     const pin = safeGetVal('rzpPinInput');
-    if(!pin || pin.length < 4) return alert("Please enter valid 4 to 6 digit security PIN / OTP.");
+    if (!pin || pin.length < 4) return alert("Please enter valid 4 to 6 digit security PIN / OTP.");
 
     const pinBox = document.getElementById('rzpPinPrompt');
-    if(pinBox) pinBox.classList.add('hidden');
+    if (pinBox) pinBox.classList.add('hidden');
     
     const statusScreen = document.getElementById('rzpStatusScreen');
-    if(statusScreen) statusScreen.classList.remove('hidden');
+    if (statusScreen) statusScreen.classList.remove('hidden');
 
     const icon = document.getElementById('rzpStatusIcon');
     const heading = document.getElementById('rzpStatusHeading');
@@ -702,21 +783,20 @@ function executeMockPayment() {
     const invoiceTemplate = document.getElementById('rzpInvoiceTemplate');
     const actionBtns = document.getElementById('invoiceActionButtons');
 
-    if(icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2";
-    if(heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
-    if(sub) sub.innerText = "Connecting with Bank Gateway...";
-    if(invoiceTemplate) invoiceTemplate.classList.add('hidden');
-    if(actionBtns) actionBtns.classList.add('hidden');
+    if (icon) icon.className = "fa-solid fa-circle-notch fa-spin fa-3x text-orange mb-2";
+    if (heading) heading.innerText = `Authorizing via ${pendingPaymentApp}...`;
+    if (sub) sub.innerText = "Connecting with Bank Gateway...";
+    if (invoiceTemplate) invoiceTemplate.classList.add('hidden');
+    if (actionBtns) actionBtns.classList.add('hidden');
 
     setTimeout(() => {
-        if(heading) heading.innerText = "Verifying Credentials...";
+        if (heading) heading.innerText = "Verifying Credentials...";
         
         setTimeout(() => {
-            if(icon) icon.className = "fa-solid fa-circle-check fa-3x green-text mb-2 scale-in";
-            if(heading) heading.innerText = "Payment Successful!";
-            if(sub) sub.innerText = "Here is your official payment receipt:";
+            if (icon) icon.className = "fa-solid fa-circle-check fa-3x green-text mb-2 scale-in";
+            if (heading) heading.innerText = "Payment Successful!";
+            if (sub) sub.innerText = "Here is your official payment receipt:";
             
-            // Populate invoice details dynamically
             const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser')) || { id: "1001", name: "Valued Consumer" };
             const amountVal = safeGetText('payModalAmount');
             const receiptNo = "EMCS-" + Math.floor(100000 + Math.random() * 900000);
@@ -730,18 +810,20 @@ function executeMockPayment() {
             safeSetText('invBaseAmount', amountVal);
             safeSetText('invTotalAmount', amountVal);
 
-            if(invoiceTemplate) invoiceTemplate.classList.remove('hidden');
-            if(actionBtns) {
-                actionBtns.classList.remove('hidden');
-            }
+            if (invoiceTemplate) invoiceTemplate.classList.remove('hidden');
+            if (actionBtns) actionBtns.classList.remove('hidden');
         }, 1500);
     }, 1200);
 }
 
-// REAL CLIENT-SIDE INVOICE PDF GENERATION
 function downloadInvoicePDF() {
     const invoiceElement = document.getElementById('rzpInvoiceTemplate');
-    if(!invoiceElement) return alert("Invoice details not found.");
+    if (!invoiceElement) return alert("Invoice details not found.");
+
+    if (typeof html2pdf === 'undefined') {
+        window.print();
+        return;
+    }
 
     const opt = {
         margin:       10,
@@ -754,57 +836,290 @@ function downloadInvoicePDF() {
     html2pdf().set(opt).from(invoiceElement).save();
 }
 
-// ------------------------------------
-// AI POPUP MODAL BEHAVIOR (CRASH-PROOF)
-// ------------------------------------
-function toggleAIPopup() {
-    try {
-        const popup = document.getElementById('aiChatPopup');
-        const overlay = document.getElementById('popupOverlay');
-        
-        if (popup && overlay) {
-            if (popup.classList.contains('hidden')) {
-                closeAllPopups(); // Ensure everything else is closed first
-                popup.classList.remove('hidden');
-                overlay.classList.remove('hidden');
-            } else {
-                closeAllPopups();
-            }
-        }
-    } catch(e) { console.error("AI Popup Error:", e); }
+// ===================================================================
+// AI TEXT & CAMERA VISION (BUG-FREE PARSER + FAIL-SAFE)
+// ===================================================================
+
+let videoStream = null;
+
+// HACKATHON: IF API FAILS OR IS MISSING, WE USE SMART BACKUP MODE
+const GEMINI_API_KEY = "YOUR_API_KEY_HERE"; // Leave empty or replace for real API
+
+function openAIPopup() {
+    openPopup('aiChatPopup');
 }
 
+// ---- CAMERA LOGIC ----
+async function startCamera() {
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('cameraVideo');
+    const suggestions = document.getElementById('chatSuggestions');
+    
+    try {
+        videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).catch(e => {
+            // Fallback for laptops
+            return navigator.mediaDevices.getUserMedia({ video: true });
+        });
+        
+        video.srcObject = videoStream;
+        cameraContainer.classList.remove('hidden');
+        if(suggestions) suggestions.style.display = 'none';
+    } catch (err) {
+        alert("Camera access denied or not available!");
+        console.error(err);
+    }
+}
+
+function closeCamera() {
+    if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+    }
+    const camCont = document.getElementById('cameraContainer');
+    if(camCont) camCont.classList.add('hidden');
+}
+
+async function captureAndAnalyze() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    const base64Image = canvas.toDataURL('image/jpeg').split(',')[1]; 
+    closeCamera(); 
+    
+    addMessageToChat('chatBox', 'user', '📸 *Scanned Appliance for Analysis*');
+    const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Processing image with EcoSpearks Vision...');
+    
+    await analyzeImageWithGemini(base64Image, loadingId);
+}
+
+async function analyzeImageWithGemini(base64Data, loadingId) {
+    // BACKUP MODE FALLBACK
+    if(!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_API_KEY_HERE") {
+        setTimeout(() => {
+            renderAIResponse(loadingId, "⚠️ **Offline Vision Backup:**\nBased on general appliance scans, this appears to be a high-wattage device (estimated 1500W - 2000W).\n\n**Energy Saving Tips:**\n* Ensure it is not left on standby mode.\n* Service the appliance regularly to maintain electrical efficiency.");
+        }, 1200);
+        return;
+    }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const payload = {
+        contents: [{
+            parts: [
+                { text: "You are an expert electrical energy advisor. Look at this image. Identify the electrical appliance. Estimate its power consumption (Watts). Give 2 smart safety or energy-saving tips to lower the electricity bill for this item. Keep it concise." },
+                { inlineData: { mimeType: "image/jpeg", data: base64Data } }
+            ]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        if (data.candidates && data.candidates.length > 0) {
+            renderAIResponse(loadingId, data.candidates[0].content.parts[0].text);
+        } else {
+            renderAIResponse(loadingId, "⚠️ Could not analyze the image clearly. Please try again.");
+        }
+    } catch (err) {
+        console.error(err);
+        renderAIResponse(loadingId, "⚠️ Network Error. Falling back to offline estimation.\nThis looks like a standard home appliance. Unplug it after use to prevent vampire power loss!");
+    }
+}
+
+// ---- TEXT CHAT LOGIC ----
 function fillAndSend(text) {
     try {
         safeSetVal('aiInput', text);
         const suggs = document.getElementById('chatSuggestions');
-        if(suggs) suggs.style.display = 'none';
+        if (suggs) suggs.style.display = 'none';
         sendPopupChatMessage();
     } catch(e) { console.error(e); }
 }
 
-// --- APPLIANCES & AUTOMATIC AUDIT ---
+async function sendPopupChatMessage() {
+    try {
+        const msg = safeGetVal('aiInput').trim();
+        if (!msg) return;
+        
+        addMessageToChat('chatBox', 'user', msg);
+        safeSetVal('aiInput', '');
+        const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
+        
+        await processAIRequest(msg, loadingId);
+    } catch(e) { console.error("Popup Chat Error:", e); }
+}
+
+async function sendTabChatMessage() {
+    try {
+        const msg = safeGetVal('tabChatInput').trim();
+        if (!msg) return;
+        
+        addMessageToChat('tabChatBox', 'user', msg);
+        safeSetVal('tabChatInput', '');
+        const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
+        
+        await processAIRequest(msg, loadingId);
+    } catch(e) { console.error("Tab Chat Error:", e); }
+}
+
+async function processAIRequest(msg, loadingId) {
+    try {
+        const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
+        const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
+        
+        const payload = { prompt: msg, language: currentLang, userId: userId };
+        
+        const response = await fetch('/api/chat', {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) throw new Error("Backend Offline");
+        
+        const data = await response.json();
+        if (data.response) {
+            renderAIResponse(loadingId, data.response);
+        } else {
+            throw new Error("Empty Response");
+        }
+    } catch(err) {
+        console.warn("AI Backend unreachable. Using Fail-Safe Smart Responses.");
+        
+        setTimeout(() => {
+            let fallbackMsg = "I am running in offline demonstration mode. To save electricity, turn off standby appliances and use natural daylight!";
+            let m = msg.toLowerCase();
+            if (m.includes("bill") || m.includes("lower")) {
+                fallbackMsg = "To lower your bill, clean your AC filters regularly and unplug vampire devices. This can reduce your electricity cost by up to 15%!";
+            } else if (m.includes("mcb") || m.includes("trip")) {
+                fallbackMsg = "Frequent MCB tripping indicates an electrical overload or a short circuit. Turn off high-wattage devices like Geysers or AC before resetting it safely.";
+            } else if (m.includes("watt") || m.includes("amp") || m.includes("basic")) {
+                fallbackMsg = "Watts (W) represent power consumption, Volts (V) is the pressure from the grid, and Amps (A) measure the electrical current flow.";
+            } else if (m.includes("hello") || m.includes("hi")) {
+                fallbackMsg = "Hello! I am EcoSpearks Ai. I can analyze your appliance consumption and help you optimize energy usage!";
+            }
+            
+            renderAIResponse(loadingId, fallbackMsg);
+        }, 600);
+    }
+}
+
+// 100% FIXED PARSER - DOES NOT SPLIT LETTERS
+function renderAIResponse(loadingId, rawText) {
+    try {
+        if (!rawText) return;
+        
+        let htmlText = rawText
+            .replace(/\r\n/g, '<br>')
+            .replace(/\n/g, '<br>')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+            .replace(/<br>\s*[\*\-]\s+/g, '<br>• ');
+
+        // Save raw clean text into registry to avoid speech quote breaks
+        window.aiTtsRegistry[loadingId] = rawText.replace(/[\r\n]+/g, ' ').replace(/["']/g, '');
+
+        const ttsHtml = `<div class="tts-controls mt-2">
+            <button type="button" class="tts-btn hover-pop" onclick="speakAiMessage('${loadingId}')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+            <button type="button" class="tts-btn hover-pop" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i> Stop</button>
+        </div>`;
+
+        safeSetHTML(loadingId, htmlText + ttsHtml);
+    } catch(e) { 
+        console.error("Render Error:", e); 
+    }
+}
+
+function speakAiMessage(id) {
+    const text = window.aiTtsRegistry[id] || '';
+    if (text) speakText(text);
+}
+
+function speakText(text) {
+    try {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            const msg = new SpeechSynthesisUtterance(text);
+            
+            const voices = window.speechSynthesis.getVoices();
+            const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.name.includes('Hindi'));
+            if (hindiVoice) msg.voice = hindiVoice;
+            
+            msg.rate = 1.0; 
+            msg.pitch = 1.0;
+            window.speechSynthesis.speak(msg);
+        } else {
+            alert("Text-to-speech is not supported in this browser.");
+        }
+    } catch(e) { 
+        console.error(e); 
+    }
+}
+
+function stopSpeak() {
+    try {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    } catch(e) { 
+        console.error(e); 
+    }
+}
+
+function addMessageToChat(boxId, sender, text) {
+    try {
+        const chatBox = document.getElementById(boxId);
+        if (!chatBox) return '';
+        const id = 'msg-' + Date.now();
+        chatBox.innerHTML += `<div id="${id}" class="message ${sender}-message fade-in">${text}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        return id;
+    } catch(e) { 
+        console.error(e); 
+        return ''; 
+    }
+}
+
+function handleChatEnter(e) { if (e.key === 'Enter') sendPopupChatMessage(); }
+function handleTabChatEnter(e) { if (e.key === 'Enter') sendTabChatMessage(); }
+
+// ===================================================================
+// APPLIANCES & AUDIT CALCULATION
+// ===================================================================
+
 function loadAppliances() {
     try {
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        if(activeUser && activeUser.appliances) {
+        if (activeUser && activeUser.appliances) {
             userAppliances = activeUser.appliances;
             renderAppliances();
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function saveAppliances() {
     try {
         const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        if(activeUser) {
+        if (activeUser) {
             activeUser.appliances = userAppliances;
             localStorage.setItem('ecoActiveUser', JSON.stringify(activeUser));
             let users = JSON.parse(localStorage.getItem('ecoUsers'));
             users[activeUser.id] = activeUser;
             localStorage.setItem('ecoUsers', JSON.stringify(users));
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function addAppliance() {
@@ -813,7 +1128,7 @@ function addAppliance() {
         const power = parseFloat(safeGetVal('appPower'));
         const hours = parseFloat(safeGetVal('appHours'));
         
-        if(!name || !power || !hours) return alert("Please fill all appliance fields.");
+        if (!name || !power || !hours) return alert("Please fill all appliance fields.");
         
         const monthlyKwh = ((power * hours * 30) / 1000).toFixed(2);
         const monthlyCost = (monthlyKwh * 8).toFixed(2); 
@@ -823,7 +1138,9 @@ function addAppliance() {
         
         saveAppliances();
         renderAppliances();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function deleteAppliance(id) {
@@ -831,18 +1148,20 @@ function deleteAppliance(id) {
         userAppliances = userAppliances.filter(app => app.id !== id);
         saveAppliances();
         renderAppliances();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function renderAppliances() {
     try {
         const tbody = document.getElementById('applianceList');
-        if(!tbody) return;
+        if (!tbody) return;
         
         tbody.innerHTML = '';
         let totalLoad = 0;
         
-        if(userAppliances.length === 0) {
+        if (userAppliances.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="text-center">No appliances added yet.</td></tr>';
         } else {
             userAppliances.forEach(app => {
@@ -875,24 +1194,27 @@ function renderAppliances() {
         safeSetText('vampireDisplay', `₹${vampireLoss}`);
         
         let ecoScore = 100 - (totalLoad / 10);
-        if(ecoScore > 100) ecoScore = 100; if(ecoScore < 10) ecoScore = 10;
-        if(totalLoad === 0) ecoScore = 85;
+        if (ecoScore > 100) ecoScore = 100; if (ecoScore < 10) ecoScore = 10;
+        if (totalLoad === 0) ecoScore = 85;
         safeSetText('ecoScoreDisplay', `${Math.floor(ecoScore)}%`);
 
         updateApplianceGraph();
         updateAutomaticAudit(totalLoad);
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
-// --- Dynamic Appliance Graphs ---
 function switchApplianceGraph(type, btnEl) {
     try {
         const parent = btnEl.closest('.graph-toggles');
-        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        if(btnEl) btnEl.classList.add('active');
+        if (parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
         applianceChartType = type;
         updateApplianceGraph();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function updateApplianceGraph() {
@@ -902,19 +1224,17 @@ function updateApplianceGraph() {
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
         let labels = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'];
-        
         let datasets = [];
-        if(userAppliances.length === 0) {
+
+        if (userAppliances.length === 0) {
             datasets.push({ label: 'No Appliances', data: [0,0,0,0,0,0,0], backgroundColor: '#ccc' });
         } else {
             userAppliances.forEach((app, index) => {
                 let baseDaily = (parseFloat(app.monthlyKwh) / 30);
-                // Creating slight dummy variations for the past 7 days
                 let data = [
                     baseDaily * 0.9, baseDaily * 1.1, baseDaily * 0.8, 
                     baseDaily * 1.0, baseDaily * 1.2, baseDaily * 0.95, baseDaily
                 ];
-                
                 let color = CHART_COLORS[index % CHART_COLORS.length];
                 
                 let dataset = {
@@ -925,11 +1245,11 @@ function updateApplianceGraph() {
                     tension: 0.4
                 };
 
-                if(applianceChartType === 'bar') {
+                if (applianceChartType === 'bar') {
                     dataset.backgroundColor = color + 'CC';
                     dataset.borderRadius = 4;
                 } else {
-                    dataset.backgroundColor = color + '33'; // transparent fill
+                    dataset.backgroundColor = color + '33';
                     dataset.fill = true;
                 }
                 datasets.push(dataset);
@@ -937,54 +1257,57 @@ function updateApplianceGraph() {
         }
 
         const chartEl = document.getElementById('applianceHistoryChart');
-        if(chartEl && typeof Chart !== 'undefined') {
-            if(applianceTrendChartInstance) {
-                applianceTrendChartInstance.destroy();
-            }
+        if (chartEl && typeof Chart !== 'undefined') {
+            if (applianceTrendChartInstance) applianceTrendChartInstance.destroy();
             
             applianceTrendChartInstance = new Chart(chartEl.getContext('2d'), {
                 type: applianceChartType,
                 data: { labels: labels, datasets: datasets },
                 options: { 
-                    responsive: true, maintainAspectRatio: false, 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
                     scales: { 
-                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}, title: {display:true, text:'kWh / Day'} }, 
-                        x: { grid: {display: false}, ticks: {color: textColor}}
+                        y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor }, title: { display: true, text: 'kWh / Day' } }, 
+                        x: { grid: { display: false }, ticks: { color: textColor } }
                     }, 
-                    plugins: { legend: { position: 'bottom', labels: {color: textColor} } } 
+                    plugins: { legend: { position: 'bottom', labels: { color: textColor } } } 
                 }
             });
         }
 
-        // Keep the Pie chart updated too
         const pieEl = document.getElementById('pieChart');
-        if(pieEl && typeof Chart !== 'undefined') {
+        if (pieEl && typeof Chart !== 'undefined') {
             let pieLabels = userAppliances.length > 0 ? userAppliances.map(a => a.name) : ['No Data'];
             let pieData = userAppliances.length > 0 ? userAppliances.map(a => a.monthlyKwh) : [100];
             let pieColors = userAppliances.length > 0 ? CHART_COLORS.slice(0, userAppliances.length) : ['#f5f5f5'];
 
-            if(pieChartInstance) pieChartInstance.destroy();
+            if (pieChartInstance) pieChartInstance.destroy();
             pieChartInstance = new Chart(pieEl.getContext('2d'), {
                 type: 'doughnut',
                 data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: pieColors }] },
                 options: { 
-                    responsive: true, maintainAspectRatio: false, cutout: '75%',
-                    plugins: { legend: { position: 'right', labels: {color: textColor, font: {family: 'Poppins', size: 11}, boxWidth: 12} } } 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '75%',
+                    plugins: { legend: { position: 'right', labels: { color: textColor, font: { family: 'Poppins', size: 11 }, boxWidth: 12 } } } 
                 }
             });
         }
-    } catch (e) { console.error("Graph Update Error:", e); }
+    } catch (e) { 
+        console.error("Graph Update Error:", e); 
+    }
 }
 
-// --- Automatic Audit Insights & History Graph ---
 function switchAuditGraph(type, btnEl) {
     try {
         const parent = btnEl.closest('.graph-toggles');
-        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        if(btnEl) btnEl.classList.add('active');
+        if (parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
         auditChartType = type;
-        if(window.lastTotalLoad) updateAutomaticAudit(window.lastTotalLoad);
-    } catch(e) { console.error(e); }
+        if (window.lastTotalLoad) updateAutomaticAudit(window.lastTotalLoad);
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function updateAutomaticAudit(totalLoad) {
@@ -1003,21 +1326,20 @@ function updateAutomaticAudit(totalLoad) {
         
         window.lastAudit = { units: totalLoad.toFixed(2), rate, bill, savings, carbon };
 
-        // Dummy 6 Month History
         let baseBill = bill > 0 ? bill : 1500;
         let baseKwh = totalLoad > 0 ? totalLoad : 180;
         
-        let histBills = [baseBill*1.1, baseBill*0.9, baseBill*1.2, baseBill*0.85, baseBill*1.05, bill];
-        let histKwh = [baseKwh*1.1, baseKwh*0.9, baseKwh*1.2, baseKwh*0.85, baseKwh*1.05, totalLoad];
+        let histBills = [baseBill * 1.1, baseBill * 0.9, baseBill * 1.2, baseBill * 0.85, baseBill * 1.05, bill];
+        let histKwh = [baseKwh * 1.1, baseKwh * 0.9, baseKwh * 1.2, baseKwh * 0.85, baseKwh * 1.05, totalLoad];
         let months = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct (Now)'];
 
         const ctxHist = document.getElementById('auditHistoryChart');
-        if(ctxHist && typeof Chart !== 'undefined') {
+        if (ctxHist && typeof Chart !== 'undefined') {
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             const textColor = isDark ? '#E0E0E0' : '#888888';
             const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
-            if(auditHistoryChartInstance) auditHistoryChartInstance.destroy();
+            if (auditHistoryChartInstance) auditHistoryChartInstance.destroy();
             
             auditHistoryChartInstance = new Chart(ctxHist.getContext('2d'), {
                 type: auditChartType,
@@ -1035,21 +1357,21 @@ function updateAutomaticAudit(totalLoad) {
                     }]
                 },
                 options: { 
-                    responsive: true, maintainAspectRatio: false, 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
                     scales: { 
-                        y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor} }, 
-                        x: { grid: {display: false}, ticks: {color: textColor} }
+                        y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, 
+                        x: { grid: { display: false }, ticks: { color: textColor } }
                     },
                     plugins: { legend: { display: false } } 
                 }
             });
         }
 
-        // Populate Table
         const histTable = document.getElementById('sixMonthTableBody');
-        if(histTable) {
+        if (histTable) {
             histTable.innerHTML = '';
-            for(let i=0; i<6; i++) {
+            for (let i = 0; i < 6; i++) {
                 let dateDummy = `${10 + i} ${months[i]} 2026`;
                 let statusBadge = i === 5 && bill > 0 ? `<span class="badge light-red-bg">Pending</span>` : `<span class="badge light-green-bg">Paid</span>`;
                 
@@ -1061,36 +1383,18 @@ function updateAutomaticAudit(totalLoad) {
                 </tr>`;
             }
         }
-    } catch (e) { console.error("Auto Audit Error:", e); }
+    } catch (e) { 
+        console.error("Auto Audit Error:", e); 
+    }
 }
 
-function downloadReport() { 
-    try {
-        if(!window.lastAudit) return alert("Add appliances to generate an audit first!");
-        const { units, rate, bill, savings, carbon } = window.lastAudit;
-        
-        const csvContent = "data:text/csv;charset=utf-8,"
-            + "EMCS - AUTOMATED ENERGY AUDIT REPORT\n\n"
-            + `Total Active Units Consumed,${units} kWh\n`
-            + `Estimated Tariff Rate,₹${rate} per unit\n`
-            + `Total Estimated Bill,₹${bill.toFixed(2)}\n`
-            + `Estimated Carbon Footprint,${carbon} kg CO2\n`
-            + `Target Optimized Savings,₹${savings.toFixed(2)}\n`;
-
-        const link = document.createElement("a");
-        link.setAttribute("href", encodeURI(csvContent));
-        link.setAttribute("download", `EMCS_Audit_Report.csv`);
-        document.body.appendChild(link); link.click(); document.body.removeChild(link);
-    } catch(e) { console.error(e); }
-}
-
-// --- General Calculators ---
+// Calculators & Simulator
 function runCalculator() {
     try {
         const w = parseFloat(safeGetVal('calcWatts'));
         const h = parseFloat(safeGetVal('calcHours'));
         const r = parseFloat(safeGetVal('calcRate'));
-        if(!w || !h || !r) return;
+        if (!w || !h || !r) return;
         
         const d = (w * h) / 1000;
         const m = d * 30;
@@ -1099,7 +1403,9 @@ function runCalculator() {
         safeSetText('resDailyKwh', `${d.toFixed(2)} kWh`);
         safeSetText('resMonthlyKwh', `${m.toFixed(2)} kWh`);
         safeSetText('resMonthlyCost', `₹${c.toFixed(2)}`);
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function runOhmCalculator() {
@@ -1112,22 +1418,46 @@ function runOhmCalculator() {
         const i = parseFloat(iStr);
         const r = parseFloat(rStr);
         
-        if(vStr && rStr && !iStr) { safeSetText('ohmResult', `Current (I) = ${(v/r).toFixed(2)} A`); }
-        else if(vStr && iStr && !rStr) { safeSetText('ohmResult', `Resistance (R) = ${(v/i).toFixed(2)} Ω`); }
-        else if(iStr && rStr && !vStr) { safeSetText('ohmResult', `Voltage (V) = ${(i*r).toFixed(2)} V`); }
+        if (vStr && rStr && !iStr) { safeSetText('ohmResult', `Current (I) = ${(v/r).toFixed(2)} A`); }
+        else if (vStr && iStr && !rStr) { safeSetText('ohmResult', `Resistance (R) = ${(v/i).toFixed(2)} Ω`); }
+        else if (iStr && rStr && !vStr) { safeSetText('ohmResult', `Voltage (V) = ${(i*r).toFixed(2)} V`); }
         else { safeSetText('ohmResult', "Leave exactly ONE field empty!"); }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
-// --- Dashboard General Graph ---
+function calculateSimulator() {
+    try {
+        const units = parseFloat(safeGetVal('simUserUnits')) || 300;
+        const rate = parseFloat(safeGetVal('simUserRate')) || 8;
+        const pct = parseFloat(safeGetVal('simSlider')) || 15;
+        
+        safeSetText('simPctVal', pct);
+        const savedUnits = (units * (pct / 100));
+        const savedMoney = (savedUnits * rate).toFixed(0); 
+        
+        safeSetText('simUnitsResult', `${savedUnits.toFixed(1)} kWh`);
+        safeSetText('simSavingsResult', `₹ ${savedMoney}`);
+    } catch(e) { 
+        console.error(e); 
+    }
+}
+
+function updateSim() { 
+    calculateSimulator(); 
+}
+
 function switchGraphType(type, btnEl) {
     try {
         const parent = btnEl.closest('.graph-toggles');
-        if(parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        if(btnEl) btnEl.classList.add('active');
+        if (parent) parent.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
         chartType = type;
         updateManualChart();
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function initCharts() {
@@ -1141,35 +1471,37 @@ function updateChartColors() {
         const textColor = isDark ? '#E0E0E0' : '#888888';
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
         
-        if(barChartInstance) {
+        if (barChartInstance) {
             barChartInstance.options.scales.y.grid.color = gridColor;
             barChartInstance.options.scales.y.ticks.color = textColor;
             barChartInstance.options.scales.x.ticks.color = textColor;
             barChartInstance.update();
         }
-        if(pieChartInstance) {
+        if (pieChartInstance) {
             pieChartInstance.options.plugins.legend.labels.color = textColor;
             pieChartInstance.update();
         }
-        if(auditHistoryChartInstance) {
+        if (auditHistoryChartInstance) {
             auditHistoryChartInstance.options.scales.y.grid.color = gridColor;
             auditHistoryChartInstance.options.scales.y.ticks.color = textColor;
             auditHistoryChartInstance.options.scales.x.ticks.color = textColor;
             auditHistoryChartInstance.update();
         }
-        if(applianceTrendChartInstance) {
+        if (applianceTrendChartInstance) {
             applianceTrendChartInstance.options.scales.y.grid.color = gridColor;
             applianceTrendChartInstance.options.scales.y.ticks.color = textColor;
             applianceTrendChartInstance.options.scales.x.ticks.color = textColor;
             applianceTrendChartInstance.update();
         }
-        if(adminUserChartInstance) {
+        if (adminUserChartInstance) {
             adminUserChartInstance.options.scales.y.grid.color = gridColor;
             adminUserChartInstance.options.scales.y.ticks.color = textColor;
             adminUserChartInstance.options.scales.x.ticks.color = textColor;
             adminUserChartInstance.update();
         }
-    } catch(e) { console.error(e); }
+    } catch(e) { 
+        console.error(e); 
+    }
 }
 
 function updateManualChart() {
@@ -1184,9 +1516,9 @@ function updateManualChart() {
         const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
         const chartEl = document.getElementById('energyChart');
-        if(!chartEl || typeof Chart === 'undefined') return;
+        if (!chartEl || typeof Chart === 'undefined') return;
 
-        if(barChartInstance) barChartInstance.destroy();
+        if (barChartInstance) barChartInstance.destroy();
         
         barChartInstance = new Chart(chartEl.getContext('2d'), {
             type: chartType, 
@@ -1207,122 +1539,16 @@ function updateManualChart() {
                 }]
             },
             options: { 
-                responsive: true, maintainAspectRatio: false, 
+                responsive: true, 
+                maintainAspectRatio: false, 
                 scales: { 
-                    y: { beginAtZero: true, grid: {color: gridColor}, ticks: {color: textColor}}, 
-                    x: { grid: {display: false}, ticks: {color: textColor}}
+                    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, 
+                    x: { grid: { display: false }, ticks: { color: textColor } }
                 }, 
-                plugins: { legend: {display: false} } 
+                plugins: { legend: { display: false } } 
             }
         });
-    } catch(e) { console.error(e); }
-}
-
-// --- Text to Speech ---
-function speakText(text) {
-    try {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); 
-            const msg = new SpeechSynthesisUtterance(text);
-            
-            const voices = window.speechSynthesis.getVoices();
-            const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.name.includes('Hindi'));
-            if(hindiVoice) msg.voice = hindiVoice;
-            
-            msg.rate = 1.0; msg.pitch = 1.0;
-            window.speechSynthesis.speak(msg);
-        } else {
-            alert("Text-to-speech is not supported in this browser.");
-        }
-    } catch(e) { console.error(e); }
-}
-
-function stopSpeak() {
-    try {
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    } catch(e) { console.error(e); }
-}
-
-// --- AI Chat Logic (100% Crash-Proof) ---
-async function sendPopupChatMessage() {
-    try {
-        const msg = safeGetVal('aiInput').trim();
-        if(!msg) return;
-        
-        addMessageToChat('chatBox', 'user', msg);
-        safeSetVal('aiInput', '');
-        const loadingId = addMessageToChat('chatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
-        
-        await processAIRequest(msg, loadingId, 'chatBox');
-    } catch(e) { console.error("Popup Chat Error:", e); }
-}
-
-async function sendTabChatMessage() {
-    try {
-        const msg = safeGetVal('tabChatInput').trim();
-        if(!msg) return;
-        
-        addMessageToChat('tabChatBox', 'user', msg);
-        safeSetVal('tabChatInput', '');
-        const loadingId = addMessageToChat('tabChatBox', 'ai', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
-        
-        await processAIRequest(msg, loadingId, 'tabChatBox');
-    } catch(e) { console.error("Tab Chat Error:", e); }
-}
-
-async function processAIRequest(msg, loadingId, boxId) {
-    try {
-        const activeUser = JSON.parse(localStorage.getItem('ecoActiveUser'));
-        const userId = activeUser ? activeUser.id : 'guest_' + Math.random();
-        
-        const payload = { prompt: msg, language: currentLang, userId: userId };
-        if(window.tempAiContext) {
-            payload.customContext = window.tempAiContext;
-            window.tempAiContext = null; 
-        }
-        
-        const response = await fetch('/api/chat', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await response.json();
-        
-        if(response.ok && data.response) {
-            const rawText = data.response;
-            
-            // SUPER SAFE STRING PARSING (No Regex Newline crash)
-            const htmlText = rawText.split('\\n').join('<br>').replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.*?)\\*/g, '<em>$1</em>');
-            const ttsCleanText = rawText.replace(/"/g, "'").split('\\n').join(' ');
-            
-            const ttsHtml = `<div class="tts-controls mt-1">
-                <button type="button" class="tts-btn" onclick="speakText(\`${ttsCleanText}\`)"><i class="fa-solid fa-volume-high"></i> Listen</button>
-                <button type="button" class="tts-btn" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
-            </div>`;
-            
-            safeSetHTML(loadingId, htmlText + ttsHtml);
-        } else {
-            safeSetHTML(loadingId, `<span class="error-text">⚠️ Connection failed: ${data.error || 'Server error'}</span>`);
-        }
-    } catch(err) {
-        safeSetHTML(loadingId, `<span class="error-text">⚠️ Network Error. Cannot reach AI server.</span>`);
+    } catch(e) { 
+        console.error(e); 
     }
-}
-
-function addMessageToChat(boxId, sender, text) {
-    try {
-        const chatBox = document.getElementById(boxId);
-        if(!chatBox) return '';
-        const id = 'msg-' + Date.now();
-        chatBox.innerHTML += `<div id="${id}" class="message ${sender}-message fade-in">${text}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-        return id;
-    } catch(e) { console.error(e); return ''; }
-}
-
-function handleChatEnter(e) { if(e.key === 'Enter') sendPopupChatMessage(); }
-function handleTabChatEnter(e) { if(e.key === 'Enter') sendTabChatMessage(); }
-
-// This function is kept for legacy support if needed elsewhere
-function renderMarkdownToHTML(text) {
-    return text.split('\\n').join('<br>').replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>').replace(/\\*(.*?)\\*/g, '<em>$1</em>');
 }
