@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="style.css?v=25">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
     
@@ -152,7 +152,7 @@
             <div class="glass-card mb-2 slide-up">
                 <div class="flex-between mb-2">
                     <h3><i class="fa-solid fa-users-gear text-orange"></i> Manage Registered Users</h3>
-                    <button type="button" class="primary-btn sm-btn hover-pop" onclick="openAdminAddUserBox()">
+                    <button type="button" class="primary-btn sm-btn hover-pop" onclick="document.getElementById('adminAddUserBox').classList.toggle('hidden')">
                         <i class="fa-solid fa-user-plus"></i> Add New User
                     </button>
                 </div>
@@ -251,7 +251,6 @@
                         <p class="card-label" data-i18n="dashBill">Est. Monthly Cost</p>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <h2 id="dashBillDisplay" class="danger-text count-up">₹0.00</h2>
-                            <!-- Redirect to Payment Tab -->
                             <button type="button" class="primary-btn sm-btn hover-pop" style="padding:5px 12px; font-size:0.8rem; width:auto;" onclick="goToPaymentTab()"><i class="fa-solid fa-wallet"></i> Pay Bill</button>
                         </div>
                         <span class="badge light-red-bg mt-1">Based on active appliances</span>
@@ -281,7 +280,7 @@
                     <div class="clean-card slide-right">
                         <div class="flex-between mb-2">
                             <h3><i class="fa-solid fa-list-check text-orange"></i> Best Action First</h3>
-                            <button class="icon-btn hover-pop" type="button" onclick="openAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
+                            <button class="icon-btn hover-pop" type="button" onclick="toggleAIPopup()"><i class="fa-solid fa-robot"></i> Ask AI</button>
                         </div>
                         <div class="action-item hover-lift">
                             <div class="icon-box green-bg"><i class="fa-solid fa-fan"></i></div>
@@ -545,7 +544,7 @@
                 </div>
             </div>
             
-            <!-- DEDICATED AI ASSISTANT TAB (EcoSpearks Ai) -->
+            <!-- DEDICATED AI ASSISTANT TAB -->
             <div id="assistant" class="feature-content hidden">
                 <div class="clean-card chat-panel-full slide-up" style="display: flex; flex-direction: column; height: 75vh;">
                     <div class="flex-between mb-2">
@@ -621,11 +620,8 @@
         </section>
     </div>
 
-    <!-- UNIVERSAL MODAL SYSTEM (ALL HIDDEN BY DEFAULT) -->
-    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()"></div>
-
     <!-- ADMIN MODAL: USER DETAILS -->
-    <div id="adminUserDetailsModal" class="hidden scale-in-center popup-modal" style="max-width: 600px; height: 90vh;">
+    <div id="adminUserDetailsModal" class="hidden scale-in-center popup-modal">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-user-check"></i> Consumer Details</h3>
             <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
@@ -811,55 +807,44 @@
         </div>
     </div>
 
-    <!-- PROPER FLOATING AI POPUP MODAL (WITH CAMERA & TEXT) -->
+    <!-- Floating AI Button -->
+    <button id="floatingAIBtn" class="pulse-icon" onclick="toggleAIPopup()" title="Ask EcoSpearks Ai">
+        <i class="fa-solid fa-robot"></i>
+    </button>
+
+    <!-- PROPER FLOATING AI POPUP MODAL -->
     <div id="aiChatPopup" class="hidden scale-in-center popup-modal">
         <div class="chat-header">
             <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
             <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <!-- Camera View (Hidden by default) -->
-        <div id="cameraContainer" class="hidden" style="padding: 15px; background: #111; text-align: center; border-bottom: 1px solid #333;">
-            <video id="cameraVideo" autoplay playsinline style="width: 100%; max-height: 220px; border-radius: 8px; object-fit: cover; border: 2px solid #E67E22;"></video>
-            <div style="display: flex; gap: 10px; margin-top: 12px;">
-                <button type="button" class="secondary-btn w-100" style="background: #444; color: white;" onclick="closeCamera()">Cancel</button>
-                <button type="button" class="primary-btn w-100" style="background: #27AE60;" onclick="captureAndAnalyze()"><i class="fa-solid fa-expand"></i> Scan Appliance</button>
-            </div>
-            <canvas id="cameraCanvas" class="hidden"></canvas>
-        </div>
-
         <div id="chatBox" class="chat-box">
             <div class="message ai-message fade-in-left">
-                <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. Type your question or click the 📷 Camera icon to scan an appliance!</p>
+                <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. Type your question or click the Camera icon to scan an appliance!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
-                <button type="button" class="hover-lift" onclick="fillAndSend('What is the best action first to lower my bill?')">Best Action First?</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
+                <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
         </div>
-
-        <!-- Unified Chat Input Area (Camera + Text + Send) -->
-        <div class="chat-input-area" style="padding: 12px 15px; align-items: center;">
-            <button type="button" class="hover-pop" style="width: 42px; height: 42px; border-radius: 50%; background: #2980B9; border: none; color: #fff; font-size: 1.1rem; flex-shrink: 0;" onclick="startCamera()" title="Open Camera">
-                <i class="fa-solid fa-camera"></i>
-            </button>
-            
-            <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)" style="flex: 1; margin: 0 8px;">
-            
-            <button type="button" class="hover-pop" style="width: 42px; height: 42px; border-radius: 50%; background: #E67E22; border: none; color: #fff; font-size: 1.1rem; flex-shrink: 0;" onclick="sendPopupChatMessage()">
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
+        <div class="chat-input-area">
+            <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)">
+            <button type="button" class="hover-pop" onclick="sendPopupChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
+
+    <!-- Background overlay for popups -->
+    <div id="popupOverlay" class="hidden popup-overlay" onclick="closeAllPopups()"></div>
 
     <footer class="site-footer">
         <small>Made with ❤️ by EMCS Team</small>
     </footer>
 
-    <script src="script.js?v=25"></script>
+    <script src="script.js"></script>
 </body>
 </html>
