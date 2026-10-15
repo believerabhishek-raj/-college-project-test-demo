@@ -813,28 +813,43 @@
     </button>
 
     <!-- PROPER FLOATING AI POPUP MODAL -->
+        <!-- PROPER FLOATING AI POPUP MODAL (WITH CAMERA) -->
     <div id="aiChatPopup" class="hidden scale-in-center popup-modal">
         <div class="chat-header">
-            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai <span class="badge pulse-subtle" style="font-size: 0.6rem; margin-left:5px; background: rgba(0,0,0,0.2);">Online</span></h3>
+            <h3 style="color: white; margin: 0;"><i class="fa-solid fa-robot"></i> EcoSpearks Ai Vision</h3>
             <button class="close-btn hover-pop" type="button" onclick="closeAllPopups()"><i class="fa-solid fa-xmark"></i></button>
         </div>
+        
+        <!-- Camera View (Hidden by default) -->
+        <div id="cameraContainer" class="hidden" style="padding: 10px; background: #000; text-align: center;">
+            <video id="cameraVideo" autoplay playsinline style="width: 100%; max-height: 200px; border-radius: 8px;"></video>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="button" class="secondary-btn w-100" onclick="closeCamera()">Cancel</button>
+                <button type="button" class="primary-btn w-100" style="background: #27AE60;" onclick="captureAndAnalyze()"><i class="fa-solid fa-camera"></i> Analyze</button>
+            </div>
+            <canvas id="cameraCanvas" class="hidden"></canvas>
+        </div>
+
         <div id="chatBox" class="chat-box">
             <div class="message ai-message fade-in-left">
-                <p data-i18n="aiGreeting">Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!</p>
+                <p>Hello! I am EcoSpearks Ai. Ask me a question or click the 📷 Camera icon to scan an appliance!</p>
                 <div class="tts-controls mt-1">
-                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. I can calculate loads, give tips, and even speak!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
+                    <button class="tts-btn hover-pop" type="button" onclick="speakText('Hello! I am EcoSpearks Ai. Ask me a question or click the Camera icon to scan an appliance!')"><i class="fa-solid fa-volume-high"></i> Listen</button>
                     <button class="tts-btn hover-pop" type="button" onclick="stopSpeak()"><i class="fa-solid fa-stop"></i></button>
                 </div>
             </div>
             <div class="chat-suggestions fade-in-up" id="chatSuggestions">
                 <button type="button" class="hover-lift" onclick="fillAndSend('How can I lower my monthly bill?')">How to lower my bill?</button>
                 <button type="button" class="hover-lift" onclick="fillAndSend('My MCB keeps tripping. What are the safe next steps?')">MCB keeps tripping</button>
-                <button type="button" class="hover-lift" onclick="fillAndSend('Explain Watts, Volts, and Amps simply.')">Electrical Basics</button>
             </div>
         </div>
-        <div class="chat-input-area">
-            <input type="text" id="aiInput" placeholder="Ask a doubt..." onkeypress="handleChatEnter(event)">
-            <button type="button" class="hover-pop" onclick="sendPopupChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        <div class="chat-input-area" style="padding: 10px;">
+            <!-- Camera Button -->
+            <button type="button" class="secondary-btn hover-pop" style="width: 45px; height: 45px; border-radius: 50%; padding:0; background: #2980B9; border:none; color:white;" onclick="startCamera()"><i class="fa-solid fa-camera"></i></button>
+            
+            <input type="text" id="aiInput" placeholder="Ask or snap a photo..." onkeypress="handleChatEnter(event)" style="flex:1;">
+            
+            <button type="button" class="primary-btn hover-pop" style="width: 45px; height: 45px; border-radius: 50%; padding:0; border:none;" onclick="sendPopupChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
